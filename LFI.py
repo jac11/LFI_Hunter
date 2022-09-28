@@ -189,7 +189,7 @@ class Local_File_In :
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
            parser.add_argument("--auth"               , action='store_true'                    ,help ="url Targst web") 
-           parser.add_argument("-F","--filelist"      , action=None         ,required=True     ,help ="read fron lfi wordlsit ")
+           parser.add_argument("-F","--filelist"      , action=None                            ,help ="read fron lfi wordlsit ")
            parser.add_argument("-C","--Cookie"        , action=None                            ,help ="Login sesion Cookie")  
            parser.add_argument("-B64","--base64"      , action='store_true'                    ,help ="Login sesion base64")  
            parser.add_argument("-R","--read"          , action=None                            ,help ="Login sesion base64")  
