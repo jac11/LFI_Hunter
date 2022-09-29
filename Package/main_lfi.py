@@ -155,9 +155,9 @@ class Local_File_In :
                          print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
-                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''),end='')
+                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                          +self.args.read.replace('/','',1).replace('/','_'))         
+                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))         
                          break 
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
@@ -166,9 +166,9 @@ class Local_File_In :
                          print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
-                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''),end='')
+                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                          +self.args.read.replace('/','',1).replace('/','_'),end='')                  
+                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))                  
                          break
                    
             exit()                
@@ -202,7 +202,7 @@ class Local_File_In :
                  if i in self.url_remove :
                     join = ";".join(self.url_remove.split(i[-1]))
                     split_list = join.split(';')
-                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\\n','')          
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')          
                             
         def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
