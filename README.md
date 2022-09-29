@@ -1,1 +1,1 @@
-# LFI_FUZZ
+# LFI_Hunter
