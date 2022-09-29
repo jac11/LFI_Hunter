@@ -12,6 +12,7 @@ import subprocess
 
 ssl._create_default_https_context = ssl._create_unverified_context  
 path = ('file://'+os.getcwd()+'/FileStore/')
+
 class Read_File:
      def __init__(self):
             self.control()
@@ -20,10 +21,10 @@ class Read_File:
                       self.Cookie =  Cookie_file.read()
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
-               print("[+] Mothead          : ................ | : Full authentication")    
-               print("[+] Login url        : ................ | : "+self.args.loginurl)
-               print("[+] username         : ................ | : "+self.args.user)
-               print("[+] Login password   : ................ | : "+self.args.password)
+               print("[+] Mothead             : ................ | : Full authentication")    
+               print("[+] Login url           : ................ | : "+self.args.loginurl)
+               print("[+] username            : ................ | : "+self.args.user)
+               print("[+] Login password      : ................ | : "+self.args.password)
             if self.args.filelist:   
                print("[+] self.LFI-wordlist   : ................ | : "+self.args.filelist)
             else:
@@ -119,15 +120,15 @@ class Read_File:
                            info = str(self.info).replace(pythex,'Content-Length:'+str(len(self.Get_Oregnal_URL)))
                            rex2 = re.findall(':.+',info)
                            print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
-                           print("[+] Date             : ................ | "+rex2[0])
-                           print("[+] Server           : ................ | "+rex2[1])
-                           print("[+] Expires          : ................ | "+rex2[2])
-                           print("[+] Cache-Control    : ................ | "+rex2[3])
-                           print("[+] Pragma           : ................ | "+rex2[4])
-                           print("[+] Vary             : ................ | "+rex2[5])
-                           print("[+] Content-Length   : ................ | "+str(rex2[6]).replace(':',': '))
-                           print("[+] Connection       : ................ | "+rex2[7])
-                           print("[+] Content-Type     : ................ | "+rex2[8]+'\n')
+                           print("[+] Date                : ................ | "+rex2[0])
+                           print("[+] Server              : ................ | "+rex2[1])
+                           print("[+] Expires             : ................ | "+rex2[2])
+                           print("[+] Cache-Control       : ................ | "+rex2[3])
+                           print("[+] Pragma              : ................ | "+rex2[4])
+                           print("[+] Vary                : ................ | "+rex2[5])
+                           print("[+] Content-Length      : ................ | "+str(rex2[6]).replace(':',': '))
+                           print("[+] Connection          : ................ | "+rex2[7])
+                           print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
                            self.store_file()
                            print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
@@ -215,7 +216,6 @@ class Read_File:
                                 import base64                                                           
                                 decoded64 = str(base64.b64decode(read_data))
                                 read_data = decoded64.split("\\n") 
-                                print(read_data)
                                 for line in read_data :                                          
                                     with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
                                          data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
