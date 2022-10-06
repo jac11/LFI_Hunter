@@ -5,6 +5,8 @@ import sys
 
 from Package.main_lfi import Local_File_In
 from Package.aggressiv import Aggressiv
+with open('./Package/Banner','r') as banner:
+     print(banner.read())
 class Hannter_LFI:
       
        def __init__(self):
