@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 import urllib.response
 import time
@@ -82,7 +83,7 @@ class Read_File:
            if self.args.auth:
                self.Login_auth()  
                         
-           with open('LFT_one.txt','r') as readline :
+           with open('./Package/LFT_one.txt','r') as readline :
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
@@ -263,5 +264,3 @@ class Read_File:
         print(a)                                       
 if __name__=='__main__':
    Read_File()    
-   
-   

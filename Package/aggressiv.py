@@ -85,7 +85,7 @@ class Aggressiv :
             ssl._create_default_https_context = ssl._create_unverified_context 
             num  = 0   
              
-            with open('aggressiv .txt','r') as readline :
+            with open('./Package/aggressiv .txt','r') as readline :
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
