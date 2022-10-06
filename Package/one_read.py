@@ -201,7 +201,7 @@ class Read_File:
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
                            print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'))
-                           break
+                           exit()
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
                           self.store_file()  
                           print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
@@ -210,7 +210,7 @@ class Read_File:
                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
                           print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_'))         
-                          break
+                          exit()
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')

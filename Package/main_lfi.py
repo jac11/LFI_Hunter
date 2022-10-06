@@ -91,23 +91,18 @@ class Local_File_In :
                url_login = request.open(loginurl) 
                try: 
                   request.select_form(nr = 0)
-                  self.url_request()
                except Exception :
                   try:
                     request.select_form(nr = 1)
-                    self.url_request()
                   except Exception:
                      try:
                        request.select_form(nr = 2)
-                       self.url_request()
                      except Exception:      
                         try:
                            request.select_form(nr = 3)
-                           self.url_request()
                         except Exception:
                              try:
                                 request.select_form(nr = 4)
-                                self.url_request()
                              except Exception as e:
                                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                                   print("[*] Error : ",e )
@@ -246,7 +241,7 @@ class Local_File_In :
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))         
-                         break 
+                         exit()
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :
                          self.file_name()
                          run = Read_File.store_file(self) 
@@ -256,8 +251,7 @@ class Local_File_In :
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))                  
-                         break
-                   
+                         exit()
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
