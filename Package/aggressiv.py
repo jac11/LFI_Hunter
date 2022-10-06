@@ -153,7 +153,9 @@ class Aggressiv :
                              print("|  "+f"{  filename     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl   :<100}","    |",end='\n')                                      
                        self.box_list.append(number)
                        self.link_list.append(self.url.replace('\n',' '))
-                       self.link_list.append (str(len(self.Get_Oregnal_URL)))                                
+                       self.link_list.append (str(len(self.Get_Oregnal_URL)))
+                       
+                                                       
         def Scan_result(self) :
                  final_list = []
                  remove_dup_elem = [*set(self.box_list)]
@@ -162,11 +164,11 @@ class Aggressiv :
                  res_dct  = res_dct
                  for key in res_dct:
                       with open('./Package/.list','a') as listf:
-                          listf.write( " %s   %s " % (key, res_dct[key])+'\n')  
+                          listf.write("%s%s" % (key, res_dct[key])+'\n')  
                  with open('./Package/.list','r') as readf:
                       readFile = readf.readlines()
                       for line in readFile :
-                          for i in remove_dup_elem:
+                          for i in remove_dup_elem:                             
                              if i in line[-6:-1] :
                                 if i in  final_list :
                                    pass
@@ -177,6 +179,7 @@ class Aggressiv :
                                       pass  
                                     final_list.append(line)
                                     final_list.append(i)
+                 
                  for L in final_list:                    
                       links = str("".join(re.findall(r'(https?://[^\s]+)',L)))                         
                       with open('./Package/.links','a') as writefile:
