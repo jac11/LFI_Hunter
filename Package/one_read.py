@@ -19,22 +19,40 @@ class Read_File:
      def __init__(self):
             self.control()
             if self.args.read:
-                  with open(self.args.Cookie,'r') as Cookie_file :
-                      self.Cookie =  Cookie_file.read()
+                  try:   
+                      with open(self.args.Cookie,'r') as Cookie_file :
+                          self.Cookie =  Cookie_file.read()
+                  except Exception as e :
+                     print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                     print("[*] Error : ",e )
+                     print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                     print("[*] Chech the File Name or File Path  to your Cookies File")
+                     exit()   
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    
-               print("[+] Login url           : ................ | : "+self.args.loginurl)
-               print("[+] username            : ................ | : "+self.args.user)
-               print("[+] Login password      : ................ | : "+self.args.password)
-            if self.args.filelist:   
-               print("[+] self.LFI-wordlist   : ................ | : "+self.args.filelist)
+               try:
+                  print("[+] Login url           : ................ | : "+self.args.loginurl)
+                  print("[+] username            : ................ | : "+self.args.user)
+                  print("[+] Login password      : ................ | : "+self.args.password)
+               except Exception as e:
+                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                  print("[*] Error : ",e )
+                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                  print("[*] Chech login info UserName and Password ")
+                  print("[*] Should use --loginurl <url> --username <username> --password <password>")
+                  print("[*] Should username and Password is True")
+                  print("[*] Example : --url lodinurl http://10.10.10.44/login.php --user admin --password admim")
+                  print("[*] ckeck Readme file at : https://www.github/jac11/LFI_Hunter.git")
+                  exit()                          
+            if self.args.filelist:
+                print("[+] LFI-wordlist        : ................ | : "+self.args.filelist)
             else:
-                print("[+] self.LFI-wordlist   : ................ | : LFT_one.txt")
+                print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt")  
             print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
-            print("[+] web Cookies         : ................ | : "+self.Cookie) 
+            print("[+] web Cookies         : ................ | : "+self.Cookie)  
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl\
@@ -46,36 +64,71 @@ class Read_File:
             and self.args.read :
                 self.url_request()
             else:
-                print("[+] Logic command  Error"+'\n'+'='*30)  
-                print('[+] To use self.LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ')  
-                print('[+] To use self.LFI without  login : --Vulnurl --read --Cookie')  
+                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                print("[*] Error :  Bad argument Logic command  Error" )
+                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ') 
+                print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
+                print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
+                exit()            
      def Login_auth(self):
-            loginurl = self.args.loginurl
-            request = mechanize.Browser()
-            request.set_handle_robots(False)
-            request.set_handle_redirect(True)
-            request.set_handle_refresh(True, max_time=1)
-            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+               loginurl = self.args.loginurl
+               request = mechanize.Browser()
+               request.set_handle_robots(False)
+               request.set_handle_redirect(True)
+               request.set_handle_refresh(True, max_time=1)
+               request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),]
-            url_login = request.open(loginurl) 
-            request.select_form(nr = 0)
-            if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
+               try:                  
+                  url_login = request.open(loginurl)
+               except urllib.error.URLError as e :
+                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print("[*] Error : ",e )
+                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                   print("[*] Follow url Format ")
+                   print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                   print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                   exit()          
+               try: 
+                  request.select_form(nr = 0)
+               except Exception :
+                  try:
+                    request.select_form(nr = 1)                 
+                  except Exception:
+                     try:
+                       request.select_form(nr = 2)
+                     except Exception:      
+                        try:
+                           request.select_form(nr = 3)
+                        except Exception:
+                             try:
+                                request.select_form(nr = 4)                        
+                             except Exception as e:
+                                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                                  print("[*] Error : ",e )
+                                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                  print("[*] try to use with out login Mothead") 
+                                  print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
+                                  exit()                 
+               if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
                    request["username"] = f'{self.args.user}'
                    request["password"] = f'{self.args.password}' 
-            elif self.args.user and  self.args.password and not self.args.PassForm and  self.args.UserForm:
+               elif self.args.user and  self.args.password and not self.args.PassForm and  self.args.UserForm:
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
                    request["password"] = f'{self.args.password}'
-            elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
+               elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
                    request["username"] = '{self.args.user}'
                    request[f'{self.args.PassForm}']=f'{self.args.password}' 
-            elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
+               elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
                    request[f'{self.args.PassForm}']=f'{self.args.password}' 
-            response   = request.submit()         
-            self.info = response.info()
-            content    = response.read()  
-            self.url = response.geturl()      
-     def url_request(self):   
+               response   = request.submit()         
+               self.info  = response.info()
+               content    = response.read()  
+               self.url   = response.geturl()   
+                  
+     def url_request(self):  
+        try: 
            self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
                       [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl)#).strip()
            if not os.path.exists('./FileStore/'+self.ip_re.group()+"/"):
@@ -112,8 +165,19 @@ class Read_File:
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
                                  ('password','password')]
-                    first_req = request.open(self.args.Vulnurl).read()                                                      
-                    self.Get_Oregnal_URL = request.open(self.url).read() 
+                    try:             
+                       first_req = request.open(self.args.Vulnurl).read()                                                      
+                       self.Get_Oregnal_URL = request.open(self.url).read() 
+                    except Exception  as e :
+                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                         print("[*] Error : ",e )
+                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                         print("[*] Follow url Format ")
+                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                         exit()   
+                    except KeyboardInterrupt:
+                         exit()           
                     
                     if self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :                  
                         pythex = str(re.findall('Content-Length:.+',str(self.info)))
@@ -147,7 +211,17 @@ class Read_File:
                           print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_'))         
                           break
-                                                                                             
+                print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
+                print("[*] No Data found")
+                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                print("[*] try to user aggressive mode ")                
+                if not self.args.base64:
+                   print("[*] try to use PHP Filter by useing -B64/--base64 ")  
+                print("[*] ckeck Readme file at : https://www.github/jac11/LFI_Hunter.git")   
+                exit()                       
+        except SyntaxError as a :
+               print(a)
+               exit()                                                                                    
      def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
