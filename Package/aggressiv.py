@@ -219,20 +219,23 @@ class Aggressiv :
                                 else:
                                     try:
                                        final_list.remove(i)
+                                       final_list.remove("\\n")
                                     except ValueError:
                                       pass  
                                     final_list.append(line)
                                     final_list.append(i)
-                 
+                                    final_list.sort()
                  for L in final_list:                    
                       links = str("".join(re.findall(r'(https?://[^\s]+)',L)))                         
                       with open('./Package/.links','a') as writefile:
-                               writedata = writefile.write(links+' ')
+                               if links == '':
+                                  pass
+                               else:   
+                                   writedata = writefile.write('[+] '+links+'\n')
                  with open('./Package/.links','r') as readfile:
                       readdata = readfile.read()
-                      readdata =readdata.split(" ")
-                      readdata = str(readdata).replace("''",'').replace(', , ',',').replace('[','').replace(']','')\
-                      .replace(',','\n').replace("'",'')                   
+                      readdata =readdata.split("\n")
+                      readdata = str("\n".join(readdata))                 
                  if  os.path.exists('./Package/.links'):
                      os.remove('./Package/.links')
                      os.remove('./Package/.list')     
