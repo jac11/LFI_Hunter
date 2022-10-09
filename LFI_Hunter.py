@@ -5,6 +5,7 @@ import sys
 
 from Package.main_lfi import Local_File_In
 from Package.aggressiv import Aggressiv
+from Package.LFIShell import Shell_Log
 with open('./Package/Banner','r') as banner:
      print(banner.read())
 class Hannter_LFI:
@@ -13,8 +14,10 @@ class Hannter_LFI:
          self.control()
          if self.args.aggress:
              run =Aggressiv()
+        # elif self.args.shell:
+         #     run=Shell_Log()
          else:    
-             run = Local_File_In()
+             run = Local_File_In()       
        def control(self): 
          try: 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
@@ -29,7 +32,8 @@ class Hannter_LFI:
            parser.add_argument("-P  ","--password"    , action=None                            ,help ="use specific Passowrd")   
            parser.add_argument("-LU  ","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U  ","--user"        , action=None                            ,help ="use specific username ")
-           parser.add_argument("-A","--aggress"     ,action='store_true'                        ,help ="  use aggressiv mode  ")
+           parser.add_argument("-A","--aggress"       ,action='store_true'                     ,help ="  use aggressiv mode  ")
+           parser.add_argument( "-S", "--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()     
            if len(sys.argv)!=1 :
               pass
