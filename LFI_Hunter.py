@@ -5,7 +5,6 @@ import sys
 
 from Package.main_lfi import Local_File_In
 from Package.aggressiv import Aggressiv
-from Package.LFIShell import Shell_Log
 with open('./Package/Banner','r') as banner:
      print(banner.read())
 class Hannter_LFI:
