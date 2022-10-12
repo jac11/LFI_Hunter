@@ -53,9 +53,7 @@ class Shell_conncet:
                 except KeyboardInterrupt:
                      exit()
         elif  "/log/auth" in  self.url or "/log/auth.log" in  self.url:    
-                path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
-                run    =  'gnome-terminal  -e '+'" '+path+' "' 
-                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE) 
+                
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readip:
                         IP_IN = readip.read().split('\n')
@@ -74,7 +72,10 @@ class Shell_conncet:
                          path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                          run    =  'gnome-terminal  -e '+'" '+path+' "' 
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
-                                                    
+                time.sleep(4)
+                path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
+                run    =  'gnome-terminal  -e '+'" '+path+' "' 
+                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
                 request = mechanize.Browser()
                 request.set_handle_robots(False)
                 request.set_handle_redirect(True)
