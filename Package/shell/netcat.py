@@ -14,9 +14,7 @@ line = '┌──(@Netcat)-[~/LFT_Hunter]\n'
 line +='└─$ \n'
 print(line)
 line1 ='nc -nvlp  7777'
-command = line1
-print(command)
-command = os.system(command)
+command = os.system(line1)
 
    
    
