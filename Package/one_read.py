@@ -334,7 +334,7 @@ class Read_File:
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'r') as file2: 
                                     read_data = file2.read().replace('\\n','').replace('\\t','').replace('\\r','')
                                     import base64   
-                                    decoded64 = str(base64.b64decode(read_data))   
+                                    decoded64 = str(base64.b64decode(read_data.replace('\n','')))   
                                     read_data = decoded64.split("\\n") 
                                     for line in read_data : 
                                           if '/'not in self.args.read:
@@ -342,7 +342,7 @@ class Read_File:
                                               +self.args.read[0]),'a') as File_2: 
                                                      data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
                                           else:                            
-                                               with open('../FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
+                                               with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
                                                     data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
                                
                  if os.path.exists('../FileStore/'+self.ip_re.group()+'/index.txt'):
@@ -363,7 +363,7 @@ class Read_File:
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'r') as File_1:  
                                      read_data = File_1.read().replace('\\n','').replace('\\t','').replace('\\r','')
                                 import base64                                                           
-                                decoded64 = str(base64.b64decode(read_data))
+                                decoded64 = str(base64.b64decode(read_data).replace('\n',''))
                                 read_data = decoded64.split("\\n") 
                                 for line in read_data :  
                                     if '/'not in self.args.read:
