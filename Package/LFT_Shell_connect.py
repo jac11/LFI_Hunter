@@ -70,7 +70,7 @@ class Shell_conncet:
                          path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                          run    =  'gnome-terminal  -e '+'" '+path+' "' 
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
-                    for T in range(4):
+                    for T in range(30):
                         for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
                             if "ssh.py" in C :
                                time.sleep(4)  
