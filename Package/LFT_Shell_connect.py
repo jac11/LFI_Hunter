@@ -10,6 +10,7 @@ import re
 import os
 import subprocess
 import base64
+import signal
 
 class Shell_conncet:
 
@@ -69,7 +70,22 @@ class Shell_conncet:
                          path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                          run    =  'gnome-terminal  -e '+'" '+path+' "' 
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
-                time.sleep(4)
+                    for T in range(4):
+                        for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
+                            if "ssh.py" in C :
+                               time.sleep(4)  
+                            else:
+                                 break 
+                    for line in os.popen("ps ax | grep ssh.py  | grep -v grep"):
+                        fields = line.split()
+                        pid = fields[0]
+                        os.kill(int(pid), signal.SIGKILL)   
+                    time.sleep(1)              
+                    print('\n'+'='*20+"\n[*] CONNCETION-INFO "+'\n'+'='*30+'\n') 
+                    print("[+] Status        : ................ | : SSH Waiting For Inputing  Password ") 
+                    print("[+] Error         : ................ | : TimeUP") 
+                    exit()
+                                             
                 path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    =  'gnome-terminal  -e '+'" '+path+' "' 
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
