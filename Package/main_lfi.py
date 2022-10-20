@@ -328,7 +328,33 @@ class Local_File_In():
                  if i in self.url_remove :
                     join = ";".join(self.url_remove.split(i[-1]))
                     split_list = join.split(';')
-                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')                  
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')      
+        def Control_ssh(self): 
+         for T in range(50):
+             for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
+                if "ssh.py" in C  and T != 29 :
+                   time.sleep(4)  
+                elif  T == 29 :
+                   for line in os.popen("ps ax | grep ssh.py  | grep -v grep"):
+                       fields = line.split()
+                       pid = fields[0]
+                       os.kill(int(pid), signal.SIGKILL)   
+                       time.sleep(1)  
+                       with open ('./Package/shell/.address','r') as readIP :
+                          IPH = readIP.readlines()
+                          for IP  in IPH :
+                             if IP in self.ip_re.group() :
+                                IP.replace(IP,'')
+                             else:   
+                                  with open ('./Package/shell/.address','w+') as writeIP:
+                                       writeIP =  writeIP.write(IP+"\n") 
+                                              
+                       print('\n'+'='*20+"\n[*] CONNCETION-INFO "+'\n'+'='*30+'\n') 
+                       print("[+] Status        : ................ | : SSH Waiting For Inputing  Password ") 
+                       print("[+] Error         : ................ | : TimeUP") 
+                       exit()
+                else:
+                     break                                                       
         def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]") 
            parser.add_argument("-UV ","--Vulnurl"     , action=None         ,required=True     ) 

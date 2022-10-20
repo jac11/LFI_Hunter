@@ -451,7 +451,8 @@ class Read_File:
                  if i in self.url_remove :
                     join = ";".join(self.url_remove.split(i[-1]))
                     split_list = join.split(';')
-                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','')            
+                    self.args.read= str("/".join((split_list[-3],split_list[-2],split_list[-1]))).replace('%2','/').replace('//','/').replace('\n','') 
+                          
    except Exception  as a :
         print(a)                                       
 if __name__=='__main__':

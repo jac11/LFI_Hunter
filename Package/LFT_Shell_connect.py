@@ -50,42 +50,74 @@ class Shell_conncet:
                 except KeyboardInterrupt:
                      exit()
         elif  "auth" in  self.url or "auth.log" in  self.url\
-        or 'apache2/access.log' in self.url:    
-                
+        or 'apache2/access.log' in self.url:                  
                 if os.path.exists('./Package/shell/.address'): 
-                    with open ('./Package/shell/.address','r') as readip:
+                    with open ('./Package/shell/.address','r') as readHost:
+                                      Host = readHost.read()
+                    with open ('./Package/shell/.addressbak.txt','w') as writeHost:
+                                 Host = writeHost.write(Host)   
+                    with open ('./Package/shell/.address','r') as readip:                    
                         IP_IN = readip.read().split('\n')
                         IP_IN = "".join([*set(IP_IN)])
-                        if self.ip_re.group() in IP_IN :
+                        if self.ip_re.group().replace('\n','') in IP_IN :
                            pass           
                         else:  
+                            
                             with open ('./Package/shell/.address','a') as readip:
-                               IP_IN = readip.write(str(self.ip_re.group())+'\n')                                                                                    
+                               IP_IN = readip.write(str(self.ip_re.group()))                                                                                    
                                path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                                run    =  'gnome-terminal  -e '+'" '+path+' "' 
-                               xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)  
+                               xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
+                           
+                            for T in range(30):
+                                for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
+                                    if "ssh.py" in C  and T != 29 :
+                                        time.sleep(4)
+                                    elif  T == 29 :
+                                       for line in os.popen("ps ax | grep ssh.py  | grep -v grep"):
+                                           fields = line.split()
+                                           pid = fields[0]
+                                           os.kill(int(pid), signal.SIGKILL) 
+                                           with open ('./Package/shell/.addressbak.txt','r') as readHost:
+                                                  Host = readHost.read() 
+                                           with open ('./Package/shell/.address','w') as writeHost:
+                                                  Host = writeHost.write(Host)                      
+                                           print('\n'+'='*20+"\n[*] CONNCETION-INFO "+'\n'+'='*30+'\n') 
+                                           print("[+] Status        : ................ | : SSH Waiting For Inputing  Password ") 
+                                           print("[+] Error         : ................ | : TimeUP")   
+                                           os.remove('./Package/shell/.addressbak.txt')                   
+                                           exit()
+                                    else:
+                                       break       
                 if not os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','a') as readip:
-                         IP_IN = readip.write(str(self.ip_re.group())+'\n')                                                                                    
+                         IP_IN = readip.write(str(self.ip_re.group()))                                                                                    
                          path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                          run    =  'gnome-terminal  -e '+'" '+path+' "' 
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
-                    for T in range(30):
+                    for T in range(50):
                         for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
-                            if "ssh.py" in C :
+                            if "ssh.py" in C  and T != 6 :
                                time.sleep(4)  
+                            elif  T == 6 :
+                                for line in os.popen("ps ax | grep ssh.py  | grep -v grep"):
+                                    fields = line.split()
+                                    pid = fields[0]
+                                    os.kill(int(pid), signal.SIGKILL)    
+                                    with open ('./Package/shell/.address','r') as readip: 
+                                               readhost = readip.read()
+                                               if self.ip_re.group() in readhost :
+                                                  repalce = readhost.replace(self.ip_re.group(),'')
+                                                  with open ('./Package/shell/.address','w+') as writeIP:
+                                                       writeIP =  writeIP.write(repalce)    
+                                               else:    
+                                                    pass                    
+                                print('\n'+'='*20+"\n[*] CONNCETION-INFO "+'\n'+'='*30+'\n') 
+                                print("[+] Status        : ................ | : SSH Waiting For Inputing  Password ") 
+                                print("[+] Error         : ................ | : TimeUP")                        
+                                exit()
                             else:
-                                 break 
-                    for line in os.popen("ps ax | grep ssh.py  | grep -v grep"):
-                        fields = line.split()
-                        pid = fields[0]
-                        os.kill(int(pid), signal.SIGKILL)   
-                    time.sleep(1)              
-                    print('\n'+'='*20+"\n[*] CONNCETION-INFO "+'\n'+'='*30+'\n') 
-                    print("[+] Status        : ................ | : SSH Waiting For Inputing  Password ") 
-                    print("[+] Error         : ................ | : TimeUP") 
-                    exit()
-                                             
+                                 break                            
                 path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    =  'gnome-terminal  -e '+'" '+path+' "' 
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
