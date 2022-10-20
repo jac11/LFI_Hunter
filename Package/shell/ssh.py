@@ -12,7 +12,7 @@ try:
     info +='[!] IP   : .............| : '+ str(SSHIPH[-1])+'\n'
     info +='[+] Port : .............| : 22\n'
     info +='='*40+'\n'
-    print(info)
+    print(info,end='')
     line = '┌──(SSH-[~/LFT_Hunter]\n'
     line +='└─$ \n'
     print(line)

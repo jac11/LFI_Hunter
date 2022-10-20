@@ -10,7 +10,7 @@ info +='='*30+'\n'
 info +='[!] IP   : .............| : 0.0.0.0\n'
 info +='[+] Port : .............| : 7777\n'
 info +='='*40+'\n'
-print(info)
+print(info,end='')
 line = '┌──(Netcat)-[~/LFT_Hunter]\n'
 line +='└─$ \n'
 print(line)
