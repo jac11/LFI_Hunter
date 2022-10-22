@@ -1,7 +1,7 @@
 # LFI_Hunter
 
 ##  what is LFT_Hunter ?
-* LFT_Hunter tool heve To atoumation file inclusion attack 
+* LFT_Hunter tool help To atoumation file inclusion attack 
 * read file and get the file in your local machine
 * filter php base64 and auto decoded the data
 * auto Injaction log file and get reverseshell "if can read log file"
