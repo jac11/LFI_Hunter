@@ -1,54 +1,76 @@
 # LFI_Hunter
-still under processing 
-# PlainHash
-PlanHash tool help to carck the password Hash by using wordlist passwords 
-genterate hash for ecth passowrd and campare it with oranale password 
-suppot crypto hash 
-* PlainHash written by python 3.9.1
 
-## info 
-* plainHash script help to  crack hash by using wordlist
-* PlainHash use Secure hashes and message digests 'hashlib'
-* PlainHash use for salt hash 'crypt' 
+##  what is LFT_Hunter ?
+* LFT_Hunter tool heve To atoumation file inclusion attack 
+* read file and get the file in your local machine
+* bypass the php sintezwer
+* filter php base64 and auto decoded the data
+* auto Injaction log file and get reverseshell "if can read log file"
+* work with authentication login
+* support not authentication as well 
+#### LFI_Hunter modes 
+   - Agressive mode 
+   - Burte Fource mode
+   - read file mode
+##  what is file inclusion vulnerability ?
+* A file inclusion vulnerability is a type of web vulnerability that is most commonly found to affect web applications that rely on a scripting run time. This issue is caused when an application builds a path to executable code using an attacker-controlled variable in a way that allows the attacker to control which file is executed at run time. A file include vulnerability is distinct from a generic directory traversal attack, in that directory traversal is a way of gaining unauthorized file system access, and a file inclusion vulnerability subverts how an application loads code for execution. Successful exploitation of a file inclusion vulnerability will result in remote code execution on the web server that runs the affected web application. An attacker can use remote code execution to create a web shell on the web server, which can be used for website defacement.
+### Types of Inclusion
+   #### A directory traversal (or path traversal) 
+-  attack exploits insufficient security validation or sanitization of user-supplied file names, such that characters representing "traverse to parent directory" are passed through to the operating system's file system API. An affected application can be exploited to gain unauthorized access to the file system. 
+ #### Remote file inclusion
+   - Remote file inclusion (RFI) occurs when the web application downloads and executes a remote file. These remote files are usually obtained in the          form of an HTTP or FTP URI as a user-supplied parameter to the web application.
+ #### Local file inclusion
+   - Local file inclusion (LFI)
+ is similar to a remote file inclusion vulnerability except instead of including remote files, only local files i.e. files on the current server          can be included for execution. This issue can still lead to remote code execution by including a file that contains attacker-controlled data such as the web server's access logs. 
+-----------------------------------------------------------------------------------
 
-##  Hash Support : 
-* MD4
-* MD5  - SHA_1 - SHA_256
-* SHA3_384 - BLAKE2c - SHA_3_512
-* SHA_512  - BLAKE2b - BLAKE2b 
-* SHA3_224 - SHA3_224  - SHA_3_256
-### Salt Hash Support:
-* MD5-CRYPT  - BCRYPT-[Y]
-* SHA1-CRYPT - SHA256-CRYPT 
-* SHA512-CRYPT  - bcrypt-2y
-* yescrypt - Version: yescrypt 1.1.0 
-## Note :
-*  pip install pycryptodome 
-* python3 disable MD4 HASh so ' pip install pycryptodome' To can crack MD4 hash
-### Windows-Hash
-* Windows-NTLM-V1 MD4 Encode[UTF-16LE]
-### Hash Message Authentication Code "HMAC" : 
- 
-* HMAC-MD5       - HMAC-SHA1  
-* HMAC-SHA_224   - HMAC-SHA3_224
-* HMAC-SHA_256   - HMAC-SHA3_256
-* HMAC-SHA_384   - HMAC-SHA3_384   
-* HMAC-SHA_512   - HMAC-SHA3_512
-* HMAC-BLAKE2b   - HMAC-BLAKE2s
+## More info :-
+#### [file inclusion vulnerability](https://en.wikipedia.org/wiki/File_inclusion_vulnerability)
+#### [Directory traversal attack](https://en.wikipedia.org/wiki/Directory_traversal_attack)
+#### [File inclusion attacks](https://resources.infosecinstitute.com/topic/file-inclusion-attacks/)
+-------------------------------------------------------------------------------------------
 
+## How to use : 
+* pip install import mechanize
+* git clone https://www.github.com/jac11/LFI_Hunter.git
+* cd LFI_Hunter
+* chmod +x LFI_Hunter.py
+* ./LFI_Hunter -h
+``` .     .____ _       __  __               .                
+ /     /     |       |   |  ,   . , __   _/_     ___  .___ 
+ |     |__.  | .---' |___|  |   | |'  `.  |    .'   ` /   \
+ |     |     |       |   |  |   | |    |  |    |----' |   '
+ /---/ /     /       /   /  `._/| /    |  \__/ `.___, /    
+              @jacstory                                             
 
-## How to use :
-* git clone https://github.com/jac11/PlainHash
-* cd PlainHash/
-* chmod +x PlainHash.py
-* to check all  option open help menu by typing ./PlainHash.py -h or --help
-* you can use input hash Example: ./PlainHash.py -H dfd5f9139a820075df69d7895015360b76d0360f3d4b77a845689614 -w wordlist
-* or you can use as file input ./PlainHash.py -r hash.txt -w wordlist
-* use ./PlainHash.py  -i info  or ./PlainHash.py  --info info for more information
-* to set color of the PlaimHash off use --color off or -c off    Example: ./PlainHash.py -H dfd5f9139a820075df69d7895015360b76d0360f3d4b77a845689614 -w wordlist -c off
-* or you can use as file input ./PlainHash.py -r hash.txt -w wordlist
-##  [ help menu overview ] 
- <img src = "images/5.png"><img src = "images/8.png"><img src = "images/9.png" >
+usage: LFI_Hunter.py [-h] -UV VULNURL [--auth] [-F FILELIST] -C COOKIE [-B] [-R READ] [-UF USERFORM] [-PF PASSFORM] [-P PASSWORD] [-LU LOGINURL] [-U USER] [-A] [-S SHELL]
+
+Usage: [OPtion] [arguments] [ -w ] [arguments]
+
+options:
+  -h, --help            show this help message and exit
+  -UV VULNURL, --Vulnurl VULNURL
+                        url Targst web
+  --auth                auth mautrd web
+  -F FILELIST, --filelist FILELIST
+                        read fron lfi wordlsit
+  -C COOKIE, --Cookie COOKIE
+                        Login sesion Cookie
+  -B, --base64          decode filter php base64
+  -R READ, --read READ  use to read file on the traget machine
+  -UF USERFORM, --UserForm USERFORM
+                        add name of the HTML Form Login User
+  -PF PASSFORM, --PassForm PASSFORM
+                        add name of the HTML Form Login Passord
+  -P PASSWORD, --password PASSWORD
+                        use specific Passowrd
+  -LU LOGINURL, --loginurl LOGINURL
+                        add login url for auth motted
+  -U USER, --user USER  use specific username
+  -A, --aggress         use aggressiv mode
+  -S SHELL, --shell SHELL
+                        to connent reverseshell
+```
   
 
 ### ScreenShot
