@@ -83,7 +83,7 @@ options:
  *  < -U / --user >      add user name
  *  < -P / --password >  add the password 
  *  < -R / --read >      add the name of the to read from the website true the directory traversal 
- *  < -S / --shell >     connect auto reverse shell " if can read log files same like "/var/log/auth.log or /proc/sealf/envertion"
+ *  < -S / --shell >     connect auto reverse shell " if can read log files same like "/var/log/auth.log or /proc/self/environ"
  *  < -UF / --USERFORM > if the field of username have different name so to can post in username give the field name after -UF 
  *  < -PF/ --PASSFORM  > if the field of password have different name so to can post in password give the fieldname after -PF
 ------------------------------------------------------------
