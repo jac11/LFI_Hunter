@@ -84,8 +84,8 @@ options:
  *  < -P / --password >  add the password 
  *  < -R / --read >      add the name of the to read from the website true the directory traversal 
  *  < -S / --shell >     connect auto reverse shell " if can read log files same like "/var/log/auth.log or /proc/sealf/envertion"
- *  < -UF / --USERFORM > if the field of username have different name so to can past in username give the field name after -UF 
- *  < -PF/ --PASSFORM  > if the field of password have different name so to can past in password give the fieldname after -PF
+ *  < -UF / --USERFORM > if the field of username have different name so to can post in username give the field name after -UF 
+ *  < -PF/ --PASSFORM  > if the field of password have different name so to can post in password give the fieldname after -PF
 ------------------------------------------------------------
 ### Command Agreesiv mode  :-
 ```
@@ -101,7 +101,7 @@ the big length mine have date we want read it '
 
 ### Notes :
 * all mode can run with authentication or not authentication as per your situation
-* Cookies is requride 
+* Cookies it required
 * < -F / --filelist > LFI_Hunter have default wordlist to use for Brute force if you try your own list give -F and the path of your list
 * < -B /--baes64 > To use php filtter decode64 'LFI_Hunter will decode the data to asscii auto 
 
