@@ -374,7 +374,7 @@ class Read_File:
                             
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'a') as File_0:  
                                      File_0.write(line0) 
-                                exit()     
+                                   
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'r') as File_1:  
                                      read_data = File_1.read().replace('\\n','').replace('\\t','').replace('\\r','')
                                 import base64   
