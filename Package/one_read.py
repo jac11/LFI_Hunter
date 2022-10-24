@@ -197,15 +197,15 @@ class Read_File:
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n',''))                           
                            self.store_file()                           
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
-                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace('.','',4)) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
-                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_').replace('.','',4))
                            if '/' in self.args.read:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                               +self.args.read.replace('/','',1).replace('/','_'))  
+                               +self.args.read.replace('/','',1).replace('/','_').replace('.','',4))  
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))
+                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_').replace('.','',4))
                            if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url: 
@@ -240,14 +240,14 @@ class Read_File:
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                            print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
-                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_'))
+                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_').replace('.','',4))
                          
                            if '/' in self.args.read:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                               +self.args.read.replace('/','',1).replace('/','_'))  
+                               +self.args.read.replace('/','',1).replace('/','_').replace('.','',4))  
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
-                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_'))              
+                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('.','',4).replace('/','_'))              
                            if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url: 
@@ -311,8 +311,8 @@ class Read_File:
      def store_file(self): 
          if  os.path.exists('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace(self.args.read[0],'_'+self.args.read[0])):  
              os.remove('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace(self.args.read[0],'_'+self.args.read[0]))
-         if  os.path.exists('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_')):  
-             os.remove('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_')) 
+         if  os.path.exists('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_').replace('.','')):  
+             os.remove('./FileStore/'+self.ip_re.group()+'/'+self.args.read.replace('/','',1).replace('/','_').replace('.','')) 
         
          with open('./FileStore/'+self.ip_re.group()+'/index.txt','w') as html:
             html.write(str(self.Get_Oregnal_URL).replace("b'",''))  
@@ -335,7 +335,7 @@ class Read_File:
                                      base64 = file2.write(h) 
                                with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'r') as file2: 
                                
-                                    read_data = file2.read().replace('\\n','').replace('\\t','').replace('\\r','')
+                                    read_data = file2.read().replace('\\n','').replace('\\t',' ').replace('\\r','')
                                     import base64   
                                     read_data= bytes(read_data.encode())                 
                                     decoded64 = str(base64.b64decode(read_data.decode()))
@@ -354,8 +354,8 @@ class Read_File:
                                              with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','__'),'r') as file2: 
                                                        read_data = file2.read().replace('\\n','').replace('\\t','').replace('\\r','') 
                                                        
-                                             with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'w') as File_2 :  
-                                                        File_2.write( read_data)
+                                             with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_').replace('.',''),'w') as File_2 :  
+                                                        File_2.write( read_data.replace('\t',' '))
                                           else:
                                               pass              
                                                        
@@ -376,7 +376,7 @@ class Read_File:
                                      File_0.write(line0) 
                                    
                                 with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'),'r') as File_1:  
-                                     read_data = File_1.read().replace('\\n','').replace('\\t','').replace('\\r','')
+                                     read_data = File_1.read().replace('\\n','').replace('\\t',' ').replace('\\r','')
                                 import base64   
                                 read_data= bytes(read_data.encode())                                                        
                                 decoded64 = str(base64.b64decode(read_data.decode()))
@@ -387,8 +387,8 @@ class Read_File:
                                                data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n') 
                                               
                                     else:                      
-                                         with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
-                                              data_Finsh = File_2.write(line.replace("b'",'').replace("'",'')+'\n')                        
+                                         with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_').replace('.',''),'a') as File_2:
+                                              data_Finsh = File_2.write(line.replace("b'",'').replace("'",'').replace('\t',' ')+'\n')                        
                    if os.path.exists('./FileStore/'+self.ip_re.group()+'/index.txt'):
                       os.remove('./FileStore/'+self.ip_re.group()+'/index.txt')  
                       os.remove('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'))             
@@ -409,8 +409,8 @@ class Read_File:
                                    with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace(self.args.read[0],'_'+self.args.read[0]),'a') as File_2:
                                          data_Finsh = file2.write(h)
                                else:          
-                                    with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as file2:
-                                         file2.write(h) 
+                                    with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_').replace('.',''),'a') as file2:
+                                         file2.write(h.replace('\t',' '))
                                     
                  if os.path.exists('./FileStore/'+self.ip_re.group()+'/index.txt'):
                     os.remove('./FileStore/'+self.ip_re.group()+'/index.txt')  
@@ -431,8 +431,8 @@ class Read_File:
                                      with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace(self.args.read[0],'_'+self.args.read[0]),'a') as File_2:
                                          data_Finsh = File_2.write(line+'\n')
                                   else:                                                 
-                                      with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_'),'a') as File_2:
-                                           data_Finsh = File_2.write(line+'\n')
+                                      with open('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','_').replace('.',''),'a') as File_2:
+                                           data_Finsh = File_2.write(line.replace('\t',' ')+'\n')
                 if os.path.exists('./FileStore/'+self.ip_re.group()+'/index.txt'):
                    os.remove('./FileStore/'+self.ip_re.group()+'/index.txt')  
                    os.remove('./FileStore/'+self.ip_re.group()+"/"+self.args.read.replace('/','',1).replace('/','X'))
