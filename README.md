@@ -28,9 +28,12 @@
 #### [Directory traversal attack](https://en.wikipedia.org/wiki/Directory_traversal_attack)
 #### [File inclusion attacks](https://resources.infosecinstitute.com/topic/file-inclusion-attacks/)
 -------------------------------------------------------------------------------------------
-
+## Update:
+* you can use  Vulnerable url as Domain name not only ip address  by use -D follow by Vulnerable url
+* same like "https://www.anyDomain.com/index.php?file="
+--------------------------------------------------------------------------------------------------
 ## How to use : 
-* pip install import mechanize
+* pip install mechanize
 * git clone https://www.github.com/jac11/LFI_Hunter.git
 * cd LFI_Hunter
 * chmod +x LFI_Hunter.py
