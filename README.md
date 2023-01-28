@@ -38,14 +38,16 @@
 * cd LFI_Hunter
 * chmod +x LFI_Hunter.py
 * ./LFI_Hunter -h
-``` .     .____ _       __  __               .                
+```  .     .____ _       __  __               .                
  /     /     |       |   |  ,   . , __   _/_     ___  .___ 
  |     |__.  | .---' |___|  |   | |'  `.  |    .'   ` /   \
  |     |     |       |   |  |   | |    |  |    |----' |   '
  /---/ /     /       /   /  `._/| /    |  \__/ `.___, /    
               @jacstory                                             
 
-usage: LFI_Hunter.py [-h] -UV VULNURL [--auth] [-F FILELIST] -C COOKIE [-B] [-R READ] [-UF USERFORM] [-PF PASSFORM] [-P PASSWORD] [-LU LOGINURL] [-U USER] [-A] [-S SHELL]
+usage: LFI_Hunter.py [-h] [-UV VULNURL] [--auth] [-F FILELIST] -C COOKIE [-B]
+                     [-R READ] [-UF USERFORM] [-PF PASSFORM] [-P PASSWORD]
+                     [-LU LOGINURL] [-U USER] [-A] [-K] [-D DOMAIN] [-S SHELL]
 
 Usage: [OPtion] [arguments] [ -w ] [arguments]
 
@@ -70,8 +72,13 @@ options:
                         add login url for auth motted
   -U USER, --user USER  use specific username
   -A, --aggress         use aggressiv mode
+  -K, --upload          use to upload file to server
+  -D DOMAIN, --Domain DOMAIN
+                        use target url domain not as ip
+                        'http://www.anyDomain.com'
   -S SHELL, --shell SHELL
                         to connent reverseshell
+                                                       
 ```
 -------------------------------------------------------------------------------------------------
 ### Command read mode :-
