@@ -267,7 +267,7 @@ class Aggressiv :
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
            parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
            parser.add_argument("-K","--upload"      ,action='store_true'                     ,help ="  use to upload file  to server")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'www.expiln.com'")
+           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
            parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()          
            self.args = parser.parse_args()    
