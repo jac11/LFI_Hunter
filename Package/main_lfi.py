@@ -325,7 +325,7 @@ class Local_File_In():
                    print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
                 exit()                   
         def Reverse_shell(self):
-                 if not self.args.shell:
+                 if not self.args.shell and not self.args.port:
                     exit()
                  else:   
                    try:
@@ -357,8 +357,8 @@ class Local_File_In():
            parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
            parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument("-K","--upload"      ,action='store_true'                     ,help ="  use to upload file  to server")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
+           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
+           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'www.expiln.com'")
            parser.add_argument("-S","--shell"       ,action=None                             ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()     
            if len(sys.argv)!=1 :

