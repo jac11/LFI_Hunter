@@ -16,6 +16,12 @@ class Read_File:
    try:
      def __init__(self):
             self.control()
+            if self.args.readuser:
+                 with open(self.args.readuser,'r') as username:
+                      self.args.user = username.read().replace('/n','')
+            if self.args.readpass:
+                 with open(self.args.readpass,'r') as password:
+                      self.args.password = password.read().replace('/n','')
             if self.args.read:
                   try:   
                       with open(self.args.Cookie,'r') as Cookie_file :
@@ -31,7 +37,7 @@ class Read_File:
                print("[+] Mothead             : ................ | : Full authentication")    
                try:
                   print("[+] Login url           : ................ | : "+self.args.loginurl)
-                  print("[+] username            : ................ | : "+self.args.user)
+                  print("[+] username            : ................ | : "+self.args.user.replace("\n",''))
                   print("[+] Login password      : ................ | : "+self.args.password)
                except Exception as e:
                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
@@ -327,11 +333,13 @@ class Read_File:
            parser.add_argument("-UF","--UserForm"   , action=None                            ,help =" add name of the HTML Form Login User")
            parser.add_argument("-PF","--PassForm"   , action=None                            ,help ="add name of the HTML Form Login Passord")
            parser.add_argument("-P","--password"    , action=None                            ,help ="use specific Passowrd")   
+           parser.add_argument("-p","--readpass"    , action=None                            ,help ="use specific Passowrd read from file")
            parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
            parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
+           parser.add_argument("-u","--readuser"    , action=None                            ,help ="use specific username read from file")
            parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
            parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'www.expiln.com'")
+           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
            parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()          
            if len(sys.argv)!=1 :
