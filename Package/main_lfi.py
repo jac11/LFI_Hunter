@@ -142,18 +142,13 @@ class Local_File_In:
                    exit()
           
         def url_request(self,**kwargs): 
-            if self.args.Domain:
-               domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
-               self.ip_re = (domain[-1][7:-2])
-               self.ip_re = self.ip_re[6:]
-            else:
-
-               self.ip_re = re.search('(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|\
-                      [1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\b\\b',self.args.Vulnurl) 
-               try :
-                   self.ip_re = self.ip_re.group()
-               except Exception:
-                    self.ip_re = "0.0.0.0.0"    
+            try: 
+              domain = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
+              self.ip_re = (domain[-1][7:-2])
+              self.ip_re = self.ip_re[6:]
+            except Exception :
+               self.ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
+               self.ip_re = self.ip_re.group() 
             try:           
                if not os.path.exists('./FileStore/'+self.ip_re+"/"):
                   os.makedirs('./FileStore/'+self.ip_re+"/")

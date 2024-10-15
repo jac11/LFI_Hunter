@@ -52,7 +52,8 @@ class FileManager():
                         cleaned_content = re.sub(r'--- index.txt', '',       cleaned_content,flags=re.MULTILINE)
                         cleaned_content = re.sub(r'<html>', '',              cleaned_content,flags=re.MULTILINE)
                         cleaned_content = re.sub(r'^-','',                   cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'^-    ', '',              cleaned_content, flags=re.MULTILINE)  
+                        cleaned_content = re.sub(r'^-    ', '',              cleaned_content, flags=re.MULTILINE) 
+                        cleaned_content = re.sub(r'\\r', '',                 cleaned_content, flags=re.MULTILINE)
                         cleaned_content = cleaned_content.strip() 
                         file.write(cleaned_content+'\n')
            
