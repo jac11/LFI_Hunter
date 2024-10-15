@@ -22,10 +22,6 @@ class Local_File_In:
             if self.args.readpass:
                  with open(self.args.readpass,'r') as password:
                       self.args.password = password.read().replace('/n','')  
-           # if self.args.read:
-           #    from Package.one_read import Read_File
-            #   run = Read_File()
-             #  exit()
             try:   
                 if self.args.Cookie:
                    with open(self.args.Cookie,'r') as Cookie_file :
@@ -257,7 +253,7 @@ class Local_File_In:
                         from Package.FileStore import FileManager
                         FileManager.FileRStore_Write(self,args=self.control)
                         print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
-                        print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                        print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace("-","/")) 
                         print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
@@ -295,7 +291,7 @@ class Local_File_In:
                         print('='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                         print("[+] Vulnerable Link     : ................ | : "+self.url)
                         print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
-                        print("[+] File request        : ................ | : "+self.args.read.replace('\n','')) 
+                        print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace("-","/")) 
                         print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))          
                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"\

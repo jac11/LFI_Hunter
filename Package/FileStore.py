@@ -56,7 +56,7 @@ class FileManager():
                         cleaned_content = cleaned_content.strip() 
                         file.write(cleaned_content+'\n')
            
-            if os.path.exists('./index.txt'):
+            if os.path.exists('.index.txt'):
                 os.remove('.index.txt')  
                 os.remove('.RQData')   
 if __name__=="__main__":

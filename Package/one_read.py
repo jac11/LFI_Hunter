@@ -188,9 +188,9 @@ class Read_File:
                                  ('password','password')]
                     try: 
                        if self.args.Domain:
-                           first_req = request.open(self.args.Domain).read()
+                           self._first_req = request.open(self.args.Domain).read()
                        else:           
-                           first_req = request.open(self.args.Vulnurl).read()                                                      
+                           self._first_req = request.open(self.args.Vulnurl).read()                                                      
                        self.Get_Oregnal_URL = request.open(self.url).read() 
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
@@ -203,7 +203,7 @@ class Read_File:
                     except KeyboardInterrupt:
                          exit()           
                  
-                    if self.args.auth and len(self.Get_Oregnal_URL) > len(first_req) :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :                  
                         pythex = str(re.findall('Content-Length:.+',str(self.info)))
                         pythex= pythex.replace("['",'').replace("']",'')
                         if pythex in str(self.info):
@@ -257,7 +257,7 @@ class Read_File:
                                       exit()            
                            else:
                                 exit()   
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(first_req):
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req):
                            Read_File.file_name (self,**kwargs)
                            from Package.FileStore import FileManager
                            FileManager.FileRStore_Write(self,args=self.control) 
@@ -335,7 +335,9 @@ class Read_File:
           self.args.read = str("".join(re.findall('=.+',self.url)))\
           .replace("/","_").replace("=",'').replace(".",'')
         else:
-           self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)     
+           self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)   
+        with open (".RQData",'w')as RQ :
+             RQ.write(str(self._first_req))   
    except Exception  as a :
 
         print(a)                                       
