@@ -24,14 +24,24 @@ class FileManager():
             for line in diff:
                 if line.startswith('-'):
                     with open('./FileStore/' +self.ip_re+'/'+self.args.read,'a')as file:
-                        cleaned_content = "".join(re.findall('-+[a-zA-Z_]+.\w.+',  line))
-                        cleaned_content = re.sub(r'^-', '',              cleaned_content, flags=re.MULTILINE) 
-                        cleaned_content = re.sub(r'\\r', '',       cleaned_content,flags=re.MULTILINE)
-                        read_data= bytes(cleaned_content.encode())                                                      
-                        decoded64 = str(base64.b64decode(read_data.decode())).replace('b','').replace("'",'').split("\\n")
-                        for data in decoded64 :
-                            file.write(data+'\n')
-             
+                        try:
+                            cleaned_content = "".join(re.findall('-+[a-zA-Z_]+.\w.+',  line))
+                            cleaned_content = re.sub(r'^-', '',              cleaned_content, flags=re.MULTILINE) 
+                            cleaned_content = re.sub(r'\\r', '',       cleaned_content,flags=re.MULTILINE)
+                            read_data= bytes(cleaned_content.encode())                                                      
+                            decoded64 = str(base64.b64decode(read_data.decode())).replace('b','').replace("'",'').split("\\n")
+                            for data in decoded64 :
+                                file.write(data+'\n')
+                        except Exception as e :
+                            print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                            print("[*] Error : ",e )
+                            print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                            print("[*] Server Not Subport PHP Filter")
+                            print("[*] Try To Use with out php fillert with out -B or --base64 ")
+                            if os.path.exists('.index.txt'):
+                                os.remove('.index.txt')  
+                                os.remove('.RQData') 
+                            exit()                       
             if os.path.exists('.index.txt'):
                 os.remove('.index.txt')  
                 os.remove('.RQData')   

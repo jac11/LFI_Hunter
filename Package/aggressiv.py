@@ -24,8 +24,6 @@ class Aggressiv :
             if self.args.aggress:
                with open(self.args.Cookie,'r') as Cookie_file :
                       self.args.Cookie =  Cookie_file.read()
-            if self.args.Domain:
-               self.args.Vulnurl = self.args.Domain
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    

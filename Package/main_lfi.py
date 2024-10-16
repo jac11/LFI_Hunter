@@ -54,17 +54,10 @@ class Local_File_In:
                 print("[+] LFI-wordlist        : ................ | : "+self.args.filelist)
             else:
                 print("[+] LFI-wordlist        : ................ | : LFI-wordlist.txt")  
-            if self.args.Domain:
-               print("[+] Vulnrenable url     : ................ | : "+self.args.Domain)
-            else:   
-                print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
+            print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
-            print("[+] web Cookies         : ................ | : "+self.Cookie) 
-            if self.args.Domain:
-               self.args.Vulnurl = self.args.Domain
-            else:
-                pass   
+            print("[+] web Cookies         : ................ | : "+self.Cookie)   
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
             and self.args.Cookie and self.args.loginurl :
@@ -325,12 +318,6 @@ class Local_File_In:
                 if not self.args.base64:
                    print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
                 exit()                   
-        def Reverse_shell(self,**kwargs):
-                   try:
-                     from Package.LFT_Shell_connect import Shell_conncet
-                     Shell_conncet.__init__(self)
-                   except KeyboardInterrupt :
-                      exit()
         def file_name (self,**kwargs):
           self.args.read = "-".join(str("".join(re.findall('=.+',self.url))).split("/")[-2:])
           with open (".RQData",'w')as RQ :
