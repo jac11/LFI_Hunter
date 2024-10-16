@@ -8,17 +8,17 @@ with open('./Package/Banner','r') as banner:
 class Hannter_LFI:
       
       def __init__(self):
-         self.control()
+          self.control()
          
-         if self.args.readuser:
+          if self.args.readuser:
              with open(self.args.readuser,'r') as username:
                   self.args.user = username.read().replace('/n','')
-         if self.args.readpass:
+          if self.args.readpass:
 
             with open(self.args.readpass,'r') as password:
                self.args.password = password.read().replace('/n','')  
 
-         if self.args.aggress:
+          if self.args.aggress:
                from Package.aggressiv import Aggressiv  
 
                if self.args.auth and self.args.Vulnurl\
@@ -47,17 +47,19 @@ class Hannter_LFI:
                   print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
                   print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
                   exit()  
-         elif self.args.fizzing:
+          elif self.args.fizzing:
               from Package.main_lfi import Local_File_In
               Local_File_In.__init__(self,args = self.control)
               Local_File_In.url_request(self,args = self.control)
               Local_File_In.Scan_result(self,aegs = self.control)
-              if self.args.shell and self.args.port:
-                 Local_File_In.Reverse_shell(self,args = self.control)
+      
+          elif self.args.read:
+              from Package.one_read import Read_File
+              Read_File.__init__(self,args = self.control)  
+              Read_File.Login_auth(self,aegs = self.control)
+              Read_File.Scan_result(self,aegs = self.control)
+
                                          
-         else:    
-             print("else")
-             exit()    
       def control(self): 
          try: 
            parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
@@ -76,7 +78,6 @@ class Hannter_LFI:
            parser.add_argument("-u","--readuser"    , action=None                            ,help ="use specific username read from file")
            parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
            parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
-           parser.add_argument("-D","--Domain"      ,action=None                             ,help ="  use target url domain not as ip 'http://www.anyDomain.com'")
            parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
            parser.add_argument("-Z","--fizzing"    , action='store_true'                      ,help ="  to connent reverseshell   ")
            self.args = parser.parse_args()     
@@ -91,9 +92,7 @@ class Hannter_LFI:
             print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
             print("[*] try to use --help")
             print("[*] Check Readme file at : https://www.github/jac11/LFI_Hunter.git")
-            exit()
-            
-            exit()                
+            exit()           
 if __name__=='__main__':
     Hannter_LFI()
 
