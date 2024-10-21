@@ -21,10 +21,13 @@ class Read_File:
             if self.args.readpass:
                  with open(self.args.readpass,'r') as password:
                       self.args.password = password.read().replace('/n','')
-            if self.args.read:
-                  try:   
-                      with open(self.args.Cookie,'r') as Cookie_file :
-                          self.Cookie =  Cookie_file.read()
+            if self.args.read  :
+                  try:  
+                    if not self.args.config: 
+                        with open(self.args.Cookie,'r') as Cookie_file :
+                            self.Cookie =  Cookie_file.read()
+                    else:
+                        self.Cookie = self.args.Cookie        
                   except Exception as e :
                      print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                      print("[*] Error : ",e )
@@ -148,7 +151,7 @@ class Read_File:
             if not os.path.exists('./FileStore/'+self.ip_re+"/"):
                   os.makedirs('./FileStore/'+self.ip_re+"/") 
             if self.args.auth:
-               self.Login_auth()  
+              Read_File.Login_auth(self,args = self.control)  
                          
             with open('./Package/LFT_one.txt','r') as readline :
                 command_dir = readline.readlines()
@@ -169,7 +172,6 @@ class Read_File:
                     else:
                         self.LFI = (URL+LINE+self.args.read).replace('\n','')                                                                                               
                     self.url = self.LFI
-                    print(self.url)
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)

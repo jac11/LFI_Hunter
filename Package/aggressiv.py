@@ -21,9 +21,11 @@ class Aggressiv :
             if self.args.readpass:
                  with open(self.args.readpass,'r') as password:
                       self.args.password = password.read().replace('/n','') 
-            if self.args.aggress:
+            if self.args.aggress and not self.args.config:
                with open(self.args.Cookie,'r') as Cookie_file :
                       self.args.Cookie =  Cookie_file.read()
+            else:
+                           
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    

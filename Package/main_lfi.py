@@ -23,9 +23,13 @@ class Local_File_In:
                  with open(self.args.readpass,'r') as password:
                       self.args.password = password.read().replace('/n','')  
             try:   
-                if self.args.Cookie:
+                if self.args.Cookie and not self.args.config:
                    with open(self.args.Cookie,'r') as Cookie_file :
                       self.Cookie =  Cookie_file.read()
+                else:
+                    config = configparser.ConfigParser()
+                    config.read(self.args.config) 
+                    self.Cookie = config['DEFAULT']['cookie']    
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
