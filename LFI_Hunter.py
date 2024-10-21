@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-
+import configparser
 import argparse
+import re
 import sys
 with open('./Package/Banner','r') as banner:
    print(banner.read())
@@ -8,23 +9,22 @@ with open('./Package/Banner','r') as banner:
 class Hannter_LFI:
       
       def __init__(self):
-          self.control()
-         
-          if self.args.readuser:
-             with open(self.args.readuser,'r') as username:
+         self.control()
+         # self.Write_Config_File()
+         if self.args.readuser :
+            with open(self.args.readuser,'r') as username:
                   self.args.user = username.read().replace('/n','')
-          if self.args.readpass:
-
+         if self.args.readpass :
             with open(self.args.readpass,'r') as password:
                self.args.password = password.read().replace('/n','')  
-
-          if self.args.aggress:
+          
+         if self.args.Aggressiv :
                from Package.aggressiv import Aggressiv  
 
                if self.args.auth and self.args.Vulnurl\
                   and self.args.password and self.args.user\
                   and self.args.Cookie and self.args.loginurl\
-                  and self.args.aggress :  
+                  and self.args.aggress or self.args.config :  
 
                      Aggressiv.__init__(self,args = self.control)          
                      Aggressiv.Login_auth(self,args = self.control)
@@ -33,8 +33,7 @@ class Hannter_LFI:
 
                elif not self.args.auth and self.args.Vulnurl\
                and not self.args.password and not self.args.user and self.args.Cookie\
-               and self.args.aggress :  
-
+               and self.args.aggress :
                   Aggressiv.__init__(self,args = self.control)
                   Aggressiv.url_request(self,args = self.control)
                   Aggressiv.Scan_result(self,aegs = self.control)
@@ -47,45 +46,148 @@ class Hannter_LFI:
                   print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
                   print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
                   exit()  
-          elif self.args.fizzing:
+         elif self.args.fuzzing  :
               from Package.main_lfi import Local_File_In
               Local_File_In.__init__(self,args = self.control)
               Local_File_In.url_request(self,args = self.control)
               Local_File_In.Scan_result(self,aegs = self.control)
       
-          elif self.args.read:
+         elif self.args.read :
               from Package.one_read import Read_File
               Read_File.__init__(self,args = self.control)  
               Read_File.Login_auth(self,aegs = self.control)
               Read_File.Scan_result(self,aegs = self.control)
 
-                                         
+      
+                                   
       def control(self): 
          try: 
-           parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")             
-           parser.add_argument("-UV","--Vulnurl"    , action=None         ,required=False      ,help ="url Targst web") 
-           parser.add_argument("--auth"             , action='store_true'                    ,help ="auth mautrd web") 
-           parser.add_argument("-F","--filelist"    , action=None                            ,help ="read fron lfi wordlsit ")
-           parser.add_argument("-C","--Cookie"      , action=None        ,required=True      ,help ="Login sesion Cookie")  
-           parser.add_argument("-B","--base64"      , action='store_true'                    ,help ="decode filter php  base64")  
-           parser.add_argument("-R","--read"        , action=None                            ,help ="use to read file on the traget machine")  
-           parser.add_argument("-UF","--UserForm"   , action=None                            ,help =" add name of the HTML Form Login User")
-           parser.add_argument("-PF","--PassForm"   , action=None                            ,help ="add name of the HTML Form Login Passord")
-           parser.add_argument("-P","--password"    , action=None                            ,help ="use specific Passowrd")   
-           parser.add_argument("-p","--readpass"    , action=None                            ,help ="use specific Passowrd read from file")
-           parser.add_argument("-LU","--loginurl"   , action=None                            ,help =" add login url for auth motted") 
-           parser.add_argument("-U","--user"        , action=None                            ,help ="use specific username ")
-           parser.add_argument("-u","--readuser"    , action=None                            ,help ="use specific username read from file")
-           parser.add_argument("-A","--aggress"     ,action='store_true'                     ,help ="  use aggressiv mode  ")
-           parser.add_argument("--port"             ,action=None                             ,help ="  set port for netcat ")
-           parser.add_argument("-S","--shell"       , action=None                            ,help ="  to connent reverseshell   ")
-           parser.add_argument("-Z","--fizzing"    , action='store_true'                      ,help ="  to connent reverseshell   ")
-           self.args = parser.parse_args()     
-           if len(sys.argv)!=1 :
-              pass
-           else:
-              parser.print_help()         
-              exit()
+            parser = argparse.ArgumentParser(
+               description="Usage: [Option] [arguments] [-w] [arguments]",
+               epilog="Example: python LFI_Hunter.py -UV http://target.com/v1/file.php?file=  "
+           )
+           
+           # Define arguments with clear help descriptions and correct actions
+            parser.add_argument("-UV", "--Vulnurl", action="store", required=False, help="Target URL for the vulnerable web application")
+            parser.add_argument("--auth", action='store_true', help="Enable authentication mode")
+            parser.add_argument("-F", "--filelist", action="store", help="Read from an LFI wordlist file")
+            parser.add_argument("-C", "--Cookie", action="store", required=False, help="Provide the login session cookie")
+            parser.add_argument("-B", "--base64", action='store_true', help="Enable decoding of base64-filtered PHP code")
+            parser.add_argument("-R", "--read", action="store", help="Specify a file to read from the target machine")
+            parser.add_argument("-UF", "--UserForm", action="store", help="Specify the HTML login form username field")
+            parser.add_argument("-PF", "--PassForm", action="store", help="Specify the HTML login form password field")
+            parser.add_argument("-P", "--password", action="store", help="Specify a password")
+            parser.add_argument("-p", "--readpass", action="store", help="Read a password from a file")
+            parser.add_argument("-LU", "--loginurl", action="store", help="Provide the login URL for authentication mode")
+            parser.add_argument("-U", "--user", action="store", help="Specify a username")
+            parser.add_argument("-u", "--readuser", action="store", help="Read a username from a file")
+            parser.add_argument("-A", "--Aggressiv", action='store_true', help="Enable aggressive mode")
+            parser.add_argument("--port", action="store", help="Set the port for netcat")
+            parser.add_argument("-S", "--shell", action="store", help="Set up a reverse shell connection")
+            parser.add_argument("-Z", "--fuzzing", action='store_true', help="Enable brute-force mode")
+            parser.add_argument("--config", action='store', help="Use a configuration file with all options")
+
+            self.args = parser.parse_args() 
+            try: 
+               if not self.args.config:
+                  dlink = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
+                  ip_re = (dlink[-1][7:-2])
+                  ip_re = ip_re[7:]
+            except Exception :
+                  ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
+                  ip_re = ip_re.group()    
+            if len(sys.argv) > 1 and not self.args.config:
+               config = configparser.ConfigParser()
+               if   self.args.Cookie:
+                      config['Cookie']={}
+                      config['Cookie']['Cookie']= self.args.Cookie                   
+               if   self.args.Vulnurl:
+                      config['Vulnurls']={}
+                      config['Vulnurls']['Vulnurl']= self.args.Vulnurl             
+               if   self.args.filelist:
+                      config['filelist']={}
+                      config['filelist'][ 'filelist']= self.args.filelist                     
+               if   self.args.read:
+                      config['read']={}
+                      config['read'][ 'read']= self.args.read                      
+               if   self.args.UserForm:
+                      config['UserForm']={}
+                      config['UserForm'][ 'UserForm']= self.args.UserForm                     
+               if   self.args.PassForm:
+                      config['PassForm']={}
+                      config['PassForm'][ 'PassForm']= self.args. PassForm                 
+               if   self.args.password:
+                      config['password']={}
+                      config['password'][ 'password']= self.args.password               
+               if   self.args.loginurl:
+                      config['loginurl']={}
+                      config['loginurl'][ 'loginurl']= self.args.loginurl                
+               if   self.args.user:
+                      config['user']={}
+                      config['user'][ 'user']= self.args.user                   
+               if   self.args.port:
+                      config['port']={}
+                      config['port'][ 'port']= self.args.port                      
+               if   self.args.shell:
+                      config['shell']={}
+                      config['shell'][ 'shell']= self.args.shell                    
+               if   self.args.readpass:
+                      config['readpass']={}
+                      config['readpass'][ 'readpass']= self.args.readpass
+               if   self.args.fuzzing:
+                      config['fuzzing']={}
+                      config['fuzzing'][ 'fuzzing']= "True" 
+               if   self.args.Aggressiv:
+                      config['Aggressiv']={}
+                      config['Aggressiv'][ 'Aggressiv']= "True" 
+               if self.args.auth:
+                      config['auth']={}
+                      config['auth']['auth'] ="True"
+               if self.args.base64:
+                      config['base64']={}
+                      config['base64']['base64'] ="True"                 
+               with open(ip_re+'.ini', 'w') as configfile:
+                    config.write(configfile)  
+            elif len(sys.argv) > 1 and self.args.config:
+               config = configparser.ConfigParser()
+               config.read(self.args.config)
+               if not self.args.Vulnurl and 'Vulnurls' in config:
+                  self.args.Vulnurl = config['Vulnurls'].get('Vulnurl')
+               if not self.args.Cookie and 'Cookie' in config:
+                   self.args.Cookie = config['Cookie'].get('Cookie')
+               if not self.args.filelist and 'filelist' in config:
+                   self.args.filelist = config['filelist'].get('filelist')
+               if not self.args.read and 'read' in config:
+                   self.args.read = config['read'].get('read')
+               if not self.args.UserForm and 'UserForm' in config:
+                   self.args.UserForm = config['UserForm'].get('UserForm')
+               if not self.args.PassForm and 'PassForm' in config:
+                   self.args.PassForm = config['PassForm'].get('PassForm')
+               if not self.args.password and 'password' in config:
+                   self.args.password = config['password'].get('password')
+               if not self.args.loginurl and 'loginurl' in config:
+                   self.args.loginurl = config['loginurl'].get('loginurl')
+               if not self.args.user and 'user' in config:
+                   self.args.user = config['user'].get('user')
+               if not self.args.port and 'port' in config:
+                   self.args.port = config['port'].get('port')
+               if not self.args.shell and 'shell' in config:
+                   self.args.shell = config['shell'].get('shell')
+               if not self.args.readpass and 'readpass' in config:
+                   self.args.readpass = config['readpass'].get('readpass')
+               if not self.args.fuzzing and 'fuzzing' in config:
+                   self.args.fuzzing = config['fuzzing'].getboolean('fuzzing')
+               if not self.args.Aggressiv and 'Aggressiv' in config:
+                   self.args.Aggressiv = config['Aggressiv'].getboolean('Aggressiv')
+               if not self.args.base64 and 'base64' in config:
+                   self.args.base64 = config['base64'].getboolean('base64')
+               if not self.args.auth and 'auth' in config:
+                   self.args.auth = config['auth'].getboolean('auth')
+
+            else:
+               parser.print_help()         
+               exit()
+
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
             print("[*] Error :  Bad argument" )
