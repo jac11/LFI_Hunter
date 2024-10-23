@@ -24,7 +24,7 @@ class Hannter_LFI:
                if self.args.auth and self.args.Vulnurl\
                   and self.args.password and self.args.user\
                   and self.args.Cookie and self.args.loginurl\
-                  and self.args.aggress or self.args.config :  
+                  and self.args.Aggressiv or self.args.config :  
 
                      Aggressiv.__init__(self,args = self.control)          
                      Aggressiv.Login_auth(self,args = self.control)
@@ -33,7 +33,7 @@ class Hannter_LFI:
 
                elif not self.args.auth and self.args.Vulnurl\
                and not self.args.password and not self.args.user and self.args.Cookie\
-               and self.args.aggress :
+               and self.args.Aggressiv or self.args.config:
                   Aggressiv.__init__(self,args = self.control)
                   Aggressiv.url_request(self,args = self.control)
                   Aggressiv.Scan_result(self,aegs = self.control)
@@ -145,7 +145,10 @@ class Hannter_LFI:
                       config['auth']['auth'] ="True"
                if self.args.base64:
                       config['base64']={}
-                      config['base64']['base64'] ="True"                 
+                      config['base64']['base64'] ="True"     
+               if self.args.readuser:
+                      config['readuser'] ={}
+                      config['readuser']['readuser']= self.args.readuser                  
                with open(ip_re+'.ini', 'w') as configfile:
                     config.write(configfile)  
             elif len(sys.argv) > 1 and self.args.config:
@@ -183,6 +186,8 @@ class Hannter_LFI:
                    self.args.base64 = config['base64'].getboolean('base64')
                if not self.args.auth and 'auth' in config:
                    self.args.auth = config['auth'].getboolean('auth')
+               if not self.args.readuser and 'readuser' in config:
+                   self.args.readuser = config['readuser'].get('readuser')
 
             else:
                parser.print_help()         
@@ -197,5 +202,3 @@ class Hannter_LFI:
             exit()           
 if __name__=='__main__':
     Hannter_LFI()
-
-9
