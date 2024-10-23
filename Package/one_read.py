@@ -15,19 +15,22 @@ path = ('file://'+os.getcwd()+'/FileStore/')
 class Read_File:
    try:
      def __init__(self,**kwargs):
-            if self.args.readuser:
-                 with open(self.args.readuser,'r') as username:
-                      self.args.user = username.read().replace('/n','')
-            if self.args.readpass:
-                 with open(self.args.readpass,'r') as password:
-                      self.args.password = password.read().replace('/n','')
-            if self.args.read  :
+            if self.args.readuser or self.args.config:
+                try: 
+                    with open(self .args.readuser,'r') as username:
+                        self.args.user = username.read().replace('/n','')  
+                except TypeError:
+                    pass         
+            if self.args.readpass or self.args.config:
+                try:
+                    with open(self.args.readpass,'r') as password:
+                       self.args.password = password.read().replace('/n','')
+                except TypeError:
+                    pass       
+            if self.args.read or self.args.config :
                   try:  
-                    if not self.args.config: 
-                        with open(self.args.Cookie,'r') as Cookie_file :
-                            self.Cookie =  Cookie_file.read()
-                    else:
-                        self.Cookie = self.args.Cookie        
+                    with open(self.args.Cookie,'r') as Cookie_file :
+                        self.Cookie =  Cookie_file.read()      
                   except Exception as e :
                      print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                      print("[*] Error : ",e )
@@ -213,7 +216,7 @@ class Read_File:
                            print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
                            print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n',''))                           
-                           self.store_file()                           
+                           Read_File.file_name (self,**kwargs)                          
                            print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('_',"/")) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))

