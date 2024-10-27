@@ -3,21 +3,37 @@ import configparser
 import argparse
 import re
 import sys
+
 with open('./Package/Banner','r') as banner:
-   print(banner.read())
+    print(banner.read())
 
 class Hannter_LFI:
       
       def __init__(self):
          self.control()
-         # self.Write_Config_File()
+         if self.args.info :
+            from Package.lfi_info import ManPage
+            ManPage.man_info(self,args=self.control)
          if self.args.readuser :
-            with open(self.args.readuser,'r') as username:
-                  self.args.user = username.read().replace('/n','')
+            try:
+                with open(self.args.readuser,'r') as username:
+                      self.args.user = username.read().replace('/n','')
+            except FileNotFoundError as e :
+                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                print("[*] Error : ",e )
+                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                print("[*] find the correct Path ")
+                exit()          
          if self.args.readpass :
-            with open(self.args.readpass,'r') as password:
-               self.args.password = password.read().replace('/n','')  
-          
+            try : 
+                with open(self.args.readpass,'r') as password:
+                   self.args.password = password.read().replace('/n','')  
+            except FileNotFoundError as e :
+                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                print("[*] Error : ",e )
+                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                print("[*] find the correct Path ")  
+                exit()   
          if self.args.Aggressiv :
                from Package.aggressiv import Aggressiv  
 
@@ -67,6 +83,7 @@ class Hannter_LFI:
                description="Usage: [Option] [arguments] [-w] [arguments]",
                 epilog="Example: python LFI_Hunter.py -FP file1.php"
            )
+            parser.add_argument("-i","--info", action='store_true', help="see man page")
             parser.add_argument("-UV", "--Vulnurl", action="store", required=False, help="Target URL for the vulnerable web application")
             parser.add_argument("--auth", action='store_true', help="Enable authentication mode")
             parser.add_argument("-F", "--filelist", action="store", help="Read from an LFI wordlist file")
@@ -88,7 +105,7 @@ class Hannter_LFI:
             parser.add_argument("-FP","--PARAME", action='store', help="parameter fuzzing [replace the parameter with PARAME in url]\
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
-
+          
             self.args = parser.parse_args() 
             try: 
                if not self.args.config:
