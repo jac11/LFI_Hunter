@@ -57,17 +57,16 @@ class Hannter_LFI:
               Read_File.__init__(self,args = self.control)  
               Read_File.Login_auth(self,aegs = self.control)
               Read_File.Scan_result(self,aegs = self.control)
-
-      
+         elif self.args.PARAME :
+            from Package.parameters import UrlParameters
+            UrlParameters.URL_separated(self,args=self.control)
                                    
       def control(self): 
          try: 
             parser = argparse.ArgumentParser(
                description="Usage: [Option] [arguments] [-w] [arguments]",
-               epilog="Example: python LFI_Hunter.py -UV http://target.com/v1/file.php?file=  "
+                epilog="Example: python LFI_Hunter.py -FP file1.php"
            )
-           
-           # Define arguments with clear help descriptions and correct actions
             parser.add_argument("-UV", "--Vulnurl", action="store", required=False, help="Target URL for the vulnerable web application")
             parser.add_argument("--auth", action='store_true', help="Enable authentication mode")
             parser.add_argument("-F", "--filelist", action="store", help="Read from an LFI wordlist file")
@@ -86,6 +85,9 @@ class Hannter_LFI:
             parser.add_argument("-S", "--shell", action="store", help="Set up a reverse shell connection")
             parser.add_argument("-Z", "--fuzzing", action='store_true', help="Enable brute-force mode")
             parser.add_argument("--config", action='store', help="Use a configuration file with all options")
+            parser.add_argument("-FP","--PARAME", action='store', help="parameter fuzzing [replace the parameter with PARAME in url]\
+             [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
+            parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
 
             self.args = parser.parse_args() 
             try: 
@@ -94,8 +96,20 @@ class Hannter_LFI:
                   ip_re = (dlink[-1][7:-2])
                   ip_re = ip_re[7:]
             except Exception :
-                  ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
-                  ip_re = ip_re.group()    
+                try:
+                   ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.Vulnurl)
+                   ip_re = ip_re.group()   
+                except Exception:
+                    try:
+                       dlink = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.PARAME)).split()
+                       ip_re = (dlink[-1][7:-2])
+                       ip_re = ip_re[7:]
+                    except Exception:
+                        try:
+                            ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.PARAME)
+                            ip_re = ip_re.group()  
+                        except Exception:
+                            exit()       
             if len(sys.argv) > 1 and not self.args.config:
                config = configparser.ConfigParser()
                if   self.args.Cookie:
@@ -148,7 +162,14 @@ class Hannter_LFI:
                       config['base64']['base64'] ="True"     
                if self.args.readuser:
                       config['readuser'] ={}
-                      config['readuser']['readuser']= self.args.readuser                  
+                      config['readuser']['readuser']= self.args.readuser  
+               if self.args.PARAME:
+                      config['PARAME'] ={}
+                      config['PARAME']['PARAME']= self.args.PARAME
+               if self.args.paramslist:
+                      config['paramslist'] ={}
+                      config['paramslist']['paramslist']= self.args.paramslist 
+
                with open(ip_re+'.ini', 'w') as configfile:
                     config.write(configfile)  
             elif len(sys.argv) > 1 and self.args.config:
@@ -178,6 +199,12 @@ class Hannter_LFI:
                    self.args.shell = config['shell'].get('shell')
                if not self.args.readpass and 'readpass' in config:
                    self.args.readpass = config['readpass'].get('readpass')
+               if not self.args.readuser and 'readuser' in config:
+                   self.args.readuser = config['readuser'].get('readuser')
+               if not self.args.PARAME and 'PARAME' in config:
+                   self.args.PARAME = config['PARAME'].get('PARAME')   
+               if not self.args.paramslist and 'paramslist' in config:
+                   self.args.paramslist = config['paramslist'].get('paramslist')    
                if not self.args.fuzzing and 'fuzzing' in config:
                    self.args.fuzzing = config['fuzzing'].getboolean('fuzzing')
                if not self.args.Aggressiv and 'Aggressiv' in config:
@@ -186,11 +213,8 @@ class Hannter_LFI:
                    self.args.base64 = config['base64'].getboolean('base64')
                if not self.args.auth and 'auth' in config:
                    self.args.auth = config['auth'].getboolean('auth')
-               if not self.args.readuser and 'readuser' in config:
-                   self.args.readuser = config['readuser'].get('readuser')
-
             else:
-               parser.print_help()         
+               parser.print_help()      
                exit()
 
          except AssertionError as a :
