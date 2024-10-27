@@ -110,7 +110,6 @@ class Aggressiv :
                     exit()          
         def url_request(self,**kwargs): 
           try:
-           
             self.box_list    = []  
             self.link_list = []
             try: 
