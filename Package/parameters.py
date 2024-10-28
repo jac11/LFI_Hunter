@@ -4,17 +4,27 @@ import argparse
 import mechanize
 import ssl
 import time
+import os 
 import sys
+import re
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
 class  UrlParameters:
     def __init__(self,**kwargs):
+        
         self.Fprint_Print()
         self.URL_separated()
     def Fprint_Print(self,**kwargs):
         print("[+] Mothead             : ................ | : Fuzzing Parameters") 
         print("[+] Parameters url      : ................ | : "+self.args.PARAME)
+        try:
+            dlink = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.PARAME)).split()
+            self.ip_re = (dlink[-1][7:-2])
+            self.ip_re = self.ip_re[7:]
+        except Exception:
+            self.ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.PARAME)
+            self.ip_re = self.ip_re.group()
     def URL_separated(self,**kwargs):
         if self.args.Cookie  or self.args.config:
             try: 
@@ -26,7 +36,16 @@ class  UrlParameters:
                 print("[*] Error : ",e )
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                 print("[*] find the correct Path ")  
-                exit()           
+                exit()  
+        keyword = "PARAME"            
+        if  keyword not  in  self.args.PARAME :
+            print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+            print("[*] Error : PARAME Key Word Not in url ")
+            print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+            print("[*] replace the part of url parameter by PARAME ") 
+            print("[*] http://172.17.0.2/vulnerabilities/fi/?PARAME=file1.php  ")  
+            exit() 
+
         self.url = self.args.PARAME
         if "PARAME" in self.url:
             partlink0,partlink1 = self.url.split("PARAME")
@@ -92,6 +111,16 @@ class  UrlParameters:
             for _ in range(N) :
                 print("\t\t\t\t\t\t | : "+listlink[N]) 
                 N -=1 
- 
+            path = ('file://'+os.getcwd()+'/FileStore/')
+            if not os.path.exists('./FileStore/'+self.ip_re+"/"):
+                    os.makedirs('./FileStore/'+self.ip_re+"/")
+                    with open('./FileStore/'+self.ip_re+"/"+self.ip_re+'-Parameters','w') as PARAMET:
+                            PARAMET = PARAMET.write(str("\n".join(listlink)))     
+            else:
+                with open('./FileStore/'+self.ip_re+"/"+self.ip_re+'-Parameters','w') as PARAMET:
+                        PARAMET = PARAMET.write(str("\n".join(listlink))) 
+
+            print("\n[+] Data Save\t\t\t\t\t | : "+path+self.ip_re+'/'+self.ip_re+'-Parameters')                 
 if __name__=='__main__':
    UrlParameters()
+
