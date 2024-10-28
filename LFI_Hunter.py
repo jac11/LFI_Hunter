@@ -11,9 +11,7 @@ class Hannter_LFI:
       
       def __init__(self):
          self.control()
-         if self.args.info :
-            from Package.lfi_info import ManPage
-            ManPage.man_info(self,args=self.control)
+        
          if self.args.readuser :
             try:
                 with open(self.args.readuser,'r') as username:
@@ -75,15 +73,16 @@ class Hannter_LFI:
               Read_File.Scan_result(self,aegs = self.control)
          elif self.args.PARAME :
             from Package.parameters import UrlParameters
+            UrlParameters.Fprint_Print(self,args=self.control) 
             UrlParameters.URL_separated(self,args=self.control)
-                                   
+                                 
       def control(self): 
          try: 
             parser = argparse.ArgumentParser(
                description="Usage: [Option] [arguments] [-w] [arguments]",
                 epilog="Example: python LFI_Hunter.py -FP file1.php"
            )
-            parser.add_argument("-i","--info", action='store_true', help="see man page")
+            parser.add_argument("--man", action='store_true', help="see man page")
             parser.add_argument("-UV", "--Vulnurl", action="store", required=False, help="Target URL for the vulnerable web application")
             parser.add_argument("--auth", action='store_true', help="Enable authentication mode")
             parser.add_argument("-F", "--filelist", action="store", help="Read from an LFI wordlist file")
@@ -107,6 +106,10 @@ class Hannter_LFI:
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
           
             self.args = parser.parse_args() 
+            if self.args.man:
+                from Package.lfi_info import ManPage
+                ManPage.man_info(self,args=self.control)
+                exit()
             try: 
                if not self.args.config:
                   dlink = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
