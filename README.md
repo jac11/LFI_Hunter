@@ -126,7 +126,6 @@ LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt --
 In this command:
 - `-A` activates aggressive mode.
 - `--auth` allows interaction with authenticated sections of the application.
-- `--man` 	Show the man page.
 ### Examples
 
 1. **Basic URL Scan with Authentication**:
