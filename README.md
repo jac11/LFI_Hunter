@@ -76,12 +76,6 @@ LFI_Hunter [OPTIONS]
    LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /var/log/auth.log -S 192.168.0.10 --port 5555
    ```
 
-## Exit Status
-
-- **0**: Successful execution.
-- **1**: General error, such as invalid command input.
-- **2**: Misuse of command options.
-
 ## Files
 
 - **config.txt**: Configuration file storing default options, useful for automation.
@@ -101,16 +95,10 @@ LFI Hunter is licensed for user use only, with no permission to modify any sourc
 To access the man page with detailed information about usage and options, run:
 
 ```bash
-python3 lfi_info.py --man
+./ LFI_Hunter.py --man
 ```
 
 This will display all relevant information in a paginated format using the terminal's built-in capabilities.
 
 ---
 
-This README provides an overview of how to install, use, and contribute to LFI Hunter while ensuring that users understand its capabilities and limitations.
-
-Citations:
-[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/39151810/86d7026d-1fc5-4a40-a4fa-d3debb3714d7/lfi_info.py# LFI_Hunter
-
-UPdate in progress
