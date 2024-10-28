@@ -106,6 +106,9 @@ class Hannter_LFI:
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
           
             self.args = parser.parse_args() 
+            if len(sys.argv) == 1 :
+               parser.print_help()      
+               exit()
             if self.args.man:
                 from Package.lfi_info import ManPage
                 ManPage.man_info(self,args=self.control)
@@ -233,9 +236,7 @@ class Hannter_LFI:
                    self.args.base64 = config['base64'].getboolean('base64')
                if not self.args.auth and 'auth' in config:
                    self.args.auth = config['auth'].getboolean('auth')
-            else:
-               parser.print_help()      
-               exit()
+            
 
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
