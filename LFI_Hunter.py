@@ -190,11 +190,11 @@ class Hannter_LFI:
                       config['paramslist'] ={}
                       config['paramslist']['paramslist']= self.args.paramslist 
 
-               with open(ip_re+'.ini', 'w') as configfile:
+               with open("./Package/ConfigFile/"+ip_re+'.ini', 'w') as configfile:
                     config.write(configfile)  
             elif len(sys.argv) > 1 and self.args.config:
                config = configparser.ConfigParser()
-               config.read(self.args.config)
+               config.read("./Package/ConfigFile/"+self.args.config)
                if not self.args.Vulnurl and 'Vulnurls' in config:
                   self.args.Vulnurl = config['Vulnurls'].get('Vulnurl')
                if not self.args.Cookie and 'Cookie' in config:
