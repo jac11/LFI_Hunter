@@ -4,6 +4,7 @@ import os
 import  base64
 import re
 import difflib
+import sys
 class FileManager():
 
     def __init__(self,):
@@ -20,32 +21,17 @@ class FileManager():
                 file1_lines = f.read().split("\\n")
             with open(".RQData", 'r') as Rqreder:
                 file2_lines = Rqreder.read().split("\\n")  
+         #   if "<generator object unified_diff" in str(diff):
             diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='index.txt', tofile='.RQData', lineterm='')
             for line in diff:
-                if line.startswith('-'):
-                    with open('./FileStore/' +self.ip_re+'/'+self.args.read,'a')as file:
-                        try:
-                            cleaned_content = "".join(re.findall('-+[a-zA-Z_]+.\w.+',  line))
-                            cleaned_content = re.sub(r'^-', '',              cleaned_content, flags=re.MULTILINE) 
-                            cleaned_content = re.sub(r'\\r', '',       cleaned_content,flags=re.MULTILINE)
-                            read_data= bytes(cleaned_content.encode())                                                      
-                            decoded64 = str(base64.b64decode(read_data.decode())).replace('b','').replace("'",'').split("\\n")
-                            for data in decoded64 :
-                                file.write(data+'\n')
-                        except Exception as e :
-                            print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                            print("[*] Error : ",e )
-                            print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                            print("[*] Server Not Subport PHP Filter")
-                            print("[*] Try To Use with out php fillert with out -B or --base64 ")
-                            if os.path.exists('.index.txt'):
-                                os.remove('.index.txt')  
-                                os.remove('.RQData') 
-                            exit()                       
-            if os.path.exists('.index.txt'):
-                os.remove('.index.txt')  
-                os.remove('.RQData')   
-
+                matches = re.findall(r'[A-Za-z0-9+/=]{20,}', line) 
+                for match in matches:
+                    try:
+                        decoded_line = base64.b64decode(match).decode('utf-8')
+                        with open('./FileStore/' + self.ip_re + '/' + self.args.read, 'a') as file:
+                            file.write(decoded_line + '\n')     
+                    except Exception as e:
+                        print("Error decoding base64 content in match:", e)
         elif not self.args.base64  :   
 
             with open('.index.txt', 'r') as f:
