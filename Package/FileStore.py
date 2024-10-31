@@ -32,6 +32,9 @@ class FileManager():
                             file.write(decoded_line + '\n')     
                     except Exception as e:
                         print("Error decoding base64 content in match:", e)
+            if os.path.exists('.index.txt'):
+                os.remove('.index.txt')  
+                os.remove('.RQData')               
         elif not self.args.base64  :   
 
             with open('.index.txt', 'r') as f:
@@ -39,20 +42,17 @@ class FileManager():
             with open(".RQData", 'r') as Rqreder:
                 file2_lines = Rqreder.read().split("\\n")  
             diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='index.txt', tofile='.RQData', lineterm='')
+            print(diff)
             for line in diff:
                 if line.startswith('-'):
                     with open('./FileStore/' + self.ip_re+'/'+self.args.read,'a')as file:
-                        cleaned_content = re.sub(r'-<br\s*/?>', '', line)
-                        cleaned_content = re.sub(r'<!DOCTYPE html>\\r', '',  cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'<br />\\r', '',           cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'--- index.txt', '',       cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'<html>', '',              cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'^-','',                   cleaned_content,flags=re.MULTILINE)
-                        cleaned_content = re.sub(r'^-    ', '',              cleaned_content, flags=re.MULTILINE) 
-                        cleaned_content = re.sub(r'\\r', '',                 cleaned_content, flags=re.MULTILINE)
-                        cleaned_content = cleaned_content.strip() 
-                        file.write(cleaned_content+'\n')
-           
+                        if line.startswith('-'):
+                           cleaned_content = line[1:]
+                           cleaned_content = re.sub(r'<[^>]+>', '', cleaned_content)
+                           cleaned_content = re.sub(r'-- index.txt', '',       cleaned_content,flags=re.MULTILINE)
+                           cleaned_content = re.sub(r'\s+', ' ', cleaned_content).strip()
+                           file.write(cleaned_content+'\n')
+
             if os.path.exists('.index.txt'):
                 os.remove('.index.txt')  
                 os.remove('.RQData')   

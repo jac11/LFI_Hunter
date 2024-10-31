@@ -201,13 +201,13 @@ class Aggressiv :
                                     print(" "+"-"*149)                    
                                     num = 1 
                              try:       
-                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')                 
+                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')   
+
                              except IndexError:
                                  continue                    
                        self.box_list.append(number)
                        self.link_list.append(self.url.replace('\n',' '))
                        self.link_list.append (str(len(self.Get_Oregnal_URL)))
-                       
           except KeyboardInterrupt :
              exit()                                             
         def Scan_result(self,**kwargs) :
