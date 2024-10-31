@@ -285,7 +285,7 @@ class Read_File:
                                print("[+] save Locatoin       : ................ | : "+path+self.ip_re+'/'+self.args.read)              
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url or "/apache2/php.ini" in self.ur \
+                                or "environ" in self.url or "/apache2/php.ini" in self.url \
                                 or  "fpm/php.ini" in self.ur: 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
