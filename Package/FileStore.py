@@ -42,7 +42,7 @@ class FileManager():
             with open(".RQData", 'r') as Rqreder:
                 file2_lines = Rqreder.read().split("\\n")  
             diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='index.txt', tofile='.RQData', lineterm='')
-            print(diff)
+          
             for line in diff:
                 if line.startswith('-'):
                     with open('./FileStore/' + self.ip_re+'/'+self.args.read,'a')as file:
