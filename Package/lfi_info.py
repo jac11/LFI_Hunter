@@ -230,7 +230,7 @@ class ManPage:
                             Example:
                             LFI_Hunter -FP http://example.com/vulnerable_path?file= -C session_cookie.txt  -PL fuzz_params.txt
 
-                     -s, --status 
+                     -s, --status STATUS
 
                             Filter parameter to specify an HTTP status code for filtering responses.
                             Accepts a single HTTP status code (e.g., 200, 404, 500), 
@@ -245,7 +245,10 @@ class ManPage:
 
               Parameter fuzzing using a custom wordlist:
               LFI_Hunter -FP http://example.com/vulnerable_path?file= -C session_cookie.txt -PL fuzz_wordlist.txt
-
+              
+              Parameter fuzzing with  Filter parameter to specify an HTTP status code :
+              LFI_Hunter -FP http://example.com/vulnerable_path?file= -C session_cookie.txt -PL fuzz_wordlist.txt -s 301
+              
               Read the /etc/passwd file from a vulnerable URL:
               LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  -R /etc/passwd
 
