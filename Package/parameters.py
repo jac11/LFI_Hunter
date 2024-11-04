@@ -26,71 +26,104 @@ class  UrlParameters:
             self.ip_re = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',self.args.PARAME)
             self.ip_re = self.ip_re.group()
     def URL_separated(self,**kwargs):
-        if self.args.Cookie  or self.args.config:
+        try:
+            if self.args.Cookie  or self.args.config:
+                try: 
+                    with open(self.args.Cookie,'r') as Cookie:
+                        self.args.Cookie = Cookie.read().strip()
+                        print("[+] Cookie              : ................ | : "+self.args.Cookie)
+                except FileNotFoundError as e :
+                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                    print("[*] Error : ",e )
+                    print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                    print("[*] find the correct Path ")  
+                    exit()  
+            keyword = "PARAME"            
+            if  keyword not  in  self.args.PARAME :
+                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                print("[*] Error : PARAME Key Word Not in url ")
+                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                print("[*] replace the part of url parameter by PARAME ") 
+                print("[*] http://172.17.0.2/vulnerabilities/fi/?PARAME=file1.php  ")  
+                exit() 
+
+            self.url = self.args.PARAME
+            if "PARAME" in self.url:
+                partlink0,partlink1 = self.url.split("PARAME")
+            if not self.args.paramslist :
+                self.args.paramslist = "./Package/parames.txt" 
+
+            else:  
+                 pass   
+            print("[+] wordlist            : ................ | : "+self.args.paramslist)
+            count = 0 
+            listPar = []
+            listlink = []
             try: 
-                with open(self.args.Cookie,'r') as Cookie:
-                    self.args.Cookie = Cookie.read().strip()
-                    print("[+] Cookie              : ................ | : "+self.args.Cookie)
-            except FileNotFoundError as e :
+                with open (self.args.paramslist,'r')  as paramslist :  
+                    paramslist = paramslist.readlines()
+            except FileNotFoundError  as e :
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                 print("[*] Error : ",e )
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                 print("[*] find the correct Path ")  
                 exit()  
-        keyword = "PARAME"            
-        if  keyword not  in  self.args.PARAME :
-            print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-            print("[*] Error : PARAME Key Word Not in url ")
-            print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-            print("[*] replace the part of url parameter by PARAME ") 
-            print("[*] http://172.17.0.2/vulnerabilities/fi/?PARAME=file1.php  ")  
-            exit() 
+            for param in paramslist:
+                param = param.replace('\n','')
+                link = f'{partlink0}{param}{partlink1}'
+                print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')
+                print("[+] Parameter           : ................ | : "+param)
+                print("[+] try url             : ................ | : "+link)
+                if count > 0 :
+                    print("[+] Parameters Found\t: ................ | : "+str(count))
+                    for _ in range(8) :  
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+                else:             
+                    for _ in range(7) :
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K') 
+                request = mechanize.Browser()
+                request.set_handle_robots(False)
+                request.set_handle_redirect(False)
+                request.set_handle_refresh(True, max_time=1)
+                request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                ('Cookie',self.args.Cookie),
+                ] 
+                try:
+                    if not self.args.status:
+                        try:
+                            response = request.open(link)
+                            response_code = response.getcode()  # Get HTTP response code directly
+                            count += 1
+                            listPar.append(param)
+                            listlink.append(response.geturl() + " >> Code 200")
+                        except Exception as e:
+                            # Handle redirection specifically
+                            if '302' in str(e):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(link + " >> Code 302")
+                    elif self.args.status:
+                        try:
+                            response = request.open(link)
+                            response_code = response.getcode()  # Get HTTP response code directly
+                            if self.args.status == str(response_code):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(response.geturl() + " >> Code " + str(response_code))
+                        except Exception as e:
+                            # Handle specific response code error
+                            if self.args.status in str(e):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(link + " >> " + self.args.status)
 
-        self.url = self.args.PARAME
-        if "PARAME" in self.url:
-            partlink0,partlink1 = self.url.split("PARAME")
-        if not self.args.paramslist :
-            self.args.paramslist = "./Package/parames.txt" 
-
-        else:  
-             pass   
-        print("[+] wordlist            : ................ | : "+self.args.paramslist)
-        count = 0 
-        listPar = []
-        listlink = []
-        with open (self.args.paramslist,'r')  as paramslist :
-            paramslist = paramslist.readlines()
-        for param in paramslist:
-            param = param.replace('\n','')
-            link = f'{partlink0}{param}{partlink1}'
-            print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')
-            print("[+] Parameter           : ................ | : "+param)
-            print("[+] try url             : ................ | : "+link)
-            if count > 0 :
-                print("[+] Parameters Found\t: ................ | : "+str(count))
-                for _ in range(8) :  
-                    sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K')
-            else:             
-                for _ in range(7) :
-                    sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K') 
-            request = mechanize.Browser()
-            request.set_handle_robots(False)
-            request.set_handle_redirect(False)
-            request.set_handle_refresh(True, max_time=1)
-            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-            ('Cookie',self.args.Cookie),
-            ] 
-            try:
-                response = request.open(link)
-                count +=1
-              
-                listPar.append(param)
-                listlink.append(response.geturl())
-            except Exception as e :
-               pass
-            time.sleep(.02)
+                except KeyboardInterrupt :
+                    exit()   
+                time.sleep(.02)
+        except KeyboardInterrupt :
+            exit()    
         if count == 0 :
            sys.stdout.write('\x1b[1A')
            sys.stdout.write('\x1b[2K')   
