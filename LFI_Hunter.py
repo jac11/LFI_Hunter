@@ -104,6 +104,7 @@ class Hannter_LFI:
             parser.add_argument("-FP","--PARAME", action='store', help="parameter fuzzing [replace the parameter with PARAME in url]\
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
+            parser.add_argument("-s","--status", action='store', help="filter parameter with HTTP status responses")
           
             self.args = parser.parse_args() 
             if len(sys.argv) == 1 :
@@ -192,6 +193,9 @@ class Hannter_LFI:
                if self.args.paramslist:
                       config['paramslist'] ={}
                       config['paramslist']['paramslist']= self.args.paramslist 
+               if self.args.status:
+                      config['status'] = {}
+                      config['status']['status']  = self.args.status    
 
                with open("./Package/ConfigFile/"+ip_re+'.ini', 'w') as configfile:
                     config.write(configfile)  
@@ -236,8 +240,8 @@ class Hannter_LFI:
                    self.args.base64 = config['base64'].getboolean('base64')
                if not self.args.auth and 'auth' in config:
                    self.args.auth = config['auth'].getboolean('auth')
-            
-
+               if not self.args.status and 'status' in config:
+                    self.args.status = config['status'].get('status')    
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
             print("[*] Error :  Bad argument" )
