@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import configparser
+from configparser import ConfigParser, ExtendedInterpolation
 import argparse
 import re
 import sys
@@ -104,7 +104,7 @@ class Hannter_LFI:
             parser.add_argument("-FP","--PARAME", action='store', help="parameter fuzzing [replace the parameter with PARAME in url]\
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
-            parser.add_argument("-s","--status", action='store', help="filter parameter with HTTP status responses")
+            parser.add_argument("-s","--status", action='store', help="filtter parameter with  http  status respones ")
           
             self.args = parser.parse_args() 
             if len(sys.argv) == 1 :
@@ -135,7 +135,7 @@ class Hannter_LFI:
                         except Exception:
                             exit()       
             if len(sys.argv) > 1 and not self.args.config:
-               config = configparser.ConfigParser()
+               config = ConfigParser(interpolation=ExtendedInterpolation())
                if   self.args.Cookie:
                       config['Cookie']={}
                       config['Cookie']['Cookie']= self.args.Cookie                   
@@ -147,6 +147,7 @@ class Hannter_LFI:
                       config['filelist'][ 'filelist']= self.args.filelist                     
                if   self.args.read:
                       config['read']={}
+                      print(config['read'])
                       config['read'][ 'read']= self.args.read                      
                if   self.args.UserForm:
                       config['UserForm']={}
