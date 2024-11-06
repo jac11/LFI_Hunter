@@ -338,9 +338,16 @@ class Read_File:
      def file_name (self,**kwargs):
         if not self.args.read :
           self.args.read = str("".join(re.findall('=.+',self.url)))\
-          .replace("/","_").replace("=",'').replace(".",'')
+          .replace("/","_").replace("=",'').replace(".",'').replace('%','')\
+          .replace("2f",'').replace('2e','')
         else:
-            self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE)   
+            if "%" not in  self.args.read :
+                self.args.read = re.sub(r'/','_',self.args.read,flags=re.MULTILINE) 
+            else:
+                decoded_path = urllib.parse.unquote(self.args.read)
+                Match = re.search(r"/([^/]+)\x00",decoded_path)
+                self.args.read = Match.group(1) 
+        
         with open (".RQData",'w')as RQ :
              RQ.write(str(self._first_req))   
    except Exception  as a :

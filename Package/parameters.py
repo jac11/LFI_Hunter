@@ -8,7 +8,7 @@ import os
 import sys
 import re
 ssl._create_default_https_context = ssl._create_unverified_context
-
+print(0000)
 
 class  UrlParameters:
     def __init__(self,**kwargs):
@@ -69,58 +69,60 @@ class  UrlParameters:
                 print("[*] find the correct Path ")  
                 exit()  
             for param in paramslist:
-                param = param.replace('\n','')
-                link = f'{partlink0}{param}{partlink1}'
-                print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')
-                print("[+] Parameter           : ................ | : "+param)
-                print("[+] try url             : ................ | : "+link)
-                if count > 0 :
-                    print("[+] Parameters Found\t: ................ | : "+str(count))
-                    for _ in range(8) :  
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')
-                else:             
-                    for _ in range(7) :
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K') 
-                request = mechanize.Browser()
-                request.set_handle_robots(False)
-                request.set_handle_redirect(False)
-                request.set_handle_refresh(True, max_time=1)
-                request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                ('Cookie',self.args.Cookie),
-                ] 
-                try:
-                    if not self.args.status:
-                        try:
-                            response = request.open(link)
-                            response_code = response.getcode()  # Get HTTP response code directly
-                            count += 1
-                            listPar.append(param)
-                            listlink.append(response.geturl() + " >> Code 200")
-                        except Exception as e:
-                            # Handle redirection specifically
-                            if '302' in str(e):
+                if '#'in param:
+                    pass
+                else:                  
+                    param = param.replace('\n','')
+                    link = f'{partlink0}{param}{partlink1}'
+                    print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')
+                    print("[+] Parameter           : ................ | : "+param)
+                    print("[+] try url             : ................ | : "+link)
+                    if count > 0 :
+                        print("[+] Parameters Found\t: ................ | : "+str(count))
+                        for _ in range(8) :  
+                            sys.stdout.write('\x1b[1A')
+                            sys.stdout.write('\x1b[2K')
+                    else:             
+                        for _ in range(7) :
+                            sys.stdout.write('\x1b[1A')
+                            sys.stdout.write('\x1b[2K') 
+                    request = mechanize.Browser()
+                    request.set_handle_robots(False)
+                    request.set_handle_redirect(False)
+                    request.set_handle_refresh(True, max_time=1)
+                    request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                    ('Cookie',self.args.Cookie),
+                    ] 
+                    try:
+                        if not self.args.status:
+                            try:
+                                response = request.open(link)
+                                response_code = response.getcode()  # Get HTTP response code directly
                                 count += 1
                                 listPar.append(param)
-                                listlink.append(link + " >> Code 302")
-                    elif self.args.status:
-                        try:
-                            response = request.open(link)
-                            response_code = response.getcode()  # Get HTTP response code directly
-                            if self.args.status == str(response_code):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(response.geturl() + " >> Code " + str(response_code))
-                        except Exception as e:
-                            # Handle specific response code error
-                            if self.args.status in str(e):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(link + " >> " + self.args.status)
-
-                except KeyboardInterrupt :
-                    exit()   
+                                listlink.append(response.geturl() + " >> Code 200")
+                            except Exception as e:
+                                # Handle redirection specifically
+                                if '302' in str(e):
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(link + " >> Code 302")
+                        elif self.args.status:
+                            try:
+                                response = request.open(link)
+                                response_code = response.getcode()  # Get HTTP response code directly
+                                if self.args.status == str(response_code):
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(response.geturl() + " >> Code " + str(response_code))
+                            except Exception as e:
+                                # Handle specific response code error
+                                if self.args.status in str(e):
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(link + " >> " + self.args.status)
+                    except KeyboardInterrupt :
+                        exit()   
                 time.sleep(.02)
         except KeyboardInterrupt :
             exit()    
