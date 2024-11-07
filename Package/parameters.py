@@ -124,7 +124,7 @@ class  UrlParameters:
                         exit()   
                 time.sleep(.02)
         except KeyboardInterrupt :
-            exit()    
+            pass    
         if count == 0 :
            sys.stdout.write('\x1b[1A')
            sys.stdout.write('\x1b[2K')   
