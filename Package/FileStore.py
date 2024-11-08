@@ -52,8 +52,8 @@ class FileManager():
                            cleaned_content = re.sub(r'\s+', ' ', cleaned_content).strip()
                            file.write(cleaned_content+'\n')
 
-          #  if os.path.exists('.index.txt'):
-           #     os.remove('.index.txt')  
-            #    os.remove('.RQData')   
+            if os.path.exists('.index.txt'):
+                os.remove('.index.txt')  
+                os.remove('.RQData')   
 if __name__=="__main__":
     FileManager()
