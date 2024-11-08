@@ -8,6 +8,7 @@ import os
 import sys
 import re
 ssl._create_default_https_context = ssl._create_unverified_context
+print(0000)
 
 class  UrlParameters:
     def __init__(self,**kwargs):
@@ -96,12 +97,11 @@ class  UrlParameters:
                         if not self.args.status:
                             try:
                                 response = request.open(link)
-                                response_code = response.getcode()  # Get HTTP response code directly
+                                response_code = response.getcode()  
                                 count += 1
                                 listPar.append(param)
                                 listlink.append(response.geturl() + " >> Code 200")
                             except Exception as e:
-                                # Handle redirection specifically
                                 if '302' in str(e):
                                     count += 1
                                     listPar.append(param)
@@ -109,13 +109,12 @@ class  UrlParameters:
                         elif self.args.status:
                             try:
                                 response = request.open(link)
-                                response_code = response.getcode()  # Get HTTP response code directly
+                                response_code = response.getcode()  
                                 if self.args.status == str(response_code):
                                     count += 1
                                     listPar.append(param)
                                     listlink.append(response.geturl() + " >> Code " + str(response_code))
                             except Exception as e:
-                                # Handle specific response code error
                                 if self.args.status in str(e):
                                     count += 1
                                     listPar.append(param)
@@ -123,8 +122,8 @@ class  UrlParameters:
                     except KeyboardInterrupt :
                         exit()   
                 time.sleep(.02)
-        except KeyboardInterrupt :
-            pass    
+        except KeyboardInterrupt : 
+            pass  
         if count == 0 :
            sys.stdout.write('\x1b[1A')
            sys.stdout.write('\x1b[2K')   

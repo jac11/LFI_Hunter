@@ -17,13 +17,14 @@ class Aggressiv :
         def __init__(self,**kwargs):          
             try: 
                 with open(self .args.readuser,'r') as username:
-                        self.args.user = username.read().replace('/n','')  
+                        self.args.user = username.read().replace('\n','') 
+                        print(self.args.user) 
             except TypeError:
                     pass         
             if self.args.readpass or self.args.config:
                 try:
                     with open(self.args.readpass,'r') as password:
-                       self.args.password = password.read().replace('/n','')
+                       self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass      
             try:   
@@ -58,7 +59,7 @@ class Aggressiv :
                       request.set_handle_redirect(True)
                       request.set_handle_refresh(True, max_time=1)
                       request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                           ('username',f'{self.args.user}'),
+                                           ('username',f'{self.args.user}'.replace('\n','')),
                                            ('password',f'{self.args.password}'),
                                            ('Cookie',str(self.Cookie).replace('\n',''))]                     
                       url_login = request.open(loginurl)    
@@ -85,17 +86,17 @@ class Aggressiv :
                                           exit()                                   
 
                       if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
-                           request["username"] = f'{self.args.user}'
-                           request["password"] = f'{self.args.password}' 
+                           request["username"] = f'{self.args.user}'.replace('\n','')
+                           request["password"] = f'{self.args.password}'.replace('\n','') 
                       elif self.args.user and  self.args.password and not self.args.PassForm and  self.args.UserForm:
-                           request[f'{self.args.UserForm}'] = f'{self.args.user}'
-                           request["password"] = f'{self.args.password}'
+                           request[f'{self.args.UserForm}'] = f'{self.args.user}'.replace('\n','')
+                           request["password"] = f'{self.args.password}'.replace('\n','')
                       elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
-                           request["username"] = '{self.args.user}'
-                           request[f'{self.args.PassForm}']=f'{self.args.password}' 
+                           request["username"] = f'{self.args.user}'.replace('\n','')
+                           request[f'{self.args.PassForm}']=f'{self.args.password}'.replace('\n','') 
                       elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
-                           request[f'{self.args.UserForm}'] = f'{self.args.user}'
-                           request[f'{self.args.PassForm}']=f'{self.args.password}' 
+                           request[f'{self.args.UserForm}'] = f'{self.args.user}'.replace('\n','')
+                           request[f'{self.args.PassForm}']=f'{self.args.password}'.replace('\n','')
                       response   = request.submit()         
                       self.info = response.info()
                       content    = response.read()  
@@ -135,7 +136,7 @@ class Aggressiv :
                         
                     else:
                          URL = self.args.Vulnurl+LINE
-                                                                                                          
+                                                                                      
                     self.url =  URL
                     request = mechanize.Browser()
                     request.set_handle_robots(False)

