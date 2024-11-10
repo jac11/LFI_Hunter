@@ -15,7 +15,7 @@ class Hannter_LFI:
          if self.args.readuser :
             try:
                 with open(self.args.readuser,'r') as username:
-                      self.args.user = username.read().replace('/n','')
+                      self.args.user = username.read().replace('\n','')
             except FileNotFoundError as e :
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                 print("[*] Error : ",e )
@@ -25,7 +25,7 @@ class Hannter_LFI:
          if self.args.readpass :
             try : 
                 with open(self.args.readpass,'r') as password:
-                   self.args.password = password.read().replace('/n','')  
+                   self.args.password = password.read().replace('\n','')  
             except FileNotFoundError as e :
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                 print("[*] Error : ",e )
