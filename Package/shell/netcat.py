@@ -28,9 +28,3 @@ else:
      line1 = f'nc -nvlp {port}'
 print(line)     
 command = os.system(line1)
-
-
-   
-   
- 
-
