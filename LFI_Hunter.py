@@ -11,7 +11,13 @@ class Hannter_LFI:
       
       def __init__(self):
          self.control()
-        
+         if self.args.webshell:
+             with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
+                args = sys.argv[1:] 
+                for i in range(0, len(args), 2):
+                    Comm = " ".join(args[i:i+2]) 
+                    writesysinfo.write(Comm + '\n')
+            
          if self.args.readuser :
             try:
                 with open(self.args.readuser,'r') as username:
@@ -75,7 +81,7 @@ class Hannter_LFI:
             from Package.parameters import UrlParameters
             UrlParameters.Fprint_Print(self,args=self.control) 
             UrlParameters.URL_separated(self,args=self.control)
-                                 
+                               
       def control(self): 
          try: 
             parser = argparse.ArgumentParser(
@@ -105,11 +111,11 @@ class Hannter_LFI:
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
             parser.add_argument("-s","--status", action='store', help="filtter parameter with  http  status respones ")
-          
+            parser.add_argument("--webshell", action='store_true', help="to run command webshell from command line dirtcet  ")
             self.args = parser.parse_args() 
             if len(sys.argv) == 1 :
                parser.print_help()      
-               exit()
+               exit() 
             if self.args.man:
                 from Package.lfi_info import ManPage
                 ManPage.man_info(self,args=self.control)
@@ -147,7 +153,6 @@ class Hannter_LFI:
                       config['filelist'][ 'filelist']= self.args.filelist                     
                if   self.args.read:
                       config['read']={}
-                      print(config['read'])
                       config['read'][ 'read']= self.args.read                      
                if   self.args.UserForm:
                       config['UserForm']={}
@@ -196,12 +201,15 @@ class Hannter_LFI:
                       config['paramslist']['paramslist']= self.args.paramslist 
                if self.args.status:
                       config['status'] = {}
-                      config['status']['status']  = self.args.status    
+                      config['status']['status']  = self.args.status  
+               if self.args.webshell:
+                      config['webshell']={}
+                      config['webshell']['webshell'] ="True"           
 
                with open("./Package/ConfigFile/"+ip_re+'.ini', 'w') as configfile:
                     config.write(configfile)  
             elif len(sys.argv) > 1 and self.args.config:
-               config = configparser.ConfigParser()
+               config = ConfigParser()
                config.read("./Package/ConfigFile/"+self.args.config)
                if not self.args.Vulnurl and 'Vulnurls' in config:
                   self.args.Vulnurl = config['Vulnurls'].get('Vulnurl')
@@ -242,7 +250,9 @@ class Hannter_LFI:
                if not self.args.auth and 'auth' in config:
                    self.args.auth = config['auth'].getboolean('auth')
                if not self.args.status and 'status' in config:
-                    self.args.status = config['status'].get('status')    
+                    self.args.status = config['status'].get('status') 
+               if not self.args.webshell and 'webshell' in config:
+                    self.args.webshell= config['webshell'].getboolean('webshell')        
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
             print("[*] Error :  Bad argument" )
