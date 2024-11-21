@@ -13,6 +13,8 @@ class Hannter_LFI:
          self.control()
          if self.args.webshell:
              with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
+                pass
+             with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
                 args = sys.argv[1:] 
                 for i in range(0, len(args), 2):
                     Comm = " ".join(args[i:i+2]) 
