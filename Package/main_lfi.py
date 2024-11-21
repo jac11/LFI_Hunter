@@ -295,7 +295,11 @@ class Local_File_In:
                             with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
                                 dataurl = dataurl.write("self.url ="+self.url)
                             from Package.webshell import WebShellInteract
-                            WebShellInteract.WebShell(self,**kwargs) 
+                            if 'auth' in self.url or 'auth.log' in self.url:
+                                WebShellInteract.Soures_Web(self,**kwargs) 
+                            else:    
+                                WebShellInteract.WebShell(self,**kwargs)  
+                            exit()                    
                         else:
                              exit()                 
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :
@@ -349,8 +353,11 @@ class Local_File_In:
                             with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
                                 dataurl = dataurl.write("self.url ="+self.url)
                             from Package.webshell import WebShellInteract
-                            WebShellInteract.WebShell(self,**kwargs) 
-                            exit()                        
+                            if 'auth' in self.url or 'auth.log' in self.url:
+                                WebShellInteract.Soures_Web(self,**kwargs) 
+                            else:    
+                                WebShellInteract.WebShell(self,**kwargs)  
+                            exit()                           
                         else:
                               exit()                             
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
