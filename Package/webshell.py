@@ -18,7 +18,7 @@ class WebShellInteract:
 
     def Soures_Web(self,**kwargs):
         print('\n'+'='*20+"\n[*] WebShell Interact "+'\n'+'='*30+'\n')
-        print("[+] Mothead             : ................ | : WebShell Active ")    
+        print("[+] Moode               : ................ | : WebShell Active ")    
         print("[+] WebShell            : ................ | : <?php system(['cmd']);?>")
         print("[+] file access         : ................ | : "+self.args.read.replace("_",'/'))
         print("[+] Mothead             : ................ | : SSH Interact")   
@@ -31,7 +31,7 @@ class WebShellInteract:
 
     def WebShell(self,**kwargs):
         print('\n'+'='*20+"\n[*] WebShell Interact "+'\n'+'='*30+'\n')
-        print("[+] Mothead             : ................ | : WebShell Active ")    
+        print("[+] Moode               : ................ | : WebShell Active ")    
         print("[+] WebShell            : ................ | : <?php system(['cmd']);?>")
         print("[+] file access         : ................ | : "+self.args.read.replace("_",'/'))
             
