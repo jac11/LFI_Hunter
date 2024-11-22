@@ -3,9 +3,15 @@ from configparser import ConfigParser, ExtendedInterpolation
 import argparse
 import re
 import sys
+import os
 
 with open('./Package/Banner','r') as banner:
     print(banner.read())
+if os.path.exists("./Package/shell/respones.txt"):
+   os.remove("./Package/shell/respones.txt")
+if os.path.exists("./Package/shell/respones2.txt") :
+    os.remove("./Package/shell/respones2.txt")
+
 
 class Hannter_LFI:
       
