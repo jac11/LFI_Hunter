@@ -164,7 +164,7 @@ class Aggressiv :
                          exit()     
                     except KeyboardInterrupt :
                          exit()        
-                    self.number = str(len(self.Get_Oregnal_URL,timeout=5))
+                    self.number = str(len(self.Get_Oregnal_URL))
                     try:  
                         filename = LINE.replace('../','').replace('%2f','').replace('....//','').replace('../','').replace('file://','').replace('//','/').replace('\n','')
                         if self.args.base64:
