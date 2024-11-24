@@ -234,7 +234,7 @@ class Aggressiv :
                 for entry in final_list:
                     links = "".join(re.findall(r'(https?://[^\s]+)', entry))
                     if links:
-                        writefile.write(f'[+] {links[0:-len(self.number)]}\n')
+                        writefile.write(f'[+] {links[0:]}\n')
             with open('./Package/.links', 'r') as readfile:
                 readdata = "\n".join(readfile.read().splitlines())
             print('\n' + '=' * 40 + " \n[*] Vulnerable Path " + '\n' + '=' * 30 + '\n')

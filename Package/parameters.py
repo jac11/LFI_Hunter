@@ -8,7 +8,7 @@ import os
 import sys
 import re
 ssl._create_default_https_context = ssl._create_unverified_context
-print(0000)
+
 
 class  UrlParameters:
     def __init__(self,**kwargs):
@@ -59,6 +59,7 @@ class  UrlParameters:
             count = 0 
             listPar = []
             listlink = []
+            listLen = []
             try: 
                 with open (self.args.paramslist,'r')  as paramslist :  
                     paramslist = paramslist.readlines()
@@ -93,34 +94,43 @@ class  UrlParameters:
                     request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                     ('Cookie',self.args.Cookie),
                     ] 
-                    try:
-                        if not self.args.status:
-                            try:
-                                response = request.open(link)
-                                response_code = response.getcode()  
+                   
+                    if not self.args.status:
+                        try:
+                            response = request.open(link)
+                            response_code = response.getcode()  
+                            response_content = response.read() 
+                            if len(response_content) in listLen :
+                                pass
+                            else:    
+                                listLen.append(len(response_content))
+                                print(listLen)
+                            if len(response_content) == listLen[0]:
+                                pass
+                            else:    
                                 count += 1
                                 listPar.append(param)
                                 listlink.append(response.geturl() + " >> Code 200")
-                            except Exception as e:
-                                if '302' in str(e):
-                                    count += 1
-                                    listPar.append(param)
-                                    listlink.append(link + " >> Code 302")
-                        elif self.args.status:
-                            try:
-                                response = request.open(link)
-                                response_code = response.getcode()  
-                                if self.args.status == str(response_code):
-                                    count += 1
-                                    listPar.append(param)
-                                    listlink.append(response.geturl() + " >> Code " + str(response_code))
-                            except Exception as e:
-                                if self.args.status in str(e):
-                                    count += 1
-                                    listPar.append(param)
-                                    listlink.append(link + " >> " + self.args.status)
-                    except KeyboardInterrupt :
-                        exit()   
+
+                        except Exception as e:
+                            if '302' in str(e):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(link + " >> Code 302")
+                    elif self.args.status:
+                        try:
+                            response = request.open(link)
+                            response_code = response.getcode()  
+                            if self.args.status == str(response_code):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(response.geturl() + " >> Code " + str(response_code))
+                        except Exception as e:
+                            if self.args.status in str(e):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(link + " >> " + self.args.status)
+                  
                 time.sleep(.02)
         except KeyboardInterrupt : 
             pass  
