@@ -41,8 +41,8 @@ class RunShellCode:
                         self.Cookie = Cookie.read()   
                 if "self.url ="  in line:
                    self.url = line.replace("self.url =",'').replace("\n",'').strip()           
-          #  if os.path.exists('./Package/shell/.FileWebInfo.txt'):
-           #     os.remove('./Package/shell/.FileWebInfo.txt')  
+            if os.path.exists('./Package/shell/.FileWebInfo.txt'):
+                os.remove('./Package/shell/.FileWebInfo.txt')  
             else:
                 pass
         try :            
