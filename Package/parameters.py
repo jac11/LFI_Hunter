@@ -69,24 +69,18 @@ class  UrlParameters:
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                 print("[*] find the correct Path ")  
                 exit()  
+            print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')    
+            print(" "+"-"*149)
+            print("|  "+f"{'   Parameters    ':<23}","|"+f"{'  Length ':<10}","|"+f"{'  Status ':<10}","|",f"{'  Full-URL   ':<96}","|")
+            print(" "+"-"*149)    
             for param in paramslist:
                 if '#'in param:
                     pass
                 else:                  
                     param = param.replace('\n','')
                     link = f'{partlink0}{param}{partlink1}'
-                    print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')
-                    print("[+] Parameter           : ................ | : "+param)
-                    print("[+] try url             : ................ | : "+link)
-                    if count > 0 :
-                        print("[+] Parameters Found\t: ................ | : "+str(count))
-                        for _ in range(8) :  
-                            sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K')
-                    else:             
-                        for _ in range(7) :
-                            sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K') 
+                    
+                   
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(False)
@@ -94,24 +88,33 @@ class  UrlParameters:
                     request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                     ('Cookie',self.args.Cookie),
                     ] 
-                   
+                    
                     if not self.args.status:
                         try:
                             response = request.open(link)
                             response_code = response.getcode()  
                             response_content = response.read() 
+                            
+
+                            
+                            print("|  "+f"{  param[0:20]     :<23}","| "+f"{  len(response_content) :<10}"+"| "+f"{  response_code :<10}"+"| "+f"{   link[0:]   :<96}","|") 
+                            sys.stdout.write('\x1b[1A')
+                            sys.stdout.write('\x1b[2K')        
                             if len(response_content) in listLen :
                                 pass
                             else:    
                                 listLen.append(len(response_content))
-                                print(listLen)
                             if len(response_content) == listLen[0]:
                                 pass
                             else:    
                                 count += 1
                                 listPar.append(param)
                                 listlink.append(response.geturl() + " >> Code 200")
-
+                                Lget = response_content
+                                Cget = response_code
+                                GLink = response.geturl()
+                                PGet = param 
+                                print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|") 
                         except Exception as e:
                             if '302' in str(e):
                                 count += 1

