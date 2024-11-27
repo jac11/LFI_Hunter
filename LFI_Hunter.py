@@ -13,7 +13,7 @@ if os.path.exists("./Package/shell/respones2.txt") :
     os.remove("./Package/shell/respones2.txt")
 
 
-class Hannter_LFI:
+class Hunter_LFI:
       
       def __init__(self):
          self.control()
@@ -269,4 +269,4 @@ class Hannter_LFI:
             print("[*] Check Readme file at : https://www.github/jac11/LFI_Hunter.git")
             exit()           
 if __name__=='__main__':
-    Hannter_LFI()
+    Hunter_LFI()
