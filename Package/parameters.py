@@ -79,8 +79,6 @@ class  UrlParameters:
                 else:                  
                     param = param.replace('\n','')
                     link = f'{partlink0}{param}{partlink1}'
-                    
-                   
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(False)
@@ -94,40 +92,75 @@ class  UrlParameters:
                             response = request.open(link)
                             response_code = response.getcode()  
                             response_content = response.read() 
-                            
-
-                            
-                            print("|  "+f"{  param[0:20]     :<23}","| "+f"{  len(response_content) :<10}"+"| "+f"{  response_code :<10}"+"| "+f"{   link[0:]   :<96}","|") 
-                            sys.stdout.write('\x1b[1A')
-                            sys.stdout.write('\x1b[2K')        
-                            if len(response_content) in listLen :
+                            if response_code != 200:
                                 pass
                             else:    
-                                listLen.append(len(response_content))
-                            if len(response_content) == listLen[0]:
-                                pass
-                            else:    
+                                print("|  "+f"{  param[0:20]     :<23}","| "+f"{  len(response_content) :<10}"+"| "+f"{  response_code :<10}"+"| "+f"{   link[0:]   :<96}","|") 
+                                sys.stdout.write('\x1b[1A')
+                                sys.stdout.write('\x1b[2K')        
+                                if len(response_content) in listLen :
+                                    pass
+                                else:    
+                                    listLen.append(len(response_content))
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(response.geturl() + " >> Code 200")
+                                    Lget = response_content
+                                    Cget = response_code
+                                    GLink = response.geturl()
+                                    PGet = param 
+                                    print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|")
+                                if len(response_content) == listLen[0]  :
+                                   pass
+                                else:    
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(response.geturl() + " >> Code 200")
+                                    Lget = response_content
+                                    Cget = response_code
+                                    GLink = response.geturl()
+                                    PGet = param 
+                                    print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|") 
+                        except Exception as e :
+                            if '302' in str(e):
+                                Lget = 1042
+                                code = 302
                                 count += 1
                                 listPar.append(param)
-                                listlink.append(response.geturl() + " >> Code 200")
+                                print("|  "+f"{ param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  code :<10}"+"| "+f"{    link  :<96}","|") 
+                                listlink.append(link + " >> Code 302")
+                            if "301" in str(e):
+                                Lget = 1042
+                                code = 301
+                                count += 1  
+                                print("|  "+f"{  param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  code :<10}"+"| "+f"{    link    :<96}","|") 
+                                listPar.append(param)
+                                listlink.append(link + " >> Code 301")
+                            if "404" in str(e) :
+                                Lget = 230
+                                Cget = 404
+                                print("|  "+f"{  param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  Cget  :<10}"+"| "+f"{   link  :<96}","|") 
+                                sys.stdout.write('\x1b[1A')
+                                sys.stdout.write('\x1b[2K')
+                                        
+                    elif self.args.status:
+                           
+                        try:
+                            response = request.open(link)
+                            response_code = response.getcode()  
+                            response_content = response.read()   
+                            print("|  "+f"{  param[0:20]     :<23}","| "+f"{  len(response_content) :<10}"+"| "+f"{  response_code :<10}"+"| "+f"{   link[0:]   :<96}","|") 
+                            sys.stdout.write('\x1b[1A')
+                            sys.stdout.write('\x1b[2K') 
+                            if self.args.status == str(response_code):
+                                count += 1
+                                listPar.append(param)
+                                listlink.append(response.geturl() + " >> Code " + str(response_code))
                                 Lget = response_content
                                 Cget = response_code
                                 GLink = response.geturl()
                                 PGet = param 
                                 print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|") 
-                        except Exception as e:
-                            if '302' in str(e):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(link + " >> Code 302")
-                    elif self.args.status:
-                        try:
-                            response = request.open(link)
-                            response_code = response.getcode()  
-                            if self.args.status == str(response_code):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(response.geturl() + " >> Code " + str(response_code))
                         except Exception as e:
                             if self.args.status in str(e):
                                 count += 1
@@ -137,9 +170,7 @@ class  UrlParameters:
                 time.sleep(.02)
         except KeyboardInterrupt : 
             pass  
-        if count == 0 :
-           sys.stdout.write('\x1b[1A')
-           sys.stdout.write('\x1b[2K')   
+        if count == 0 :   
            print('\n'+'='*20+"\n[*] Parameters Found  "+'\n'+'='*30+'\n')
            print("[+] Parameters Found              : ................ | : no Parameters found")
            exit()
