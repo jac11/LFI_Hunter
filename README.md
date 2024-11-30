@@ -15,7 +15,8 @@
 ## Installation
 
 To use LFI Hunter, clone the repository from GitHub:
-
+### Install dependencies:
+* pip install -r requirements.txt
 ```bash
 git clone https://github.com/jac11/LFI_Hunter.git
 cd LFI_Hunter
