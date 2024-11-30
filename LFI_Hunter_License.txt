@@ -1,0 +1,40 @@
+
+LFI Hunter License Agreement
+
+Copyright (c) [Year] [Your Name or Organization]
+
+This software is released under the terms of the MIT License, with the following restrictions to ensure responsible usage.
+
+License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is provided to do so, subject to the following conditions:
+
+1. Ethical Use:
+   - This software is intended solely for ethical hacking and vulnerability research. 
+   - You must have explicit, written permission from the system owner before using this tool to test or scan any system, network, or website.
+
+2. No Malicious Use:
+   - The use of this software for any illegal, malicious, or unauthorized activity is prohibited. This includes, but is not limited to, unauthorized penetration testing, exploitation of vulnerabilities, data theft, or causing damage to any system, network, or website.
+   - By using this software, you agree not to engage in activities that may lead to unauthorized access or harm to any individual, organization, or system.
+
+3. Disclosure of Vulnerabilities:
+   - If you discover a vulnerability or security issue while using this tool, you are required to report it directly to the owner of the affected system or website in a responsible manner.
+   - Do not exploit or publicly disclose any vulnerabilities without the permission of the system owner, and follow responsible disclosure practices.
+
+4. No Commercial Use:
+   - You may not use, sell, or distribute this software for any commercial purpose, including using it to conduct penetration testing services for compensation or integrating it into paid products.
+
+5. No Modification or Redistribution:
+   - Modification or redistribution of the Software is not permitted without prior approval from the original author, except for personal, non-commercial use, where you may modify the code for educational purposes only.
+
+6. Disclaimer of Warranty:
+   - The Software is provided “as is,” without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, or noninfringement.
+   - In no event shall the authors or copyright holders be liable for any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the Software.
+
+Termination
+
+If you violate any of these conditions, your right to use the Software will be automatically terminated. Upon termination, you must cease all use of the Software and destroy any copies of it in your possession.
+
+Acknowledgments
+
+The development of LFI Hunter is made possible by the open-source community. We encourage responsible disclosure of security vulnerabilities and support efforts to improve the security of web applications.
