@@ -176,7 +176,8 @@ Developed by jac11. For issues or contributions, visit the [GitHub repository](h
 
 ## License
 
-LFI Hunter is licensed for user use only, with no permission to modify any source code.
+* LFI Hunter is licensed for user use only, with no permission to modify any source code.
+* read LFI_Hunter_License.txt
 
 ---
 
