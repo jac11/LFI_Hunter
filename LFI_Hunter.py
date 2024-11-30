@@ -7,25 +7,16 @@ import os
 
 with open('./Package/Banner','r') as banner:
     print(banner.read())
-if os.path.exists("./Package/shell/respones.txt"):
-   os.remove("./Package/shell/respones.txt")
-if os.path.exists("./Package/shell/respones2.txt") :
+if  os.path.exists("./Package/shell/respones.txt"):
+    os.remove("./Package/shell/respones.txt")
+if  os.path.exists("./Package/shell/respones2.txt") :
     os.remove("./Package/shell/respones2.txt")
 
 
-class Hunter_LFI:
+class Hannter_LFI:
       
       def __init__(self):
-         self.control()
-         if self.args.webshell:
-             with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
-                pass
-             with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
-                args = sys.argv[1:] 
-                for i in range(0, len(args), 2):
-                    Comm = " ".join(args[i:i+2]) 
-                    writesysinfo.write(Comm + '\n')
-            
+         self.control()  
          if self.args.readuser :
             try:
                 with open(self.args.readuser,'r') as username:
@@ -119,7 +110,8 @@ class Hunter_LFI:
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
             parser.add_argument("-s","--status", action='store', help="filtter parameter with  http  status respones ")
-            parser.add_argument("--webshell", action='store_true', help="Execute commands via web shell directly from the command line for remote server interaction")
+            parser.add_argument("--webshell", action='store_true', help="Execute commands via web shell directly from the command line for remote server interaction.")
+
             self.args = parser.parse_args() 
             if len(sys.argv) == 1 :
                parser.print_help()      
@@ -259,8 +251,9 @@ class Hunter_LFI:
                    self.args.auth = config['auth'].getboolean('auth')
                if not self.args.status and 'status' in config:
                     self.args.status = config['status'].get('status') 
-               if not self.args.webshell and 'webshell' in config:
+               if not self.args.webshell and 'webshell' in config:            
                     self.args.webshell= config['webshell'].getboolean('webshell')        
+
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
             print("[*] Error :  Bad argument" )
@@ -269,4 +262,4 @@ class Hunter_LFI:
             print("[*] Check Readme file at : https://www.github/jac11/LFI_Hunter.git")
             exit()           
 if __name__=='__main__':
-    Hunter_LFI()
+    Hannter_LFI()
