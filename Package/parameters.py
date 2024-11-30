@@ -72,7 +72,19 @@ class  UrlParameters:
             print('\n'+'='*20+"\n[*] Test Parameters"+'\n'+'='*30+'\n')    
             print(" "+"-"*149)
             print("|  "+f"{'   Parameters    ':<23}","|"+f"{'  Length ':<10}","|"+f"{'  Status ':<10}","|",f"{'  Full-URL   ':<96}","|")
-            print(" "+"-"*149)    
+            print(" "+"-"*149)   
+            param1 =  "GOOO"
+            link = f'{partlink0}{param1}{partlink1}'
+            request = mechanize.Browser()
+            request.set_handle_robots(False)
+            request.set_handle_redirect(False)
+            request.set_handle_refresh(True, max_time=1)
+            request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+            ('Cookie',self.args.Cookie),
+            ]  
+            response = request.open(link)
+            response_content = response.read() 
+            listLen.append(len(response_content))
             for param in paramslist:
                 if '#'in param:
                     pass
@@ -102,14 +114,6 @@ class  UrlParameters:
                                     pass
                                 else:    
                                     listLen.append(len(response_content))
-                                    count += 1
-                                    listPar.append(param)
-                                    listlink.append(response.geturl() + " >> Code 200")
-                                    Lget = response_content
-                                    Cget = response_code
-                                    GLink = response.geturl()
-                                    PGet = param 
-                                    print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|")
                                 if len(response_content) == listLen[0]  :
                                    pass
                                 else:    
