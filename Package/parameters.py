@@ -16,8 +16,8 @@ class  UrlParameters:
         self.Fprint_Print()
         self.URL_separated()
     def Fprint_Print(self,**kwargs):
-        print("[+] Mothead             : ................ | : Fuzzing Parameters") 
-        print("[+] Parameters url      : ................ | : "+self.args.PARAME)
+        print("[+] Mothead                    : ................ | : Fuzzing Parameters") 
+        print("[+] Parameters url             : ................ | : "+self.args.PARAME)
         try:
             dlink = str(re.search(r'https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.PARAME)).split()
             self.ip_re = (dlink[-1][7:-2])
@@ -31,7 +31,7 @@ class  UrlParameters:
                 try: 
                     with open(self.args.Cookie,'r') as Cookie:
                         self.args.Cookie = Cookie.read().strip()
-                        print("[+] Cookie              : ................ | : "+self.args.Cookie)
+                        print("[+] Cookie                     : ................ | : "+self.args.Cookie)
                 except FileNotFoundError as e :
                     print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                     print("[*] Error : ",e )
@@ -55,7 +55,9 @@ class  UrlParameters:
 
             else:  
                  pass   
-            print("[+] wordlist            : ................ | : "+self.args.paramslist)
+            print("[+] wordlist                   : ................ | : "+self.args.paramslist)
+            if self.args.status:
+                print("[+] Filter Response Status     : ................ | : "+self.args.status)
             count = 0 
             listPar = []
             listlink = []
@@ -157,20 +159,23 @@ class  UrlParameters:
                             sys.stdout.write('\x1b[1A')
                             sys.stdout.write('\x1b[2K') 
                             if self.args.status == str(response_code):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(response.geturl() + " >> Code " + str(response_code))
-                                Lget = response_content
-                                Cget = response_code
-                                GLink = response.geturl()
-                                PGet = param 
-                                print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|") 
+                                if len(response_content) in listLen :
+                                    pass
+                                else:    
+                                    listLen.append(len(response_content))
+                                if len(response_content) == listLen[0]  :
+                                   pass
+                                else:    
+                                    count += 1
+                                    listPar.append(param)
+                                    listlink.append(response.geturl() + " >> Code 200")
+                                    Lget = response_content
+                                    Cget = response_code
+                                    GLink = response.geturl()
+                                    PGet = param 
+                                    print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|")  
                         except Exception as e:
-                            if self.args.status in str(e):
-                                count += 1
-                                listPar.append(param)
-                                listlink.append(link + " >> " + self.args.status)
-                  
+                            continue
                 time.sleep(.02)
         except KeyboardInterrupt : 
             pass  
