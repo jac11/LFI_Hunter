@@ -1,0 +1,2 @@
+mechanize==0.4.9
+paramiko==3.4.1
