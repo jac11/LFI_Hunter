@@ -293,13 +293,13 @@ class Local_File_In:
                                       exit()   
                         elif self.args.webshell or self.args.config:
                             from Package.webshell import WebShellInteract    
-                                if 'auth' in self.url or 'auth.log' in self.url:
-                                    WebShellInteract.__init__(self) 
-                                    WebShellInteract.Soures_Web(self,**kwargs) 
-                                else:   
-                                    WebShellInteract.__init__(self)  
-                                    WebShellInteract.WebShell(self,**kwargs)  
-                                exit()             
+                            if 'auth' in self.url or 'auth.log' in self.url:
+                                WebShellInteract.__init__(self) 
+                                WebShellInteract.Soures_Web(self,**kwargs) 
+                            else:   
+                                WebShellInteract.__init__(self)  
+                                WebShellInteract.WebShell(self,**kwargs)  
+                            exit()             
                         else:
                             exit()            
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :
@@ -351,13 +351,13 @@ class Local_File_In:
                                       exit()
                         elif self.args.webshell or self.args.config:
                             from Package.webshell import WebShellInteract    
-                                if 'auth' in self.url or 'auth.log' in self.url:
-                                    WebShellInteract.__init__(self) 
-                                    WebShellInteract.Soures_Web(self,**kwargs) 
-                                else:   
-                                    WebShellInteract.__init__(self)  
-                                    WebShellInteract.WebShell(self,**kwargs)  
-                                exit()             
+                            if 'auth' in self.url or 'auth.log' in self.url:
+                                WebShellInteract.__init__(self) 
+                                WebShellInteract.Soures_Web(self,**kwargs) 
+                            else:   
+                                WebShellInteract.__init__(self)  
+                                WebShellInteract.WebShell(self,**kwargs)  
+                            exit()             
                         else:
                             exit()                           
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
