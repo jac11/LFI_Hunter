@@ -298,4 +298,3 @@ class ManPage:
               exit()              
 if __name__=='__main__':
        ManPage()
-

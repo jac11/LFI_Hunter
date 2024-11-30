@@ -291,17 +291,17 @@ class Local_File_In:
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
                                       exit()   
-                        elif self.args.webshell:
-                            with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
-                                dataurl = dataurl.write("self.url ="+self.url)
-                            from Package.webshell import WebShellInteract
-                            if 'auth' in self.url or 'auth.log' in self.url:
-                                WebShellInteract.Soures_Web(self,**kwargs) 
-                            else:    
-                                WebShellInteract.WebShell(self,**kwargs)  
-                            exit()                    
+                        elif self.args.webshell or self.args.config:
+                            from Package.webshell import WebShellInteract    
+                                if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.__init__(self) 
+                                    WebShellInteract.Soures_Web(self,**kwargs) 
+                                else:   
+                                    WebShellInteract.__init__(self)  
+                                    WebShellInteract.WebShell(self,**kwargs)  
+                                exit()             
                         else:
-                             exit()                 
+                            exit()            
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :
                         Local_File_In.file_name(self)
                         from Package.FileStore import FileManager
@@ -349,17 +349,17 @@ class Local_File_In:
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
                                       exit()
-                        elif self.args.webshell:
-                            with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
-                                dataurl = dataurl.write("self.url ="+self.url)
-                            from Package.webshell import WebShellInteract
-                            if 'auth' in self.url or 'auth.log' in self.url:
-                                WebShellInteract.Soures_Web(self,**kwargs) 
-                            else:    
-                                WebShellInteract.WebShell(self,**kwargs)  
-                            exit()                           
+                        elif self.args.webshell or self.args.config:
+                            from Package.webshell import WebShellInteract    
+                                if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.__init__(self) 
+                                    WebShellInteract.Soures_Web(self,**kwargs) 
+                                else:   
+                                    WebShellInteract.__init__(self)  
+                                    WebShellInteract.WebShell(self,**kwargs)  
+                                exit()             
                         else:
-                              exit()                             
+                            exit()                           
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')

@@ -273,17 +273,17 @@ class Read_File:
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
                                       exit()  
-                           elif self.args.webshell:
-                                with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
-                                    dataurl = dataurl.write("self.url ="+self.url)
-                                from Package.webshell import WebShellInteract
+                           elif self.args.webshell or self.args.config:
+                                from Package.webshell import WebShellInteract    
                                 if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.__init__(self) 
                                     WebShellInteract.Soures_Web(self,**kwargs) 
-                                else:    
+                                else:   
+                                    WebShellInteract.__init__(self)  
                                     WebShellInteract.WebShell(self,**kwargs)  
-                                exit()                     
+                                exit()             
                            else:
-                                exit()   
+                                exit()     
                     elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req):
                            Read_File.file_name (self,**kwargs)
                            from Package.FileStore import FileManager
@@ -339,13 +339,13 @@ class Read_File:
                                       print("[*] Example : --read /proc/self/environ")
                                       print("[*] Example : --read /var/log/auth")
                                       exit()    
-                           elif self.args.webshell:
-                                with open('./Package/shell/.FileWebInfo.txt',"a") as dataurl:
-                                    dataurl = dataurl.write("self.url ="+self.url)
+                           elif self.args.webshell or self.args.config:
                                 from Package.webshell import WebShellInteract    
                                 if 'auth' in self.url or 'auth.log' in self.url:
+                                    WebShellInteract.__init__(self) 
                                     WebShellInteract.Soures_Web(self,**kwargs) 
-                                else:    
+                                else:   
+                                    WebShellInteract.__init__(self)  
                                     WebShellInteract.WebShell(self,**kwargs)  
                                 exit()             
                            else:

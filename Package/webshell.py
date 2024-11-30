@@ -15,8 +15,32 @@ from subprocess import Popen, PIPE, check_output, Popen
 ssl._create_default_https_context = ssl._create_unverified_context
 
 class WebShellInteract:
-
+    def __init__(self):
+        with open('./Package/shell/.FileWebInfo.txt', 'w') as writesysinfo:
+            pass
+        with open('./Package/shell/.FileWebInfo.txt', 'a') as writesysinfo:
+            if not self.args.config:
+                args = sys.argv[1:] 
+                for i in range(0, len(args), 2):
+                    Comm = " ".join(args[i:i+2]) 
+                    writesysinfo.write(Comm + '\n')
+                writesysinfo.write("self.url ="+self.url)
+            else:
+                if "/" in self.args.config:
+                    with open(self.args.config, 'r') as configfile: 
+                        readconfig = configfile.readlines()
+                else:    
+                    with open("./Package/ConfigFile/"+self.args.config, 'r') as configfile:
+                        readconfig = configfile.readlines() 
+                for con in readconfig:
+                    if "cookie = " in con :
+                        writesysinfo.write("-C "+con.split("=")[-1])
+                    if "vulnurl =" in con :
+                        writesysinfo.write("-UV "+con.split(" = ")[-1])
+                writesysinfo.write("self.url ="+self.url)           
+                             
     def Soures_Web(self,**kwargs):
+
         print('\n'+'='*20+"\n[*] WebShell Interact "+'\n'+'='*30+'\n')
         print("[+] Moode               : ................ | : WebShell Active ")    
         print("[+] WebShell            : ................ | : <?php system(['cmd']);?>")
