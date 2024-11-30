@@ -183,11 +183,11 @@ class ManPage:
                             
                      --webshell 
                     
-                            The --webshell option works by capturing the web application's responses and saving them into files.
-                            After the initial request, the second response is compared with the first to detect any differences. 
-                            This process works over the HTTP protocol or via a socket connection (using a specific IP and port). Essentially,
-                            it allows remote command execution on the target server, similar to using a web shell directly from the browser, 
-                            letting the attacker interact with the server and run commands in real time.
+                            The --webshell option enables an attacker or tester to execute commands remotely on a target server through a web application. 
+                            After sending the command via HTTP,the tool saves both the initial and the altered web responses. 
+                            By comparing them, it detects changes that suggest successful execution of the command. 
+                            This mimics the experience of using a web shell directly from the browser, allowing real-time
+                            interaction with the server without needing a socket connection.
                             Example:
                             LFI_Hunter -UV http://example.com/vulnerable_path?file= -C session_cookie.txt  -R /var/log/auth.log --webshell     
 
