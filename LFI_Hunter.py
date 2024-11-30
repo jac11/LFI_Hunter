@@ -119,7 +119,7 @@ class Hunter_LFI:
              [Fuzzed URL: http://example.com/vulnerabilities/fi/?PARAME=file1.php]")
             parser.add_argument("-PL","--paramslist", action='store', help="parameter fuzzing wordlist")
             parser.add_argument("-s","--status", action='store', help="filtter parameter with  http  status respones ")
-            parser.add_argument("--webshell", action='store_true', help="to run command webshell from command line dirtcet  ")
+            parser.add_argument("--webshell", action='store_true', help="Execute commands via web shell directly from the command line for remote server interaction")
             self.args = parser.parse_args() 
             if len(sys.argv) == 1 :
                parser.print_help()      
