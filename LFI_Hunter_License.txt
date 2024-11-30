@@ -1,7 +1,7 @@
 
 LFI Hunter License Agreement
 
-Copyright (c) [Year] [Your Name or Organization]
+Copyright (c) [2024] [jac11]
 
 This software is released under the terms of the MIT License, with the following restrictions to ensure responsible usage.
 
