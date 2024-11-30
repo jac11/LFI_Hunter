@@ -51,7 +51,11 @@ class RunShellCode:
         except Exception as go :
             print(go) 
             time.sleep(10) 
-
+        except KeyboardInterrupt:
+            if os.path.exists("./Package/shell/.response.txt"):
+               os.remove("./Package/shell/.response.txt")
+               os.remove("./Package/shell/.response2.txt")
+               exit()
     def WebControl(self,**kwargs):
         if 'sess_' in self.url:
              while True:
