@@ -154,7 +154,7 @@ class Aggressiv :
                                  ('password',f'{self.args.password}')]
                     try:   
                         first_req = request.open(self.args.Vulnurl).read()   
-                        self.Get_Oregnal_URL = request.open(self.url,timeout=3).read()
+                        self.Get_Oregnal_URL = request.open(self.url,timeout=6).read()
                     except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                          print("[*] Error : ",e )
