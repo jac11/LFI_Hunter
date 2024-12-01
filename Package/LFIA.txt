@@ -54,7 +54,6 @@ file:///../../../../../../etc/passwd
 file:////../../../../../../etc/passwd
 file:////../../../../../../../var/log/auth
 file:///auth.log
-
 file:///auth
 file:///index
 file:///index.php
