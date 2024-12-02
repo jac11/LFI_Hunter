@@ -156,14 +156,7 @@ class Aggressiv :
                         first_req = request.open(self.args.Vulnurl).read()   
                         self.Get_Oregnal_URL = request.open(self.url,timeout=6).read()
                     except Exception  as e :
-                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                         print("[*] Error : ",e )
-                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                         print("[*] Try To Use PHP-Filter as -B Option ")
-                         print("[*] Follow url Format ")
-                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                         exit()     
+                         continue    
                     except KeyboardInterrupt :
                          exit()        
                     self.number = str(len(self.Get_Oregnal_URL))

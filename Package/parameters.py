@@ -89,7 +89,7 @@ class  UrlParameters:
                 response_content = response.read() 
                 listLen.append(len(response_content))
             except Exception :
-                pass    
+                listLen.append(101)    
             for param in paramslist:
                 if '#'in param:
                     pass
@@ -145,6 +145,13 @@ class  UrlParameters:
                                 print("|  "+f"{  param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  code :<10}"+"| "+f"{    link    :<96}","|") 
                                 listPar.append(param)
                                 listlink.append(link + " >> Code 301")
+                            if "500" in str(e):
+                                Lget = 1042
+                                code = 500
+                                count += 1  
+                                print("|  "+f"{  param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  code :<10}"+"| "+f"{    link    :<96}","|") 
+                                listPar.append(param)
+                                listlink.append(link + " >> Code 500")    
                             if "404" in str(e) :
                                 Lget = 230
                                 Cget = 404
@@ -153,7 +160,6 @@ class  UrlParameters:
                                 sys.stdout.write('\x1b[2K')
                                         
                     elif self.args.status:
-                           
                         try:
                             response = request.open(link)
                             response_code = response.getcode()  
@@ -161,6 +167,7 @@ class  UrlParameters:
                             print("|  "+f"{  param[0:20]     :<23}","| "+f"{  len(response_content) :<10}"+"| "+f"{  response_code :<10}"+"| "+f"{   link[0:]   :<96}","|") 
                             sys.stdout.write('\x1b[1A')
                             sys.stdout.write('\x1b[2K') 
+                            
                             if self.args.status == str(response_code):
                                 if len(response_content) in listLen :
                                     pass
@@ -178,7 +185,11 @@ class  UrlParameters:
                                     PGet = param 
                                     print("|  "+f"{  PGet[0:20]     :<23}","| "+f"{  len(Lget) :<10}"+"| "+f"{  Cget :<10}"+"| "+f"{    GLink [0:]   :<96}","|")  
                         except Exception as e:
-                            continue
+                            Lget = 230
+                            Cget =  500
+                            print("|  "+f"{  param[0:20]     :<23}","| "+f"{  Lget :<10}"+"| "+f"{  Cget  :<10}"+"| "+f"{   link  :<96}","|") 
+                            sys.stdout.write('\x1b[1A')
+                            sys.stdout.write('\x1b[2K')
                 time.sleep(.02)
         except KeyboardInterrupt : 
             pass  
