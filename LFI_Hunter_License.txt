@@ -25,7 +25,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
    - You may not use, sell, or distribute this software for any commercial purpose, including using it to conduct penetration testing services for compensation or integrating it into paid products.
 
 5. No Modification or Redistribution:
-   - Modification or redistribution of the Software is not permitted without prior approval from the original author, except for personal, non-commercial use, where you may modify the code for educational purposes only.
+   - Modification or redistribution of the Software is not permitted without prior approval from the original author.
 
 6. Disclaimer of Warranty:
    - The Software is provided “as is,” without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, or noninfringement.
