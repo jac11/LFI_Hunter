@@ -34,7 +34,7 @@ class  UrlParameters:
                 elif not self.args.Cookie or self.args.config:
                     with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
                         self.Cookie =  Cookie_file.read()   
-                print("[+] Cookie                     : ................ | : "+self.args.Cookie)               
+                print("[+] Cookie                     : ................ | : "+self.Cookie)               
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
@@ -104,7 +104,7 @@ class  UrlParameters:
                     request.set_handle_redirect(False)
                     request.set_handle_refresh(True, max_time=1)
                     request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                    ('Cookie',self.args.Cookie),
+                    ('Cookie',self.Cookie),
                     ] 
                     
                     if not self.args.status:
