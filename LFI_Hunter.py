@@ -144,7 +144,11 @@ class Hannter_LFI:
                config = ConfigParser(interpolation=ExtendedInterpolation())
                if   self.args.Cookie:
                       config['Cookie']={}
-                      config['Cookie']['Cookie']= self.args.Cookie                   
+                      config['Cookie']['Cookie']= self.args.Cookie  
+               else:
+                   if not self.args.Cookie:
+                       config['Cookie']={}
+                       config['Cookie']['Cookie']= "./Package/ConfigFile/.Cookie.txt"                       
                if   self.args.Vulnurl:
                       config['Vulnurls']={}
                       config['Vulnurls']['Vulnurl']= self.args.Vulnurl             
@@ -253,7 +257,6 @@ class Hannter_LFI:
                     self.args.status = config['status'].get('status') 
                if not self.args.webshell and 'webshell' in config:            
                     self.args.webshell= config['webshell'].getboolean('webshell')        
-
          except AssertionError as a :
             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
             print("[*] Error :  Bad argument" )
