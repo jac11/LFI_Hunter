@@ -93,15 +93,16 @@ class Shell_conncet:
                     self.Get_Oregnal_URL = request.open(command).read()
                     exit()
                 except Exception  as e :
-                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                         print("[*] Error : ",e )
-                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                         print("[*] Follow url Format ")
-                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                         exit()
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                   print("[*] Error : ",e )
+                   print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                   print("[*] Use the following format ")
+                   print("[*] Check connection or port.")
+                   print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                   print("[*] Example : http://10.10.10.193:4000/login.php")
+                   exit()
                 except KeyboardInterrupt:
-                     exit()           
+                    exit()           
   
         elif  'php.ini' in self.url or 'apache2' in  self.url :
             with open('./Package/shell/php.txt', 'r') as paylaodPHPRead:
@@ -226,13 +227,14 @@ class Shell_conncet:
                         self.Get_Oregnal_URL = request.open(command).read()
                         exit()
                     except Exception  as e :
-                             print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                             print("[*] Error : ",e )
-                             print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                             print("[*] Follow url Format ")
-                             print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                             print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                             exit()
+                        print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                        print("[*] Error : ",e )
+                        print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                        print("[*] Use the following format ")
+                        print("[*] Check connection or port.")
+                        print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                        print("[*] Example : http://10.10.10.193:4000/login.php")
+                        exit()
                     except KeyboardInterrupt:
                          exit()
         

@@ -27,16 +27,19 @@ class Read_File:
                        self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass       
-            if self.args.read or self.args.config :
-                  try:  
+            try:   
+                if self.args.Cookie  or self.args.config:
                     with open(self.args.Cookie,'r') as Cookie_file :
+                      self.Cookie =  Cookie_file.read()
+                elif not self.args.Cookie or self.args.config:
+                    with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
                         self.Cookie =  Cookie_file.read()      
-                  except Exception as e :
-                     print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                     print("[*] Error : ",e )
-                     print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                     print("[*] Chech the File Name or File Path  to your Cookies File")
-                     exit()   
+            except Exception as e :
+                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print("[*] Error : ",e )
+                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                   print("[*] Chech the File Name or File Path  to your Cookies File")
+                   exit() 
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    
@@ -45,15 +48,15 @@ class Read_File:
                   print("[+] username            : ................ | : "+self.args.user.replace("\n",''))
                   print("[+] Login password      : ................ | : "+self.args.password)
                except Exception as e:
-                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                  print("[*] Error : ",e )
-                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                  print("[*] Chech login info UserName and Password ")
-                  print("[*] Should use --loginurl <url> --username <username> --password <password>")
-                  print("[*] Should username and Password is True")
-                  print("[*] Example : --url lodinurl http://10.10.10.44/login.php --user admin --password admim")
-                  print("[*] ckeck Readme file at : https://www.github/jac11/LFI_Hunter.git")
-                  exit()                          
+                    print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                    print("[*] Error: ", e)
+                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                    print("[*] Verify the login information: username and password.")
+                    print("[*] Use the following format: --loginurl <url> --username <username> --password <password>")
+                    print("[*] Ensure the username and password are correct.")
+                    print("[*] Example: --loginurl http://10.10.10.44/login.php --user admin --password admin")
+                    print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")
+                    exit()                          
             if self.args.filelist:
                 print("[+] LFI-wordlist        : ................ | : "+self.args.filelist)
             else:
@@ -67,21 +70,21 @@ class Read_File:
             print("[+] web Cookies         : ................ | : "+self.Cookie)  
             if self.args.auth and (self.args.Vulnurl or self.args.Domain)\
             and self.args.password and self.args.user\
-            and self.args.Cookie and self.args.loginurl\
+            and self.args.loginurl\
             and self.args.read:
                 Read_File.Login_auth(self,args = self.control)
                 Read_File.url_request(self,args = self.control)
             elif not self.args.auth and (self.args.Vulnurl or self.args.Domain)\
-            and not self.args.password and not self.args.user and self.args.Cookie\
-            and self.args.read :
+            and not self.args.password and not self.args.user and self.args.read :
+           
                 Read_File.url_request(self,args = self.control)
             else:
-                print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                print("[*] Error :  Bad argument Logic command  Error" )
-                print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                print('[+] To use LFI with login     : --auth --loginurl --Vulnurl --user --password --filelist --Cookie ') 
-                print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                print("[*] ckeck Readme file at      : https://www.github/jac11/LFI_Hunter.git")
+                print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                print("[*] Error: Bad argument logic command error")
+                print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                print('[+] To use LFI with login      : --auth --loginurl --vulnurl --user --password --filelist --cookie') 
+                print('[+] To use LFI without login   : --vulnurl --filelist --cookie') 
+                print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")
                 exit()            
      def Login_auth(self,**kwargs):
                loginurl = self.args.loginurl
@@ -96,12 +99,12 @@ class Read_File:
                try:                  
                   url_login = request.open(loginurl,timeout=5)
                except urllib.error.URLError as e :
-                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
                    print("[*] Error : ",e )
-                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                   print("[*] Follow url Format ")
+                   print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                   print("[*] Use the following format ")
                    print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                   print("[*] Example : http://10.10.10.193:4000/page=index.php")
+                   print("[*] Example : http://10.10.10.193:4000/login.php")
                    exit()          
                try: 
                   request.select_form(nr = 0)
@@ -115,15 +118,15 @@ class Read_File:
                         try:
                            request.select_form(nr = 3)
                         except Exception:
-                             try:
+                            try:
                                 request.select_form(nr = 4)                        
-                             except Exception as e:
-                                  print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                                  print("[*] Error : ",e )
-                                  print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                  print("[*] try to use with out login Mothead") 
-                                  print('[+] To use LFI without  login : --Vulnurl --filelist --Cookie') 
-                                  exit()                 
+                            except Exception as e:
+                                print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                                print("[*] Error: ", e)
+                                print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                print("[*] Try using the method without login authentication.")
+                                print('[+] To use LFI without login: --vulnurl --filelist --cookie')
+                                exit()                
                if  self.args.user and self.args.password and not self.args.PassForm and  not self.args.UserForm  :
                    request["username"] = f'{self.args.user}'
                    request["password"] = f'{self.args.password}' 
@@ -194,13 +197,13 @@ class Read_File:
                       self._first_req = request.open(self.args.Vulnurl,timeout=5).read()                                                      
                       self.Get_Oregnal_URL = request.open(self.url,timeout=5).read() 
                     except Exception  as e :
-                         print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                         print("[*] Error : ",e )
-                         print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                         print("[*] Follow url Format ")
-                         print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                         print("[*] Example : http://10.10.10.193:4000/page=index.php")
-                         exit()   
+                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                           print("[*] Error : ",e )
+                           print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
+                           print("[*] Use the following format ")
+                           print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                           print("[*] Example : http://10.10.10.193:4000/login.php?file=")
+                           exit()          
                     except KeyboardInterrupt:
                          exit()           
                  
@@ -225,7 +228,7 @@ class Read_File:
                            Read_File.file_name (self,**kwargs) 
                            from Package.FileStore import FileManager
                            FileManager.FileRStore_Write(self,args=self.control)                         
-                           print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
+                           print('\n'+'='*20+"\n[*] Path Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace('_',"/")) 
                            print("[+] Full Path           : ................ | : "+self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read)
@@ -261,18 +264,18 @@ class Read_File:
                                     Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
-                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
-                                      time.sleep(1)
-                                      print("[*] FILE : ", self.args.read)
-                                      time.sleep(1)
-                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
-                                      time.sleep(1)
-                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
-                                      print("[*] Example : --read /var/log/auth.log ")
-                                      print("[*] Example : --read /proc/self/environ")
-                                      print("[*] Example : --read /var/log/auth")
-                                      exit()  
+                                    print('\n' + '=' * 20 + "\n[*] SHELL INFORMATION\n" + '=' * 30 + '\n')
+                                    time.sleep(1)
+                                    print("[*] FILE: ", self.args.read)
+                                    time.sleep(1)
+                                    print("[*] INFO: Unable to add PHP code to", self.args.read)
+                                    time.sleep(1)
+                                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                    print("[*] To obtain a shell, try using --read with the 'environ' or 'auth' log file.")
+                                    print("[*] Example : --read /var/log/auth.log ")
+                                    print("[*] Example : --read /proc/self/environ")
+                                    print("[*] Example : --read /var/log/auth")
+                                    exit()  
                            elif self.args.webshell or self.args.config:
                                 from Package.webshell import WebShellInteract    
                                 if 'auth' in self.url or 'auth.log' in self.url:
@@ -290,7 +293,7 @@ class Read_File:
                            FileManager.FileRStore_Write(self,args=self.control) 
                            print('\n'+'='*20+"\n[*] Vulnerable Found  "+'\n'+'='*30+'\n')
                            print("[+] Vulnerable  Link    : ................ | : "+self.url.replace('\n','')) 
-                           print('\n'+'='*20+"\n[*] Directory Traversal "+'\n'+'='*30+'\n')
+                           print('\n'+'='*20+"\n[*] Path Traversal "+'\n'+'='*30+'\n')
                            print("[+] File request        : ................ | : "+self.args.read.replace("_","/")) 
                            print("[+] Full  URL           : ................ | : "+ self.LFI.replace('\n',''))
                            print("[+] File Name           : ................ | : "+self.args.read)
@@ -327,18 +330,18 @@ class Read_File:
                                     Shell_conncet.Connect_SSh_Shell(self,args = self.control)
                                     exit()
                                 else:
-                                      print('\n'+'='*20+"\n[*] Shell-Info "+'\n'+'='*30+'\n')
-                                      time.sleep(1)
-                                      print("[*] FILE : ", self.args.read)
-                                      time.sleep(1)
-                                      print("[*] INFO :  Cat not add PHP Code To",self.args.read)
-                                      time.sleep(1)
-                                      print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                                      print("[*] To Get Shell try  --read  with 'environ/auth' log file ")  
-                                      print("[*] Example : --read /var/log/auth.log ")
-                                      print("[*] Example : --read /proc/self/environ")
-                                      print("[*] Example : --read /var/log/auth")
-                                      exit()    
+                                    print('\n' + '=' * 20 + "\n[*] SHELL INFORMATION\n" + '=' * 30 + '\n')
+                                    time.sleep(1)
+                                    print("[*] FILE: ", self.args.read)
+                                    time.sleep(1)
+                                    print("[*] INFO: Unable to add PHP code to", self.args.read)
+                                    time.sleep(1)
+                                    print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTION\n" + '=' * 14 + '\n')
+                                    print("[*] To obtain a shell, try using --read with the 'environ' or 'auth' log file.")
+                                    print("[*] Example : --read /var/log/auth.log ")
+                                    print("[*] Example : --read /proc/self/environ")
+                                    print("[*] Example : --read /var/log/auth")
+                                    exit()  
                            elif self.args.webshell or self.args.config:
                                 from Package.webshell import WebShellInteract    
                                 if 'auth' in self.url or 'auth.log' in self.url:
@@ -352,12 +355,13 @@ class Read_File:
                                 exit()   
                 print('\n'+'='*20+"\n[*] RESUITE-INFO "+'\n'+'='*30+'\n')
                 print("[*] No Data found")
+                print("[*] No Permission To read the File")
                 print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                 print("[*] try to use new cookie ")
                 print("[*] try to use aggressive mode ")                
                 if not self.args.base64:
-                   print("[*] try to use PHP Filter by useing -B64/--base64 ")  
-                print("[*] check Readme file at : https://www.github/jac11/LFI_Hunter.git")   
+                   print("[*] try to use PHP Filter by useing -B/--base64 ")  
+                print("[*] Refer to the README file at: https://www.github.com/jac11/LFI_Hunter.git")   
                 exit()                       
         except SyntaxError as a :
                print(a)

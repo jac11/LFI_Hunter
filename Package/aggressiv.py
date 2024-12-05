@@ -28,17 +28,19 @@ class Aggressiv :
                        self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass      
-            try:   
+           try:   
                 if self.args.Cookie  or self.args.config:
                    with open(self.args.Cookie,'r') as Cookie_file :
-                      self.Cookie =  Cookie_file.read() 
+                      self.Cookie =  Cookie_file.read()
+                elif not self.args.Cookie or self.args.config:
+                    with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
+                        self.Cookie = Cookie_file.read()      
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
                    print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
                    print("[*] Chech the File Name or File Path  to your Cookies File")
-                   exit()    
-
+                   exit()                             
             print('\n'+'='*20+"\n[*] Input-INFO "+'\n'+'='*30+'\n')
             if self.args.auth:
                print("[+] Mothead             : ................ | : Full authentication")    

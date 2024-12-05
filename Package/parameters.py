@@ -27,17 +27,20 @@ class  UrlParameters:
             self.ip_re = self.ip_re.group()
     def URL_separated(self,**kwargs):
         try:
-            if self.args.Cookie  or self.args.config:
-                try: 
-                    with open(self.args.Cookie,'r') as Cookie:
-                        self.args.Cookie = Cookie.read().strip()
-                        print("[+] Cookie                     : ................ | : "+self.args.Cookie)
-                except FileNotFoundError as e :
-                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
-                    print("[*] Error : ",e )
-                    print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
-                    print("[*] find the correct Path ")  
-                    exit()  
+            try:   
+                if self.args.Cookie  or self.args.config:
+                    with open(self.args.Cookie,'r') as Cookie_file :
+                      self.Cookie =  Cookie_file.read()
+                elif not self.args.Cookie or self.args.config:
+                    with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
+                        self.Cookie =  Cookie_file.read()   
+                print("[+] Cookie                     : ................ | : "+self.args.Cookie)               
+            except Exception as e :
+                   print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
+                   print("[*] Error : ",e )
+                   print('\n'+'='*10+"\n[*] Solution "+'\n'+'='*14+'\n')
+                   print("[*] Chech the File Name or File Path  to your Cookies File")
+                   exit()
             keyword = "PARAME"            
             if  keyword not  in  self.args.PARAME :
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
