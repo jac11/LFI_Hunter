@@ -54,7 +54,7 @@ LFI_Hunter [OPTIONS]
 | `--port PORT`           | Set the port for netcat or reverse shell connections.                                          |
 | `-Z`, `--fuzzing`       | Enable brute-force LFI                                                                         |
 | `-FP`,`--PARAME`        | parameter fuzzing [replace the parameter with PARAME in url]                                   |
-| `-PL`,`--paramslist`    | Specify a parameter fuzzing wordlist"                                                          |
+| `-PL`,`--paramslist`    | Specify a parameter fuzzing wordlist                                                           |
 | `-s`, `--status`        | filter parameter with HTTP status responses.                                                   |
 | `--webshell`            | Deploying Webshells for remote code execution directly from the terminal .                     |
 | `--config FILE`         | Use a configuration file with predefined options.                                              |
