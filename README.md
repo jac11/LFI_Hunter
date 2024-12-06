@@ -52,8 +52,9 @@ LFI_Hunter [OPTIONS]
 | `-A`, `--Aggressiv`     | Enable aggressive mode to increase request speed.                                              |
 | `-S`, `--shell`         | Set up a reverse shell connection to a specified IP address.                                   |
 | `--port PORT`           | Set the port for netcat or reverse shell connections.                                          |
-| `-Z`, `--fuzzing`       | Enable brute-force or fuzzing mode for parameter testing.                                      |
-| `-s`, `--fuzzing`       | filter parameter with HTTP status responses.                                                   |
+| `-Z`, `--fuzzing`       | Enable brute-force LFI                                                                         |
+| `-FP`,`--PARAME`        | parameter fuzzing [replace the parameter with PARAME in url]                                   |
+| `-s`, `--status`        | filter parameter with HTTP status responses.                                                   |
 | `--webshell`            | Deploying Webshells for remote code execution directly from the terminal .                     |
 | `--config FILE`         | Use a configuration file with predefined options.                                              |
 
