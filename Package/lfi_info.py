@@ -33,7 +33,7 @@ class ManPage:
                      -UV, --Vulnurl                  Target URL for the vulnerable web application 
                      --auth                          Enable authentication mode
                      -F, --filelist                  Read from an LFI wordlist file
-                     -C, --Cookie     (required)     Provide the login session cookie              
+                     -C, --Cookie                    Provide the login session cookie              
                      -B, --base64                    Enable decoding of base64-filtered PHP code
                      -R, --read                      Specify a file to read from the target machine
                      -UF, --UserForm                 Specify the HTML login form username field
@@ -83,7 +83,9 @@ class ManPage:
                             you can test the LFI vulnerability at the given URL without passing credentials directly in the command line.
                             This is particularly useful for handling session cookies that may contain special characters 
                             that could lead to errors if passed directly in the terminal.
-
+                            Noted :
+                                  if not set -C ,--Cookie option the cookie will set to None
+ 
                             Ensure that the specified file contains valid session cookie 
                             information needed to maintain the session with the target application.
                             Example:
