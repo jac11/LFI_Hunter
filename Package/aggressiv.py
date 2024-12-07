@@ -28,7 +28,7 @@ class Aggressiv :
                        self.args.password = password.read().replace('\n','')
                 except TypeError:
                     pass      
-           try:   
+            try:   
                 if self.args.Cookie  or self.args.config:
                    with open(self.args.Cookie,'r') as Cookie_file :
                       self.Cookie =  Cookie_file.read()
