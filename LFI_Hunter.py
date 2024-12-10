@@ -42,7 +42,7 @@ class Hannter_LFI:
 
                if self.args.auth and self.args.Vulnurl\
                   and self.args.password and self.args.user\
-                  and self.args.Cookie and self.args.loginurl\
+                  and self.args.loginurl\
                   and self.args.Aggressiv or self.args.config :  
 
                      Aggressiv.__init__(self,args = self.control)          
@@ -51,7 +51,7 @@ class Hannter_LFI:
                      Aggressiv.Scan_result(self,aegs = self.control) 
 
                elif not self.args.auth and self.args.Vulnurl\
-               and not self.args.password and not self.args.user and self.args.Cookie\
+               and not self.args.password and not self.args.user\
                and self.args.Aggressiv or self.args.config:
                   Aggressiv.__init__(self,args = self.control)
                   Aggressiv.url_request(self,args = self.control)
