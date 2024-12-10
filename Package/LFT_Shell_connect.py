@@ -60,6 +60,7 @@ class Shell_conncet:
                     first_req = request.open(self.url).read()  
                     time.sleep(4) 
                     self.Get_Oregnal_URL = request.open(command).read()
+                    exit()
                 except Exception  as e :
                          print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                          print("[*] Error : ",e )
@@ -90,6 +91,7 @@ class Shell_conncet:
                     first_req = request.open(WEB).read()  
                     time.sleep(4) 
                     self.Get_Oregnal_URL = request.open(command).read()
+                    exit()
                 except Exception  as e :
                    print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
                    print("[*] Error : ",e )
@@ -130,7 +132,7 @@ class Shell_conncet:
                         exit()
                 time.sleep(1)
                 first_req = request.open(self.url).read()
-            
+                exit()
         elif  "auth" in  self.url or "auth.log" in  self.url :                 
                 if os.path.exists('./Package/shell/.address'): 
                     with open ('./Package/shell/.address','r') as readHost:
@@ -197,7 +199,7 @@ class Shell_conncet:
                                 print("[+] Error         : ................ | : TimeUP")                        
                                 exit()
                             else:
-                                 break   
+                                break   
                 if self.args.webshell:
                    pass
                 else:  
@@ -220,10 +222,9 @@ class Shell_conncet:
                     try:
                         first_req = request.open(self.url).read()
                         first_req = request.open(self.url).read()
-                        first_req = request.open(self.url).read()   
                         time.sleep(4) 
                         self.Get_Oregnal_URL = request.open(command).read()
-                        
+                        first_req = request.open(self.url).read()
                     except Exception  as e :
                         print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
                         print("[*] Error : ",e )
