@@ -180,7 +180,9 @@ Developed by jac11. For issues or contributions, visit the [GitHub repository](h
 
 * LFI Hunter is licensed for user use only, with no permission to modify any source code.
 * read LFI_Hunter_License.txt
+__________________________________________________________________________________________________
+## Demo Video
 
----
+[![Watch the demo video](https://img.youtube.com/vi/ORSG0z9wi_I/maxresdefault.jpg)](https://www.youtube.com/embed/ORSG0z9wi_I?autoplay=1&t=164)
 
 This README provides a comprehensive overview of how to install and use LFI Hunter effectively while highlighting its capabilities regarding authentication and aggressive mode operations.
