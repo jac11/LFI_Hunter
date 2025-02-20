@@ -34,7 +34,7 @@ class  UrlParameters:
                 elif not self.args.Cookie or self.args.config:
                     with open("./Package/ConfigFile/.Cookie.txt",'r') as Cookie_file :
                         self.Cookie =  Cookie_file.read()   
-                print("[+] Cookie                     : ................ | : "+self.Cookie)               
+                print("[+] Cookie                     : ................ | : "+self.Cookie.replace('\n',''))               
             except Exception as e :
                    print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
                    print("[*] Error : ",e )
@@ -66,7 +66,7 @@ class  UrlParameters:
             listlink = []
             listLen = []
             try: 
-                with open (self.args.paramslist,'r')  as paramslist :  
+                with open (self.args.paramslist,'r',encoding = "ISO-8859-1")  as paramslist :  
                     paramslist = paramslist.readlines()
             except FileNotFoundError  as e :
                 print('\n'+'='*20+"\n[*] ERROR-INFO "+'\n'+'='*30+'\n')
@@ -85,7 +85,7 @@ class  UrlParameters:
             request.set_handle_redirect(False)
             request.set_handle_refresh(True, max_time=1)
             request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-            ('Cookie',self.args.Cookie),
+            ('Cookie',self.Cookie.replace('\n','')),
             ]  
             try:
                 response = request.open(link)
@@ -104,9 +104,8 @@ class  UrlParameters:
                     request.set_handle_redirect(False)
                     request.set_handle_refresh(True, max_time=1)
                     request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                    ('Cookie',self.Cookie),
+                    ('Cookie',self.Cookie.replace('\n','')),
                     ] 
-                    
                     if not self.args.status:
                         try:
                             response = request.open(link)
