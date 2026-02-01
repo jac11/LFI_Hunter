@@ -117,7 +117,7 @@ class Aggressiv :
             self.box_list    = []  
             self.link_list = []
             try: 
-              domain = str(re.search('https?://(www\.)?([a-zA-Z0-9]+)(\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
+              domain = str(re.search('https?://(www\\.)?([a-zA-Z0-9]+)(\\.[a-zA-Z0-9.-]+)', self.args.Vulnurl)).split()
               self.ip_re = (domain[-1][7:-2])
               self.ip_re = self.ip_re[6:]
             except Exception :
@@ -143,6 +143,7 @@ class Aggressiv :
                         URL = self.args.Vulnurl+LINE.replace('\n','')+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))+" " 
                     else:
                          URL = self.args.Vulnurl+LINE
+                    
                                                                                       
                     self.url =  URL
                     request = mechanize.Browser()
@@ -157,8 +158,13 @@ class Aggressiv :
                     try:   
                         first_req = request.open(self.args.Vulnurl).read()   
                         self.Get_Oregnal_URL = request.open(self.url,timeout=6).read()
+
                     except Exception  as e :
-                         continue    
+                        if '404' or '500' in str(e):
+                            self.Get_Oregnal_URL = self.url
+                        else:    
+                            print(e)
+                            continue    
                     except KeyboardInterrupt :
                          exit()        
                     self.number = str(len(self.Get_Oregnal_URL))
@@ -239,7 +245,7 @@ class Aggressiv :
             if os.path.exists('./Package/.links'):
                 os.remove('./Package/.links')
             if os.path.exists('./Package/.list'):
-                os.remove('./Package/.list')
+               os.remove('./Package/.list')
            
 
 if __name__=='__main__':

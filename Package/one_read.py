@@ -197,17 +197,18 @@ class Read_File:
                                  ('Cookie',str(self.Cookie).replace('\n','')),
                                  ('username',f"{self.args.user}"),
                                  ('password',f'{self.args.password}')]
-                    try: 
-                      self._first_req = request.open(self.args.Vulnurl,timeout=5).read()                                                      
-                      self.Get_Oregnal_URL = request.open(self.url,timeout=5).read() 
-                    except Exception  as e :
-                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
-                           print("[*] Error : ",e )
-                           print('\n' + '=' * 10 + "\n[*] POSSIBLE SOLUTIONS\n" + '=' * 14 + '\n')
-                           print("[*] Use the following format ")
-                           print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                           print("[*] Example : http://10.10.10.193:4000/login.php?file=")
-                           exit()          
+                    try:
+                        try:
+                            self._first_req = request.open(self.args.Vulnurl, timeout=5).read()
+                        except Exception:
+                            self._first_req = b''
+                        self.Get_Oregnal_URL = request.open(self.url, timeout=5).read()
+
+                    except KeyboardInterrupt:
+                        print("\n[!] Scan stopped by user")
+                        return 
+                    except Exception:
+                        continue
                     except KeyboardInterrupt:
                          exit()           
                  
