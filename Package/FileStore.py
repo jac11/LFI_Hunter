@@ -10,9 +10,10 @@ class FileManager():
     def __init__(self,):
         self.FileRStore_Write()
     def FileRStore_Write(self,**kwargs):
+        if not self.args.read :
+            self.args.read = self.url.split('/')[-1].strip()
         if  os.path.exists('./FileStore/'+self.ip_re+'/'+self.args.read):  
-            os.remove('./FileStore/'+self.ip_re+'/'+self.args.read)
-          
+            os.remove('./FileStore/'+self.ip_re+'/'+self.args.read)   
         with open('.index.txt','w') as html:
             html.write(str(self.Get_Oregnal_URL).replace("b'",''))     
         if self.args.base64 : 
