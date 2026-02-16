@@ -222,7 +222,7 @@ class Read_File:
                         continue
                     except KeyboardInterrupt:
                          exit()           
-                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or self.args.auth and len(self.Get_Oregnal_URL) > 200  :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) +200 :               
                         pythex = str(re.findall('Content-Length:.+',str(self.info)))
                         pythex= pythex.replace("['",'').replace("']",'')
                         if pythex in str(self.info):
@@ -302,7 +302,7 @@ class Read_File:
                                 exit()             
                            else:
                                 exit()     
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or len(self.Get_Oregnal_URL) > 200 :
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) +200 :
                            Read_File.file_name (self,**kwargs)
                            from Package.FileStore import FileManager
                            FileManager.FileRStore_Write(self,args=self.control) 

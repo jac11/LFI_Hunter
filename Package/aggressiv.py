@@ -249,6 +249,7 @@ class Aggressiv :
                         if element in line[-6:-1] and element not in final_list:
                             final_list.append(line.strip())
                             final_list.append(element)
+
             with open('./Package/.links', 'w') as writefile:
                 for entry in final_list:
                     links = "".join(re.findall(r'(https?://[^\s]+)', str(entry)))

@@ -244,7 +244,7 @@ class Local_File_In:
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
 
-                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or self.args.auth and len(self.Get_Oregnal_URL) > 200 :                  
+                    if self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) +200 :                  
                       pythex = str(re.findall('Content-Length:.+',str(self.info)))
                       pythex= pythex.replace("['",'').replace("']",'')
                       if pythex in str(self.info):
@@ -317,7 +317,7 @@ class Local_File_In:
                             exit()             
                         else:
                             exit()            
-                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) or len(self.Get_Oregnal_URL) > 200:
+                    elif not self.args.auth and len(self.Get_Oregnal_URL) > len(self._first_req) +200:
                         Local_File_In.file_name(self)
                         from Package.FileStore import FileManager
                         FileManager.FileRStore_Write(self,args=self.control)
