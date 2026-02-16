@@ -171,68 +171,77 @@ class Aggressiv :
                         if '404' or '500' in str(e):
                             self.Get_Oregnal_URL = self.url
                         else:    
-                            print(e)
                             continue    
                     except KeyboardInterrupt :
-                         exit()        
-                    self.number = str(len(self.Get_Oregnal_URL))
-                    try:  
-                        filename = LINE.replace('../','').replace('%2f','').replace('....//','').replace('../','').replace('file://','').replace('//','/').replace('\n','')
-                        if self.args.base64:
-                            fullurl = self.url.replace('\n','').replace('php://filter/read=convert.base64-encode/resource=','')
-                        else:    
-                            fullurl = self.url.replace('\n','')
-                    except IndexError:
-                            pass  
-                    if self.args.auth  or not self.args.auth  :   
-                       if not self.args.auth:
-                          pass
-                       else:                                                         
-                           pythex = str(re.findall('Content-Length:.+',str(self.info)))
-                           pythex= pythex.replace("['",'').replace("']",'')
-                           if pythex in str(self.info):
-                              info = str(self.info).replace(pythex,'Content-Length:'+str(len(self.Get_Oregnal_URL)))
-                              rex2 = re.findall(':.+',info) 
-                       for _ in range(1):
-                             if num ==1 :
-                               pass
-                             else: 
-                                 if num == 0 : 
-                                    if self.args.auth : 
-                                       print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
-                                       print("[+] Date                : ................ | "+rex2[0])
-                                       print("[+] Server              : ................ | "+rex2[1])
-                                       print("[+] Expires             : ................ | "+rex2[2])
-                                       print("[+] Cache-Control       : ................ | "+rex2[3])
-                                       print("[+] Pragma              : ................ | "+rex2[4])
-                                       print("[+] Vary                : ................ | "+rex2[5])
-                                       print("[+] Content-Length      : ................ | "+str(rex2[6]).replace(':',': '))
-                                       print("[+] Connection          : ................ | "+rex2[7])
-                                       print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
-                                    print('='*20+"\n[*] Agressive Mode   "+'\n'+'='*30+'\n')
-                                    if self.args.base64:
-                                       print('[+] PHP-Filter : ...............| : php://filter/read=convert.base64-encode/resource='+'\n')
-                                    print(" "+"-"*149) 
-                                    print("|  "+f"{'   File-Name    ':<23}","|"+f"{'    Length    ':<10}"+"|",f"{'  Full-URL   ':<100}","     |")
-                                    print(" "+"-"*149)                    
-                                    num = 1 
-                             try:       
-                                print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    self.number   :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')   
+                         exit()   
+                    if len(self.Get_Oregnal_URL) > len(first_req) or len(self.Get_Oregnal_URL) > 200 :
+                            self.number = str(len(self.Get_Oregnal_URL))
+                            try:  
+                                filename = LINE.replace('../','').replace('%2f','').replace('....//','').replace('../','').replace('file://','').replace('//','/').replace('\n','')
+                                if self.args.base64:
+                                    fullurl = self.url.replace('\n','').replace('php://filter/read=convert.base64-encode/resource=','')
+                                else:    
+                                    fullurl = self.url.replace('\n','')
+                            except IndexError:
+                                    pass  
+                            if self.args.auth  or not self.args.auth  :   
+                               if not self.args.auth:
+                                  pass
+                               else:                                                         
+                                   pythex = str(re.findall('Content-Length:.+',str(self.info)))
+                                   pythex= pythex.replace("['",'').replace("']",'')
+                                   if pythex in str(self.info):
+                                      info = str(self.info).replace(pythex,'Content-Length:'+str(len(self.Get_Oregnal_URL)))
+                                      rex2 = re.findall(':.+',info) 
+                               for _ in range(1):
+                                     if num ==1 :
+                                       pass
+                                     else: 
+                                         if num == 0 : 
+                                            if self.args.auth : 
+                                               print('='*20+"\n[*] Web-Info "+'\n'+'='*30+'\n')
+                                               print("[+] Date                : ................ | "+rex2[0])
+                                               print("[+] Server              : ................ | "+rex2[1])
+                                               print("[+] Expires             : ................ | "+rex2[2])
+                                               print("[+] Cache-Control       : ................ | "+rex2[3])
+                                               print("[+] Pragma              : ................ | "+rex2[4])
+                                               print("[+] Vary                : ................ | "+rex2[5])
+                                               print("[+] Content-Length      : ................ | "+str(rex2[6]).replace(':',': '))
+                                               print("[+] Connection          : ................ | "+rex2[7])
+                                               print("[+] Content-Type        : ................ | "+rex2[8]+'\n')
+                                            print('='*20+"\n[*] Agressive Mode   "+'\n'+'='*30+'\n')
+                                            if self.args.base64:
+                                               print('[+] PHP-Filter : ...............| : php://filter/read=convert.base64-encode/resource='+'\n')
+                                            print(" "+"-"*149) 
+                                            print("|  "+f"{'   File-Name    ':<23}","|"+f"{'    Length    ':<10}"+"|",f"{'  Full-URL   ':<100}","     |")
+                                            print(" "+"-"*149)                    
+                                            num = 1 
+                                     try:       
+                                        print("|  "+f"{  filename[0:20]     :<23}","| "+f"{    self.number   :<13}"+"| ",f"{   fullurl[0:100]   :<100}","    |",end='\n')   
 
-                             except IndexError:
-                                 continue                    
-                       self.box_list.append(self.number)
-                       self.link_list.append(self.url.replace('\n',' '))
-                       self.link_list.append (str(len(self.Get_Oregnal_URL)))
+                                     except IndexError:
+                                         continue                    
+                               self.box_list.append(self.number)
+                               self.link_list.append(self.url.replace('\n',' '))
+                               self.link_list.append (str(len(self.Get_Oregnal_URL)))
           except KeyboardInterrupt :
              pass                                            
         def Scan_result(self,**kwargs) :
             final_list = []
             unique_elements = set(self.box_list)
             link_dict = dict(zip(self.link_list[::2], self.link_list[1::2]))
+            length_dict = {}
+            for url, length_str in link_dict.items():
+                try:
+                    length_dict[url] = int(length_str)
+                except ValueError:
+                    length_dict[url] = 0
+            sorted_urls = sorted(length_dict.items(), key=lambda x: x[1], reverse=True)
+            
             with open('./Package/.list', 'w') as listf:
-                for key, value in link_dict.items():
-                    listf.write(f"{key}{value}\n")
+                for url, length in sorted_urls:
+                    listf.write(f"{url}{length}\n")
+                    
             with open('./Package/.list', 'r') as readf:
                 read_lines = readf.readlines()
                 for line in read_lines:
@@ -240,20 +249,22 @@ class Aggressiv :
                         if element in line[-6:-1] and element not in final_list:
                             final_list.append(line.strip())
                             final_list.append(element)
-            final_list.sort()
             with open('./Package/.links', 'w') as writefile:
                 for entry in final_list:
-                    links = "".join(re.findall(r'(https?://[^\s]+)', entry))
+                    links = "".join(re.findall(r'(https?://[^\s]+)', str(entry)))
                     if links:
                         writefile.write(f'[+] {links[0:]}\n')
+                        
             with open('./Package/.links', 'r') as readfile:
                 readdata = "\n".join(readfile.read().splitlines())
+                
             print('\n' + '=' * 40 + " \n[*] Vulnerable Path " + '\n' + '=' * 30 + '\n')
             print(readdata)    
+            
             if os.path.exists('./Package/.links'):
                 os.remove('./Package/.links')
             if os.path.exists('./Package/.list'):
-               os.remove('./Package/.list')
+                os.remove('./Package/.list')
            
 
 if __name__=='__main__':
